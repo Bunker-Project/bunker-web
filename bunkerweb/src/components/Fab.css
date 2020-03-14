@@ -1,0 +1,14 @@
+.speedDial {
+    position: absolute;
+
+}
+
+.MuiSpeedDial-directionUp, .MuiSpeedDial-directionLeft {
+    bottom: 2px;
+    right: 2px;
+}
+
+.MuiSpeedDial-directionDown, .MuiSpeedDial-directionRight {
+    top: 2px;
+    left: 2px;
+}

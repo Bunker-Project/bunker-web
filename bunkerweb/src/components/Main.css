@@ -1,24 +1,41 @@
-.leftside, .rightside{
-  height: 50vh;
+.leftside, .rightside {
+  height: 100%;
   width: 100%;
 }
 
-@media screen and (min-width:768px)
+
+
+
+/* @media screen and (min-width:768px)
 {
   .leftside, .rightside{
     height: 100vh;
   }
-}
+} */
 
 .leftside{
-  background-color: chartreuse;
+  border: solid 0.1em;
+  border-color: greenyellow;
 }
 
 .rightside{
-  background-color: chocolate;
+  border: solid 0.1em;
+  border-color: darkorange;
 }
-.row{
-  /* height: 100vh;
-  width: 100%; */
-  background-color: darkcyan;
+
+.row {
+  height: 100px;
+  width: 200px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  /* border: solid 0.1em;
+  border-color: blue; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
 }
+

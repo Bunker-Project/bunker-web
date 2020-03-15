@@ -1,11 +1,9 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import './Search.css';
+import './Register.css';
 import Chip from '@material-ui/core/Chip';
-// import Avatar from '@material-ui/core/Avatar';
 
-
-class Search extends React.Component {
+class Register extends React.Component {
 
     constructor(props) {
         super(props);
@@ -60,25 +58,32 @@ class Search extends React.Component {
                     }}
                 />
                 <div className="chips">
-                        {this.state.chips.map(data => {
-                            return (
-                                <Chip
-                                    key={data}
-                                    label={data}
-                                    onDelete={() => this.handleDelete(data)}
-                                    variant="outlined"
-                                    color="primary"
-                                    // avatar={<Avatar>D</Avatar>}
-                                    className="chipItem"
-                                />
-                            );
-                        })}
+                    {this.state.chips.map(data => {
+                        return (
+                            <Chip
+                                key={data}
+                                label={data}
+                                onDelete={() => this.handleDelete(data)}
+                                variant="outlined"
+                                color="primary"
+                                className="chipItem"
+                            />
+                        );
+                    })}
                 </div>
-
+                    <TextField
+                        id="outlined-multiline-static"
+                        label="What do you want to keep here?"
+                        placeholder="Type something, feel free :). I'll keep the secret"
+                        multiline
+                        rows="4"
+                        // defaultValue="Default Value"
+                        variant="outlined"
+                    />
 
             </div>
         );
     }
 }
 
-export default Search;
+export default Register;

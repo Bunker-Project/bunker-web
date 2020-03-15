@@ -3,7 +3,7 @@ import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import SearchIcon from '@material-ui/icons/Search';
-import SearchForm from './SearchForm.js';
+import Form from './Form.js';
 import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import './Fab.css'
@@ -69,7 +69,7 @@ class Fab extends React.Component {
                         />
                     ))}
                 </SpeedDial>
-                <SearchForm show={this.state.showForm} onClose={this.handleCloseForm}></SearchForm>
+                <Form show={this.state.showForm} onClose={this.handleCloseForm}></Form>
             </div>
         );
     };

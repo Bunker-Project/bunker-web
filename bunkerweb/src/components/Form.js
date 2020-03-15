@@ -12,9 +12,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import './SearchForm.css';
+import './Form.css';
+import Search from './Search.js';
 
-class SearchForm extends React.Component {
+class Form extends React.Component {
 
     constructor(props) {
         super(props);
@@ -40,7 +41,7 @@ class SearchForm extends React.Component {
 
         if (!this.props.show) {
             return null;
-        } 
+        }
 
         const Transition = React.forwardRef(function Transition(props, ref) {
             return <Slide direction="up" ref={ref} {...props} />;
@@ -62,23 +63,26 @@ class SearchForm extends React.Component {
                             </Button>
                         </Toolbar>
                     </AppBar>
-                    {/* <List className="list">
-                        <ListItem button>
-                            <ListItemText primary="Phone ringtone" secondary="Titania" />
-                        </ListItem>
-                        <Divider />
-                        <ListItem button>
-                            <ListItemText primary="Default notification ringtone" secondary="Tethys" />
-                        </ListItem>
-                    </List> */}
+                    <div className="form">
+                        {/* <List className="list">
+                            <ListItem button>
+                                <ListItemText primary="Phone ringtone" secondary="Titania" />
+                            </ListItem>
+                            <Divider />
+                            <ListItem button>
+                                <ListItemText primary="Default notification ringtone" secondary="Tethys" />
+                            </ListItem>
+                        </List> */}
+                        <Search></Search>
+                    </div>
                 </Dialog>
             </div>
         );
     }
 }
 
-SearchForm.propTypes = {
+Form.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default SearchForm;
+export default Form;

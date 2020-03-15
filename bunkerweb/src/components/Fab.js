@@ -17,6 +17,7 @@ class Fab extends React.Component {
             open: false,
             hidden: false,
             showForm: false,
+            id: ''
         }
     }
 
@@ -28,16 +29,14 @@ class Fab extends React.Component {
         this.setState({ open: true });
     }
 
-    handleClick = (id) => {
-        this.setState({ showForm: true }, () => {
-            console.log("The status was updated to : " + this.state.showForm);
+    handleClick = (idClicked) => {
+        this.setState({
+            showForm: true,
+            id: idClicked
         });
-        
-        console.log(id);
     }
 
     handleCloseForm = () => {
-        console.log("Closing");
         this.setState({ showForm: false });
     }
 
@@ -69,7 +68,7 @@ class Fab extends React.Component {
                         />
                     ))}
                 </SpeedDial>
-                <Form show={this.state.showForm} onClose={this.handleCloseForm}></Form>
+                <Form show={this.state.showForm} onClose={this.handleCloseForm} id={this.state.id}></Form>
             </div>
         );
     };

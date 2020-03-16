@@ -11,7 +11,7 @@ import Slide from '@material-ui/core/Slide';
 import './Form.css';
 import Register from './Register.js';
 import Search from './Search.js';
-import Key from './Key.js';
+import Secret from './Secret.js';
 
 class Form extends React.Component {
 
@@ -40,7 +40,7 @@ class Form extends React.Component {
         else if (this.props.id === "newItem")
             return <Register></Register>
         else
-            return <Key></Key>
+            return <Secret></Secret>
             
     }
 

@@ -44,7 +44,7 @@ class Fab extends React.Component {
         const actions = [
             { icon: <SearchIcon />, name: 'Search', id: 'search' },
             { icon: <SpeakerNotesIcon />, name: "Add new item", id: 'newItem' },
-            { icon: <VpnKeyIcon />, name: "Add password", id: 'newPassword' },
+            { icon: <VpnKeyIcon />, name: "Add new secret", id: 'newSecret' },
         ];
 
         return (

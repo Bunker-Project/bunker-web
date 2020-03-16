@@ -1,18 +1,15 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import './Key.css';
+import './Secret.css';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
-import FilledInput from '@material-ui/core/FilledInput';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+// import Visibility from '@material-ui/icons/Visibility';
+// import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
-class Key extends React.Component {
+class Secret extends React.Component {
 
     constructor(props){
         super(props);
@@ -57,7 +54,7 @@ class Key extends React.Component {
                                     onClick={this.handleClickShowPassword}
                                     onMouseDown={this.handleMouseDownPassword}
                                 >
-                                    {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    {/* {this.state.showPassword ? <Visibility /> : <VisibilityOff />} */}
                                 </IconButton>
                             </InputAdornment>
                         }
@@ -69,4 +66,4 @@ class Key extends React.Component {
     }
 }
 
-export default Key;
+export default Secret;

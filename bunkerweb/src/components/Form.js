@@ -12,6 +12,8 @@ import './Form.css';
 import Register from './Register.js';
 import Search from './Search.js';
 import Secret from './Secret.js';
+import CheckIcon from '@material-ui/icons/Check';
+import Api from '../Api';
 
 class Form extends React.Component {
 
@@ -20,7 +22,7 @@ class Form extends React.Component {
         this.state = {
             open: this.props.show,
         };
-        
+
         this.handleClose = this.handleClose.bind(this);
 
     }
@@ -37,11 +39,13 @@ class Form extends React.Component {
     handleFormType() {
         if (this.props.id === "search")
             return <Search></Search>
-        else if (this.props.id === "newItem")
+        else if (this.props.id === "newItem") {
+            const api = new Api({isDev: true});
+            console.log(api.getAll({api : "items"}));
             return <Register></Register>
+        }
         else
             return <Secret></Secret>
-            
     }
 
     render() {
@@ -49,38 +53,47 @@ class Form extends React.Component {
         if (!this.props.show)
             return null;
 
-            const Transition = React.forwardRef(function Transition(props, ref) {
-                return <Slide direction="up" ref={ref} {...props} />;
-            });
+        const Transition = React.forwardRef(function Transition(props, ref) {
+            return <Slide direction="up" ref={ref} {...props} />;
+        });
 
-            return (
-                <div>
-                    <Dialog fullScreen open={this.props.show} onClose={this.props.onClose} TransitionComponent={Transition}>
-                        <AppBar className="appBar">
-                            <Toolbar>
-                                <IconButton edge="start" color="inherit" onClick={this.props.onClose} aria-label="close">
-                                    <CloseIcon />
-                                </IconButton>
-                                <Typography variant="h6" className="title">
-                                    Sound
+        return (
+            <div>
+                <Dialog fullScreen open={this.props.show} onClose={this.props.onClose} TransitionComponent={Transition}>
+                    <AppBar className="appBar">
+                        <Toolbar>
+                            <IconButton edge="start" color="inherit" onClick={this.props.onClose} aria-label="close">
+                                {/* <CloseIcon /> */}
+                            </IconButton>
+                            <Typography variant="h6" className="title">
+                                Bunker
                             </Typography>
-                                <Button autoFocus color="inherit" onClick={this.props.onClose}>
-                                    save
+                            <Button
+                                autoFocus color="inherit"
+                                onClick={this.props.onClose}
+                                startIcon={<CloseIcon></CloseIcon>}>
+                                cancel
                             </Button>
-                            </Toolbar>
-                        </AppBar>
-                        <div className="form">
-                            {this.handleFormType()}
-                        </div>
-                    </Dialog>
-                </div>
-            );
-        }
+                            <Button
+                                autoFocus color="inherit"
+                                onClick={this.props.onClose}
+                                startIcon={<CheckIcon></CheckIcon>}>
+                                save
+                            </Button>
+                        </Toolbar>
+                    </AppBar>
+                    <div className="form">
+                        {this.handleFormType()}
+                    </div>
+                </Dialog>
+            </div>
+        );
     }
+}
 
-    Form.propTypes = {
-        onClose: PropTypes.func.isRequired,
-        id: PropTypes.string,
-    };
+Form.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    id: PropTypes.string,
+};
 
-    export default Form;
+export default Form;

@@ -3,13 +3,30 @@ import TextField from '@material-ui/core/TextField';
 import './Register.css';
 import Chip from '@material-ui/core/Chip';
 
+
 class Register extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            chips: []
+            chips: [],
+            txtTitle: '',
+            txtDescription: '',
+            errorTitle: '',
+            errorDescription: ''
         }
+    }
+
+    validate(){
+
+    }
+
+    updateVariables = event => {
+        console.log("dajosdjaisod");
+        console.log(event.target.name);
+        // this.setState({
+        //     [event.target.name] : 
+        // });
     }
 
     handleKeyDown = (e) => {
@@ -41,6 +58,9 @@ class Register extends React.Component {
                     helperText="(Optional)"
                     fullWidth
                     margin="normal"
+                    error={true}
+                    onChange={this.updateVariables}
+                    value={this.state.title}
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -72,16 +92,16 @@ class Register extends React.Component {
                         );
                     })}
                 </div>
-                    <TextField
-                        id="outlined-multiline-static"
-                        label="What do you want to keep here?"
-                        placeholder="Type something, feel free :). I'll keep the secret"
-                        multiline
-                        rows="4"
-                        // defaultValue="Default Value"
-                        variant="outlined"
-                    />
-
+                <TextField
+                    id="txtDescription"
+                    label="What do you want to keep here?"
+                    placeholder="Type something, feel free :). I'll keep the secret"
+                    multiline
+                    rows="4"
+                    value={this.state.description}
+                    // defaultValue="Default Value"
+                    variant="outlined"
+                />
             </div>
         );
     }

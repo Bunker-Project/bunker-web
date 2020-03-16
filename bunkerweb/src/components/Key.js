@@ -14,6 +14,21 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 class Key extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            showPassword: false,
+        }
+    }
+
+    handleClickShowPassword = () => {
+        this.setState({showPassword: !this.state.showPassword});
+    }
+
+    handleMouseDownPassword = event => {
+        event.preventDefault();
+    }
+    
     render() {
         return (
             <div className="container">
@@ -30,21 +45,19 @@ class Key extends React.Component {
                     }}
                 />
 
-                <FormControl >
+                <FormControl className='pwd'>
                     <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
                     <Input
-                        // id="standard-adornment-password"
-                        // type={values.showPassword ? 'text' : 'password'}
-                        // value={values.password}
-                        // onChange={handleChange('password')}
+                        id="standard-adornment-password"
+                        type={this.state.showPassword ? 'text' : 'password'}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
                                     aria-label="toggle password visibility"
-                                    // onClick={handleClickShowPassword}
-                                    // onMouseDown={handleMouseDownPassword}
+                                    onClick={this.handleClickShowPassword}
+                                    onMouseDown={this.handleMouseDownPassword}
                                 >
-                                    <Visibility />
+                                    {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
                                 </IconButton>
                             </InputAdornment>
                         }

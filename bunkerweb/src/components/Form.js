@@ -12,8 +12,6 @@ import './Form.css';
 import Register from './Register.js';
 import Search from './Search.js';
 import Secret from './Secret.js';
-import CheckIcon from '@material-ui/icons/Check';
-import Api from '../Api';
 
 class Form extends React.Component {
 
@@ -39,11 +37,8 @@ class Form extends React.Component {
     handleFormType() {
         if (this.props.id === "search")
             return <Search></Search>
-        else if (this.props.id === "newItem") {
-            const api = new Api({isDev: true});
-            console.log(api.getAll({api : "items"}));
+        else if (this.props.id === "newItem")
             return <Register></Register>
-        }
         else
             return <Secret></Secret>
     }
@@ -69,17 +64,17 @@ class Form extends React.Component {
                                 Bunker
                             </Typography>
                             <Button
-                                autoFocus color="inherit"
+                                color="inherit"
                                 onClick={this.props.onClose}
                                 startIcon={<CloseIcon></CloseIcon>}>
                                 cancel
                             </Button>
-                            <Button
+                            {/* <Button
                                 autoFocus color="inherit"
                                 onClick={this.props.onClose}
                                 startIcon={<CheckIcon></CheckIcon>}>
                                 save
-                            </Button>
+                            </Button> */}
                         </Toolbar>
                     </AppBar>
                     <div className="form">

@@ -4,11 +4,22 @@ class Api {
     constructor({ isDev }) {
         this.state = {
             url: isDev ? 'https://localhost:44305/api' : '',
+            errorMessage: ''
         }
+
+        axios.interceptors.response.use(function (response) {
+            // Any status code that lie within the range of 2xx cause this function to trigger
+            // Do something with response data
+            return response;
+          }, function (error) {
+            // Any status codes that falls outside the range of 2xx cause this function to trigger
+            // Do something with response error
+            return Promise.reject(error);
+          });
     }
 
     //Concats the url 
-    concatUrl(api){
+    concatUrl(api) {
         return `${this.state.url}/${api}`;
     }
 
@@ -21,6 +32,23 @@ class Api {
         return axios.get(`${this.concatUrl(api)}/${id}`);
     }
 
-}
+    insert({ api, data }) {
+        return axios.post(this.concatUrl(api), data).then( response => {
+            return response
+        });
+    }
 
-export default Api;
+        setMessageText(value){
+            this.setState({
+                errorMessage: value
+            });
+        }
+
+        getErrorMessage(){
+            return this.state.errorMessage;
+        }
+
+
+    }
+
+    export default Api;

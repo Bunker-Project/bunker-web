@@ -2,7 +2,10 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import './Register.css';
 import Chip from '@material-ui/core/Chip';
-
+import Button from '@material-ui/core/Button';
+import CheckIcon from '@material-ui/icons/Check';
+import Api from '../Api';
+import { v4 as uuidv4 } from 'uuid'
 
 class Register extends React.Component {
 
@@ -12,21 +15,87 @@ class Register extends React.Component {
             chips: [],
             txtTitle: '',
             txtDescription: '',
-            errorTitle: '',
-            errorDescription: ''
+            isErrorTitle: false,
+            isErrorDescription: false,
+            errorTitleText: '',
+            errorDescText: ''
         }
     }
 
-    validate(){
+    save() {
+        var _api;
+        let newId = uuidv4();
+        if (this.validate()) {
+            _api = new Api({ isDev: true });
+            //First tries to insert the items, if successful then inserts the keywords
+            _api.insert({
+                api: "items",
+                data: {
+                    id: newId,
+                    title: this.state.txtTitle,
+                    description: this.state.txtDescription
+                }
+            }).then(data =>{
+                console.log(data);
+                    if (data.status === 201) {
+                        console.log("Caiu aqui");
+                        var keys = [];
+                        console.log(this);
+                        for (var key of this.state.chips) {
+                            keys.push({
+                                id: uuidv4(),
+                                description: key,
+                                itemId: newId
+                            });
+                        }
+                        console.log("the array contains: " + keys);
 
+                        _api.insert({
+                            api: 'keywords',
+                            data: keys
+                        });
+                    }
+                }
+            );
+        }
+    }
+
+    validate() {
+        let validated = true;
+
+        if (this.state.txtTitle.length === 0) {
+            this.setState({
+                isErrorTitle: true,
+                errorTitleText: 'The title must have a value'
+            });
+            validated = false;
+        } else {
+            this.setState({
+                isErrorTitle: false,
+                errorTitleText: ''
+            });
+        }
+
+        if (this.state.txtDescription.length === 0) {
+            this.setState({
+                isErrorDescription: true,
+                errorDescText: 'The description must have a value'
+            });
+            validated = false;
+        } else {
+            this.setState({
+                isErrorDescription: false,
+                errorDescText: ''
+            });
+        }
+
+        return validated;
     }
 
     updateVariables = event => {
-        console.log("dajosdjaisod");
-        console.log(event.target.name);
-        // this.setState({
-        //     [event.target.name] : 
-        // });
+        this.setState({
+            [event.target.id]: event.target.value,
+        });
     }
 
     handleKeyDown = (e) => {
@@ -55,10 +124,10 @@ class Register extends React.Component {
                     label="Title"
                     style={{ margin: 8 }}
                     placeholder="Type the title"
-                    helperText="(Optional)"
+                    helperText={this.state.errorTitleText}
                     fullWidth
                     margin="normal"
-                    error={true}
+                    error={this.state.isErrorTitle}
                     onChange={this.updateVariables}
                     value={this.state.title}
                     InputLabelProps={{
@@ -99,9 +168,26 @@ class Register extends React.Component {
                     multiline
                     rows="4"
                     value={this.state.description}
-                    // defaultValue="Default Value"
                     variant="outlined"
+                    onChange={this.updateVariables}
+                    helperText={this.state.errorDescText}
+                    error={this.state.isErrorDescription}
                 />
+                <div className="save">
+                    {/* <Button
+                        variant="outlined"
+                        color="secondary"
+                        startIcon={<CloseIcon></CloseIcon>}>
+                        Cancel
+                    </Button> */}
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => this.save()}
+                        startIcon={<CheckIcon></CheckIcon>}>
+                        Save
+                    </Button>
+                </div>
             </div>
         );
     }

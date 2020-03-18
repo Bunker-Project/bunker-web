@@ -24,7 +24,7 @@ class Register extends React.Component {
 
     save() {
         var _api;
-        let newId = uuidv4();
+        let newId = uuidv4();//Creates a random GUID as PK
         if (this.validate()) {
             _api = new Api({ isDev: true });
             //First tries to insert the items, if successful then inserts the keywords
@@ -36,9 +36,7 @@ class Register extends React.Component {
                     description: this.state.txtDescription
                 }
             }).then(data =>{
-                console.log(data);
                     if (data.status === 201) {
-                        console.log("Caiu aqui");
                         var keys = [];
                         console.log(this);
                         for (var key of this.state.chips) {
@@ -48,7 +46,6 @@ class Register extends React.Component {
                                 itemId: newId
                             });
                         }
-                        console.log("the array contains: " + keys);
 
                         _api.insert({
                             api: 'keywords',

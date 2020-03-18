@@ -11,11 +11,11 @@ class Api {
             // Any status code that lie within the range of 2xx cause this function to trigger
             // Do something with response data
             return response;
-          }, function (error) {
+        }, function (error) {
             // Any status codes that falls outside the range of 2xx cause this function to trigger
             // Do something with response error
             return Promise.reject(error);
-          });
+        });
     }
 
     //Concats the url 
@@ -33,22 +33,28 @@ class Api {
     }
 
     insert({ api, data }) {
-        return axios.post(this.concatUrl(api), data).then( response => {
+        return axios.post(this.concatUrl(api), data).then(response => {
             return response
         });
     }
 
-        setMessageText(value){
-            this.setState({
-                errorMessage: value
-            });
-        }
-
-        getErrorMessage(){
-            return this.state.errorMessage;
-        }
-
-
+    search({api, searchString}) {
+        return axios.get(`${this.concatUrl(api)}/search/${searchString}`).then( response => {
+            return response
+        });
     }
 
-    export default Api;
+    setMessageText(value) {
+        this.setState({
+            errorMessage: value
+        });
+    }
+
+    getErrorMessage() {
+        return this.state.errorMessage;
+    }
+
+
+}
+
+export default Api;

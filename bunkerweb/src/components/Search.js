@@ -12,12 +12,35 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
+import Api from '../Api';
 
 class Search extends React.Component {
 
-    handleClick = () =>{
+    constructor(props) {
+        super(props);
+        this.state = {
+            searchResult: []
+        };
+    }
+
+    handleClick = () => {
         console.log('Clicked');
+    }
+
+    handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            var api = new Api({ isDev: true });
+            api.search({
+                api: "items",
+                searchString: event.target.value
+            }).then(response => {
+                this.setState({
+                    searchResult: [...this.state.searchResult, response.data]
+                });
+            });
+        }
     }
 
     render() {
@@ -25,86 +48,54 @@ class Search extends React.Component {
         return (
             <div className="container">
                 <FormControl fullWidth variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+                    <InputLabel htmlFor="outlined-adornment-amount">Search your things</InputLabel>
                     <OutlinedInput
                         id="outlined-adornment-amount"
-                        placeholder="Search something"
+                        placeholder="type here what you want and press enter to search"
                         startAdornment={<InputAdornment position="start">
                             <IconButton>
                                 {<SearchOutlinedIcon color="action"></SearchOutlinedIcon>}
                             </IconButton>
                         </InputAdornment>}
-                        labelWidth={60}
+                        labelWidth={140}
+                        onKeyDown={this.handleKeyDown}
                     />
                 </FormControl>
+                <div key="search">
+                    {this.state.searchResult.map(data => {
+                        return (
+                            <List key="list">
+                                {data.map(item => {
+                                    return (
+                                        <div key={"items" + item.id}>
+                                            <ListItem alignItems="flex-start" button key={"item" + item.id}>
+                                                <ListItemAvatar key={"itemAvatar" + item.id}>
+                                                    <Avatar key={"avatar" + item.id} alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    key={"itemText" + item.id}
+                                                    primary={item.title}
+                                                    secondary={
+                                                        <React.Fragment key={"frag" + item.id}>
+                                                            {item.description}
+                                                            <br></br>
+                                                            {/* <Chip label="key1" className="keys"></Chip>
+                                                        <Chip label="key2" className="keys"></Chip>
+                                                        <Chip label="key3" className="keys"></Chip>
+                                                        <Chip label="key4" className="keys"></Chip> */}
+                                                        </React.Fragment>
+                                                    }
+                                                />
+                                            </ListItem>
+                                            <Divider key={"divider" + item.id} variant="inset" component="li" />
+                                        </div>
+                                    );
+                                })}
+                            </List>
+                        )
+                    })}
+                </div>
 
-                <List >
-                    <ListItem alignItems="flex-start" button>
-                        <ListItemAvatar>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary="Brunch this weekend?"
-                            secondary={
-                                <React.Fragment>
-                                    <Typography
-                                        component="span"
-                                        variant="body2"
-                                        className="inline"
-                                        color="textPrimary"
-                                    >
-                                        Ali Connors
-              </Typography>
-                                    {" — I'll be in your neighborhood doing errands this…"}
-                                </React.Fragment>
-                            }
-                        />
-                    </ListItem>
-                    <Divider variant="inset" component="li" />
-                    <ListItem alignItems="flex-start">
-                        <ListItemAvatar>
-                            <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary="Summer BBQ"
-                            secondary={
-                                <React.Fragment>
-                                    <Typography
-                                        component="span"
-                                        variant="body2"
-                                        className="inline"
-                                        color="textPrimary"
-                                    >
-                                        to Scott, Alex, Jennifer
-              </Typography>
-                                    {" — Wish I could come, but I'm out of town this…"}
-                                </React.Fragment>
-                            }
-                        />
-                    </ListItem>
-                    <Divider variant="inset" component="li" />
-                    <ListItem alignItems="flex-start">
-                        <ListItemAvatar>
-                            <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary="Oui Oui"
-                            secondary={
-                                <React.Fragment>
-                                    <Typography
-                                        component="span"
-                                        variant="body2"
-                                        className="inline"
-                                        color="textPrimary"
-                                    >
-                                        Sandra Adams
-              </Typography>
-                                    {' — Do you have Paris recommendations? Have you ever…'}
-                                </React.Fragment>
-                            }
-                        />
-                    </ListItem>
-                </List>
 
             </div>
         );

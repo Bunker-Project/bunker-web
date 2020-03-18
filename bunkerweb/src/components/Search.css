@@ -5,3 +5,12 @@
 .inline {
     display: inline;
 }
+
+.fragment {
+    padding-bottom: 5px;
+}
+
+.keys {
+    margin-right: 2px;
+    margin-top: 2px;
+}

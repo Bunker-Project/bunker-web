@@ -2,6 +2,11 @@
     padding: 20px 10px 20px 0px;
 }
 
+.textBar {
+    display: flex;
+    flex-direction: row;
+}
+
 .inline {
     display: inline;
 }
@@ -13,4 +18,10 @@
 .keys {
     margin-right: 2px;
     margin-top: 2px;
+}
+
+.showAll {
+    width: 150px;
+    margin-top: 10px;
+    margin-left: 5px;
 }

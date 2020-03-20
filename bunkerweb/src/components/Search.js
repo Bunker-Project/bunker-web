@@ -10,8 +10,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import Api from '../Api';
 import Button from '@material-ui/core/Button';
@@ -19,21 +17,27 @@ import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 class Search extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            searchResult: [],
+            itemsResult: [],
+            secretsResult: [],
+            mergedArray: Object,
             api: new Api({ isDev: true }),
             txtSearch: '',
             noValueSnackBarOpen: false,
+            value: null,
+            expanded: false
         };
-    }
-
-    handleClick = () => {
-        console.log('Clicked');
     }
 
     handleKeyDown = (event) => {
@@ -48,7 +52,7 @@ class Search extends React.Component {
     //Validate if the textfield has a value for searching
     validateText = () => {
         var hasValue = this.state.txtSearch !== ''
-        
+
         if (!hasValue)
             this.openSnackMessage();
 
@@ -59,34 +63,66 @@ class Search extends React.Component {
     search = (value) => {
         this.clearCurrentData();
         if (this.validateText()) {
-            this.state.api.search({
-                api: "items",
-                searchString: value
-            }).then(response => {
-                this.setState({
-                    searchResult: [...this.state.searchResult, response.data]
-                });
-            });
+            this.searchItems(value);
+            this.searchSecrets(value);
         }
     }
 
+    searchItems = (value) => {
+        this.state.api.search({
+            api: "items",
+            searchString: value
+        }).then(response => {
+            this.setState({
+                itemsResult: [...this.state.itemsResult, response.data]
+            });
+        });
+    }
+
+    searchSecrets = (value) => {
+        this.state.api.search({
+            api: "secrets",
+            searchString: value
+        }).then(response => {
+            this.setState({
+                secretsResult: [...this.state.secretsResult, response.data]
+            });
+        });
+    }
+
+    getAllItems = () => {
+        this.state.api.getAll({
+            api: "items"
+        }).then(response => {
+            this.setState({
+                itemsResult: [...this.state.itemsResult, response.data]
+            })
+        })
+    }
+
+    getAllSecrets = () => {
+        this.state.api.getAll({
+            api: "secrets"
+        }).then(response => {
+            this.setState({
+                secretsResult: [...this.state.secretsResult, response.data]
+            })
+        })
+    }
+
     //Clear all the list to not duplicate the results
-    clearCurrentData(){
+    clearCurrentData() {
         this.setState({
-            searchResult: []
+            itemsResult: [],
+            secretsResult: []
         })
     }
 
     //Show all the results from the database
     showAllClick() {
         this.clearCurrentData();
-        this.state.api.getAll({
-            api: "items"
-        }).then(response => {
-            this.setState({
-                searchResult: [...this.state.searchResult, response.data]
-            })
-        })
+        this.getAllItems();
+        this.getAllSecrets();
     }
 
     //Keep updated the variables to use to make requests later on
@@ -108,6 +144,18 @@ class Search extends React.Component {
         this.setState({
             noValueSnackBarOpen: false
         });
+    }
+
+    handleTabChange = (event) => {
+        this.setState({
+            value: event.target.value
+        })
+    }
+
+    handleChange = panel => (event, isExpanded) => {
+        this.setState({
+            expanded: isExpanded ? panel : false
+        })
     }
 
     render() {
@@ -136,51 +184,103 @@ class Search extends React.Component {
                         <Button variant="outlined" onClick={() => this.showAllClick()}>Show all</Button>
                     </div>
                 </div>
-                <div key="search">
-                    {this.state.searchResult.map(data => {
+                <div key="search" className="results">
+
+                    {/* Build the items results */}
+                    {this.state.itemsResult.map(data => {
                         return (
-                            <List key="list">
-                                {data.map(item => {
-                                    return (
-                                        <div key={"items" + item.id}>
-                                            <ListItem alignItems="flex-start" button key={"item" + item.id}>
-                                                <ListItemIcon key={"itemAvatar" + item.id}>
-                                                    <DescriptionOutlinedIcon />
-                                                </ListItemIcon>
-                                                <ListItemText
-                                                    key={"itemText" + item.id}
-                                                    primary={item.title}
-                                                    secondary={
-                                                        <React.Fragment key={"frag" + item.id}>
-                                                            {item.description}
-                                                            <br></br>
-                                                            {item.keyWords.map(keyword => {
-                                                                return (
-                                                                    <Chip key={keyword.id} label={keyword.description} className="keys"></Chip>
-                                                                );
-                                                            })}
-                                                        </React.Fragment>
-                                                    }
-                                                />
-                                            </ListItem>
-                                            <Divider key={"divider" + item.id} variant="inset" component="li" />
-                                        </div>
-                                    );
-                                })}
-                            </List>
+                            <ExpansionPanel expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                >
+                                    <Typography className="heading">Items</Typography>
+                                    <Typography className="secondaryHeading">Put a badge with the number of results</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails className="listItem">
+                                    <List key="list" className="list">
+                                        {data.map(item => {
+                                            return (
+                                                <div key={"items" + item.id} >
+                                                    <ListItem alignItems="flex-start" button key={"item" + item.id}>
+                                                        <ListItemIcon key={"itemAvatar" + item.id}>
+                                                            <DescriptionOutlinedIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText
+                                                            key={"itemText" + item.id}
+                                                            primary={item.title}
+                                                            secondary={
+                                                                <React.Fragment key={"frag" + item.id}>
+                                                                    {item.description}
+                                                                    <br></br>
+                                                                    {item.keyWords.map(keyword => {
+                                                                        return (
+                                                                            <Chip key={keyword.id} label={keyword.description} className="keys"></Chip>
+                                                                        );
+                                                                    })}
+                                                                </React.Fragment>
+                                                            }
+                                                        />
+                                                    </ListItem>
+                                                    <Divider key={"divider" + item.id} variant="inset" component="li" />
+                                                </div>
+                                            );
+                                        })}
+
+                                    </List>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
                         )
                     })}
+
+                    {this.state.secretsResult.map(secrets => {
+                        return (
+                            <ExpansionPanel expanded={this.state.expanded === 'panel2'} onChange={this.handleChange('panel2')}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel2bh-content"
+                                    id="panel2bh-header"
+                                >
+                                    <Typography className="heading">Secrets</Typography>
+                                    <Typography className="secondaryHeading">Put a badge with the number of results</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails className="listItem">
+                                    <List key="list" className="list">
+                                        {secrets.map(sec =>{
+                                            return (
+                                                <div key={"items" + sec.id} >
+                                                    <ListItem alignItems="flex-start" button key={"item" + sec.id}>
+                                                        <ListItemIcon key={"itemAvatar" + sec.id}>
+                                                            <VpnKeyIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText
+                                                            key={"itemText" + sec.id}
+                                                            primary={sec.secretId}
+                                                        />
+                                                    </ListItem>
+                                                    <Divider key={"divider" + sec.id} variant="inset" component="li" />
+                                                </div>
+                                            );
+                                        })}
+                                    </List>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        )
+                    })}
+
+
                 </div>
 
                 <SnackBar
                     open={this.state.noValueSnackBarOpen}
                     onClose={this.closeSnackMessage}
                     autoHideDuration={6000}>
-                        <MuiAlert elevation={6} variant="filled" severity="info">
-                            Please type a value or click on "Show all" on the right side
-                        </MuiAlert>
+                    <MuiAlert elevation={6} variant="filled" severity="info">
+                        Please type a value or click on "Show all" on the right side
+                         </MuiAlert>
                 </SnackBar>
-            </div>
+            </div >
         );
     }
 }

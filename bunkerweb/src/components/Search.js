@@ -23,6 +23,8 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
 
 class Search extends React.Component {
 
@@ -189,14 +191,14 @@ class Search extends React.Component {
                     {/* Build the items results */}
                     {this.state.itemsResult.map(data => {
                         return (
-                            <ExpansionPanel expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+                            <ExpansionPanel key="expPanelItems" expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
                                 <ExpansionPanelSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel1bh-content"
-                                    id="panel1bh-header"
+                                    key="panel1bh-header"
                                 >
-                                    <Typography className="heading">Items</Typography>
-                                    <Typography className="secondaryHeading">Put a badge with the number of results</Typography>
+                                    <Typography className="heading" key="itemsHeadingText">Items</Typography>
+                                    {/* <Typography className="secondaryHeading" key="itemSecondaryHeading">Put a badge with the number of results</Typography> */}
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails className="listItem">
                                     <List key="list" className="list">
@@ -204,14 +206,17 @@ class Search extends React.Component {
                                             return (
                                                 <div key={"items" + item.id} >
                                                     <ListItem alignItems="flex-start" button key={"item" + item.id}>
-                                                        <ListItemIcon key={"itemAvatar" + item.id}>
-                                                            <DescriptionOutlinedIcon />
-                                                        </ListItemIcon>
+                                                        <ListItemAvatar key={"itemAvatar" + item.id}>
+                                                            <Avatar key={"avatar" + item.id}>
+                                                                <DescriptionOutlinedIcon key={"descIcon" + item.id} />
+                                                            </Avatar>
+                                                        </ListItemAvatar>
                                                         <ListItemText
                                                             key={"itemText" + item.id}
                                                             primary={item.title}
                                                             secondary={
-                                                                <React.Fragment key={"frag" + item.id}>
+                                                                // <React.Fragment key={"frag" + item.id}>
+                                                                <div key={"frag" + item.id}>
                                                                     {item.description}
                                                                     <br></br>
                                                                     {item.keyWords.map(keyword => {
@@ -219,7 +224,8 @@ class Search extends React.Component {
                                                                             <Chip key={keyword.id} label={keyword.description} className="keys"></Chip>
                                                                         );
                                                                     })}
-                                                                </React.Fragment>
+                                                                    {/* </React.Fragment> */}
+                                                                </div>
                                                             }
                                                         />
                                                     </ListItem>
@@ -236,28 +242,27 @@ class Search extends React.Component {
 
                     {this.state.secretsResult.map(secrets => {
                         return (
-                            <ExpansionPanel expanded={this.state.expanded === 'panel2'} onChange={this.handleChange('panel2')}>
+                            <ExpansionPanel key="expPanelSecrets" expanded={this.state.expanded === 'panel2'} onChange={this.handleChange('panel2')}>
                                 <ExpansionPanelSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel2bh-content"
-                                    id="panel2bh-header"
+                                    key="panel2bh-header"
                                 >
-                                    <Typography className="heading">Secrets</Typography>
-                                    <Typography className="secondaryHeading">Put a badge with the number of results</Typography>
+                                    <Typography className="heading" key="secretsText">Secrets</Typography>
+                                    {/* <Typography className="secondaryHeading" key="badgesSecrets">Put a badge with the number of results</Typography> */}
                                 </ExpansionPanelSummary>
-                                <ExpansionPanelDetails className="listItem">
+                                <ExpansionPanelDetails className="listItem" key="expPanelDetailsSecrets">
                                     <List key="list" className="list">
-                                        {secrets.map(sec =>{
+                                        {secrets.map(sec => {
                                             return (
                                                 <div key={"items" + sec.id} >
-                                                    <ListItem alignItems="flex-start" button key={"item" + sec.id}>
-                                                        <ListItemIcon key={"itemAvatar" + sec.id}>
-                                                            <VpnKeyIcon />
+                                                    <ListItem button key={"item" + sec.id}>
+                                                        <ListItemIcon key={"itemIcon" + sec.id}>
+                                                            <Avatar key={"avatar" + sec.id}>
+                                                                <VpnKeyIcon key={"secretIcon" + sec.id} />
+                                                            </Avatar>
                                                         </ListItemIcon>
-                                                        <ListItemText
-                                                            key={"itemText" + sec.id}
-                                                            primary={sec.secretId}
-                                                        />
+                                                        <ListItemText primary={sec.secretId} />
                                                     </ListItem>
                                                     <Divider key={"divider" + sec.id} variant="inset" component="li" />
                                                 </div>

@@ -36,11 +36,11 @@ class Form extends React.Component {
 
     handleFormType() {
         if (this.props.id === "search")
-            return <Search></Search>
+            return <Search key="searchForm"></Search>
         else if (this.props.id === "newItem")
-            return <Register></Register>
+            return <Register key="registerForm"></Register>
         else
-            return <Secret></Secret>
+            return <Secret key="secretForm"></Secret>
     }
 
     render() {
@@ -77,7 +77,7 @@ class Form extends React.Component {
                             </Button> */}
                         </Toolbar>
                     </AppBar>
-                    <div className="form">
+                    <div key="formType" className="form">
                         {this.handleFormType()}
                     </div>
                 </Dialog>

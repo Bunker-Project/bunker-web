@@ -53,8 +53,13 @@ class Api {
     getErrorMessage() {
         return this.state.errorMessage;
     }
+    
+    update({api, data}){
+        return axios.put(`${this.concatUrl(api)}/${data.id}`, data).then( response => {
+            return response
+        });
 
-
+    }
 }
 
 export default Api;

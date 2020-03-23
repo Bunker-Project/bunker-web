@@ -25,6 +25,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import { withRouter } from 'react-router-dom';
 
 class Search extends React.Component {
 
@@ -38,7 +39,8 @@ class Search extends React.Component {
             txtSearch: '',
             noValueSnackBarOpen: false,
             value: null,
-            expanded: false
+            expanded: false,
+            history: props.history
         };
     }
 
@@ -160,8 +162,21 @@ class Search extends React.Component {
         })
     }
 
-    handleItemClick = () => {
-        alert('Clicked');
+    handleItemClick = index => {
+        console.log("The index is: " + index);
+        // this.state.history.push({
+        //     pathname: '/edit',
+        //     state: {
+        //         id: this.state.id,
+        //         description: this.state.description,
+        //         title: this.state.title,
+        //         keys: this.state.chips
+        //     }
+        // })
+    }
+
+    handleSecretClick = index => {
+        console.log("The index is: " + index);
     }
 
     render() {
@@ -206,14 +221,14 @@ class Search extends React.Component {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails className="listItem">
                                     <List key="list" className="list">
-                                        {data.map(item => {
+                                        {data.map( ( item, index ) => {
                                             return (
                                                 <div key={"items" + item.id} >
                                                     <ListItem 
                                                         alignItems="flex-start" 
                                                         button 
                                                         key={"item" + item.id}
-                                                        onClick={this.handleItemClick} >
+                                                        onClick={() => this.handleItemClick(index)} >
                                                         <ListItemAvatar key={"itemAvatar" + item.id}>
                                                             <Avatar key={"avatar" + item.id}>
                                                                 <DescriptionOutlinedIcon key={"descIcon" + item.id} />
@@ -261,10 +276,13 @@ class Search extends React.Component {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails className="listItem" key="expPanelDetailsSecrets">
                                     <List key="list" className="list">
-                                        {secrets.map(sec => {
+                                        {secrets.map( (sec, index) => {
                                             return (
                                                 <div key={"items" + sec.id} >
-                                                    <ListItem button key={"item" + sec.id}>
+                                                    <ListItem 
+                                                        button 
+                                                        key={"item" + sec.id}
+                                                        onClick={() => this.handleSecretClick(index)}>
                                                         <ListItemIcon key={"itemIcon" + sec.id}>
                                                             <Avatar key={"avatar" + sec.id}>
                                                                 <VpnKeyIcon key={"secretIcon" + sec.id} />
@@ -298,4 +316,4 @@ class Search extends React.Component {
     }
 }
 
-export default Search;
+export default withRouter(Search);

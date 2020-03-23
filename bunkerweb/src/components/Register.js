@@ -171,12 +171,6 @@ class Register extends React.Component {
                     error={this.state.isErrorDescription}
                 />
                 <div className="save">
-                    {/* <Button
-                        variant="outlined"
-                        color="secondary"
-                        startIcon={<CloseIcon></CloseIcon>}>
-                        Cancel
-                    </Button> */}
                     <Button
                         variant="outlined"
                         color="primary"

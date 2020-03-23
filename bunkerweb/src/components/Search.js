@@ -160,6 +160,10 @@ class Search extends React.Component {
         })
     }
 
+    handleItemClick = () => {
+        alert('Clicked');
+    }
+
     render() {
 
         return (
@@ -205,7 +209,11 @@ class Search extends React.Component {
                                         {data.map(item => {
                                             return (
                                                 <div key={"items" + item.id} >
-                                                    <ListItem alignItems="flex-start" button key={"item" + item.id}>
+                                                    <ListItem 
+                                                        alignItems="flex-start" 
+                                                        button 
+                                                        key={"item" + item.id}
+                                                        onClick={this.handleItemClick} >
                                                         <ListItemAvatar key={"itemAvatar" + item.id}>
                                                             <Avatar key={"avatar" + item.id}>
                                                                 <DescriptionOutlinedIcon key={"descIcon" + item.id} />

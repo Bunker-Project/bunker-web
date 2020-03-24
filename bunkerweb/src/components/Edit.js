@@ -1,54 +1,53 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import './Register.css';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import CheckIcon from '@material-ui/icons/Check';
 import Api from '../Api';
-import { v4 as uuidv4 } from 'uuid'
-import NavBar from './Navbar';
+import DeleteIcon from '@material-ui/icons/Delete';
+import './Edit.css';
 
-class Register extends React.Component {
+class Edit extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log(props.location.state);
+
         this.state = {
-            txtTitle: '',
-            txtDescription: '',
             isErrorTitle: false,
             isErrorDescription: false,
             errorTitleText: '',
             errorDescText: '',
-            id: props.id,
-            title: props.title,
-            description: props.description,
-            chips: props.keyWords
+            item: props.location.state,
+            title: '',
+            description: ''
         }
+    }
+
+    componentDidMount(){
+        this.initialize();
     }
 
     save() {
         var _api;
-        let newId = uuidv4();//Creates a random GUID as PK
         if (this.validate()) {
             _api = new Api({ isDev: true });
             //First tries to insert the items, if successful then inserts the keywords
-            _api.insert({
+            _api.update({
                 api: "items",
                 data: {
-                    id: newId,
-                    title: this.state.txtTitle,
-                    description: this.state.txtDescription
+                    id: this.state.item.id,
+                    title: this.state.title,
+                    description: this.state.description
                 }
             }).then(data =>{
                     if (data.status === 201) {
                         var keys = [];
                         console.log(this);
-                        for (var key of this.state.chips) {
+                        for (var key of this.state.item.keyWords) {
                             keys.push({
-                                id: uuidv4(),
-                                description: key,
-                                itemId: newId
+                                id: key.id,
+                                description: key.description,
+                                itemId: this.state.item.id
                             });
                         }
 
@@ -65,7 +64,7 @@ class Register extends React.Component {
     validate() {
         let validated = true;
 
-        if (this.state.txtTitle.length === 0) {
+        if (this.state.title.length === 0) {
             this.setState({
                 isErrorTitle: true,
                 errorTitleText: 'The title must have a value'
@@ -78,7 +77,7 @@ class Register extends React.Component {
             });
         }
 
-        if (this.state.txtDescription.length === 0) {
+        if (this.state.description.length === 0) {
             this.setState({
                 isErrorDescription: true,
                 errorDescText: 'The description must have a value'
@@ -94,10 +93,16 @@ class Register extends React.Component {
         return validated;
     }
 
-    updateVariables = event => {
+    updateTitle = event => {
         this.setState({
-            [event.target.id]: event.target.value,
+            title: event.target.value,
         });
+    }
+
+    updateDescription = event => {
+        this.setState({
+            description: event.target.value
+        })
     }
 
     handleKeyDown = (e) => {
@@ -116,12 +121,17 @@ class Register extends React.Component {
         });
     }
 
+    initialize = () => {
+        this.setState({
+            title: this.state.item.title,
+            description: this.state.item.description
+        })
+    }
+
 
     render() {
-
         return (
             <div className="container">
-                <NavBar></NavBar>
                 <TextField
                     id="txtTitle"
                     label="Title"
@@ -131,7 +141,7 @@ class Register extends React.Component {
                     fullWidth
                     margin="normal"
                     error={this.state.isErrorTitle}
-                    onChange={this.updateVariables}
+                    onChange={this.updateTitle}
                     value={this.state.title}
                     InputLabelProps={{
                         shrink: true,
@@ -151,11 +161,11 @@ class Register extends React.Component {
                     }}
                 />
                 <div className="chips">
-                    {this.state.chips.map(data => {
+                    {this.state.item.keyWords.map(data => {
                         return (
                             <Chip
-                                key={data}
-                                label={data}
+                                key={data.id}
+                                label={data.description}
                                 onDelete={() => this.handleDelete(data)}
                                 variant="outlined"
                                 color="primary"
@@ -172,17 +182,26 @@ class Register extends React.Component {
                     rows="4"
                     value={this.state.description}
                     variant="outlined"
-                    onChange={this.updateVariables}
+                    onChange={this.updateDescription}
                     helperText={this.state.errorDescText}
                     error={this.state.isErrorDescription}
                 />
                 <div className="save">
                     <Button
+                        key="saveButton"
                         variant="outlined"
                         color="primary"
                         onClick={() => this.save()}
                         startIcon={<CheckIcon></CheckIcon>}>
-                        Save
+                        update
+                    </Button>
+                    <Button
+                        key="cancelButton"
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => this.save()}
+                        startIcon={<DeleteIcon />}>
+                        cancel
                     </Button>
                 </div>
             </div>
@@ -190,4 +209,4 @@ class Register extends React.Component {
     }
 }
 
-export default Register;
+export default Edit;

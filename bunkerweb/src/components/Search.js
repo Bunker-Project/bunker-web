@@ -163,16 +163,21 @@ class Search extends React.Component {
     }
 
     handleItemClick = index => {
-        console.log("The index is: " + index);
-        // this.state.history.push({
-        //     pathname: '/edit',
-        //     state: {
-        //         id: this.state.id,
-        //         description: this.state.description,
-        //         title: this.state.title,
-        //         keys: this.state.chips
-        //     }
-        // })
+        let firstIndex = this.state.itemsResult[0];
+
+        let item = firstIndex[index];
+
+        console.log(item.keyWords);
+
+        this.state.history.push({
+            pathname: '/edit',
+            state: {
+                id: item.id,
+                description: item.description,
+                title: item.title,
+                keyWords: item.keyWords
+            }
+        })
     }
 
     handleSecretClick = index => {

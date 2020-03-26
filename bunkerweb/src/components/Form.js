@@ -13,78 +13,50 @@ import Register from './Register.js';
 import Search from './Search.js';
 import Secret from './Secret.js';
 
-class Form extends React.Component {
+function Form({ id, show, onClose }) {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            open: this.props.show,
-        };
-
-        this.handleClose = this.handleClose.bind(this);
-
-    }
-
-    //This is one way to create but we need to bind it in the constructor
-    handleClose() {
-        this.setState({ open: false });
-    }
-
-    handleOpen() {
-        this.setState({ open: true });
-    }
-
-    handleFormType() {
-        if (this.props.id === "search")
+    function handleFormType() {
+        if (id === "search")
             return <Search key="searchForm"></Search>
-        else if (this.props.id === "newItem")
+        else if (id === "newItem")
             return <Register key="registerForm"></Register>
         else
             return <Secret key="secretForm"></Secret>
     }
 
-    render() {
+    if (!show)
+        return null;
 
-        if (!this.props.show)
-            return null;
+    const Transition = React.forwardRef(function Transition(props, ref) {
+        return <Slide direction="up" ref={ref} {...props} />;
+    });
 
-        const Transition = React.forwardRef(function Transition(props, ref) {
-            return <Slide direction="up" ref={ref} {...props} />;
-        });
-
-        return (
-            <div>
-                <Dialog fullScreen open={this.props.show} onClose={this.props.onClose} TransitionComponent={Transition}>
-                    <AppBar className="appBar">
-                        <Toolbar>
-                            <IconButton edge="start" color="inherit" onClick={this.props.onClose} aria-label="close">
-                                {/* <CloseIcon /> */}
-                            </IconButton>
-                            <Typography variant="h6" className="title">
-                                Bunker
+    return (
+        <div>
+            <Dialog fullScreen open={show} onClose={onClose} TransitionComponent={Transition}>
+                <AppBar className="appBar">
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" onClick={onClose} aria-label="close">
+                        </IconButton>
+                        <Typography variant="h6" className="title">
+                            Bunker
                             </Typography>
-                            <Button
-                                color="inherit"
-                                onClick={this.props.onClose}
-                                startIcon={<CloseIcon></CloseIcon>}>
-                                cancel
+                        <Button
+                            color="inherit"
+                            onClick={onClose}
+                            startIcon={<CloseIcon></CloseIcon>}>
+                            cancel
                             </Button>
-                            {/* <Button
-                                autoFocus color="inherit"
-                                onClick={this.props.onClose}
-                                startIcon={<CheckIcon></CheckIcon>}>
-                                save
-                            </Button> */}
-                        </Toolbar>
-                    </AppBar>
-                    <div key="formType" className="form">
-                        {this.handleFormType()}
-                    </div>
-                </Dialog>
-            </div>
-        );
-    }
+                    </Toolbar>
+                </AppBar>
+                <div key="formType" className="form">
+                    {handleFormType()}
+                </div>
+            </Dialog>
+        </div>
+    );
 }
+
 
 Form.propTypes = {
     onClose: PropTypes.func.isRequired,

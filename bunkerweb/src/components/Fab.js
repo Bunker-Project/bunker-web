@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
@@ -8,70 +8,60 @@ import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import './Fab.css'
 
-class Fab extends React.Component {
+function Fab(props) {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            direction: 'right',
-            open: false,
-            hidden: false,
-            showForm: false,
-            id: ''
-        }
+    const direction = 'right';
+    const [open, setOpen] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+    const [id, setId] = useState('');
+
+    function handleClose() {
+        setOpen(false);
     }
 
-    handleClose = () => {
-        this.setState({ open: false });
+    function handleOpen() {
+        setOpen(true);
     }
 
-    handleOpen = () => {
-        this.setState({ open: true });
+    function handleClick(idClicked) {
+        setShowForm(true);
+        setId(idClicked);
     }
 
-    handleClick = (idClicked) => {
-        this.setState({
-            showForm: true,
-            id: idClicked
-        });
+    function handleCloseForm() {
+        setShowForm(false);
     }
 
-    handleCloseForm = () => {
-        this.setState({ showForm: false });
-    }
+    const actions = [
+        { icon: <SearchIcon />, name: 'Search', id: 'search' },
+        { icon: <SpeakerNotesIcon />, name: "Add new item", id: 'newItem' },
+        { icon: <VpnKeyIcon />, name: "Add new secret", id: 'newSecret' },
+    ];
 
-    render() {
-        const actions = [
-            { icon: <SearchIcon />, name: 'Search', id: 'search' },
-            { icon: <SpeakerNotesIcon />, name: "Add new item", id: 'newItem' },
-            { icon: <VpnKeyIcon />, name: "Add new secret", id: 'newSecret' },
-        ];
+    return (
+        <div>
+            <SpeedDial
+                ariaLabel="SpeedDial example"
+                className="speedDial"
+                icon={<SpeedDialIcon />}
+                onClose={handleClose}
+                onOpen={handleOpen}
+                open={open}
+                direction={direction}
+            >
+                {actions.map(action => (
+                    <SpeedDialAction
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                        onClick={() => handleClick(action.id)}
+                    />
+                ))}
+            </SpeedDial>
+            <Form show={showForm} onClose={handleCloseForm} id={id}></Form>
+        </div>
+    );
+};
 
-        return (
-            <div>
-                <SpeedDial
-                    ariaLabel="SpeedDial example"
-                    className="speedDial"
-                    hidden={this.state.hidden}
-                    icon={<SpeedDialIcon />}
-                    onClose={this.handleClose}
-                    onOpen={this.handleOpen}
-                    open={this.state.open}
-                    direction={this.state.direction}
-                >
-                    {actions.map(action => (
-                        <SpeedDialAction
-                            key={action.name}
-                            icon={action.icon}
-                            tooltipTitle={action.name}
-                            onClick={() => this.handleClick(action.id)}
-                        />
-                    ))}
-                </SpeedDial>
-                <Form show={this.state.showForm} onClose={this.handleCloseForm} id={this.state.id}></Form>
-            </div>
-        );
-    };
-}
 
 export default Fab;

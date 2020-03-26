@@ -27,18 +27,8 @@ class Register extends React.Component {
         let newId = uuidv4();//Creates a random GUID as PK
         if (this.validate()) {
             _api = new Api({ isDev: true });
-            //First tries to insert the items, if successful then inserts the keywords
-            let response = await _api.insert({
-                api: "items",
-                data: {
-                    id: newId,
-                    title: this.state.txtTitle,
-                    description: this.state.txtDescription
-                }
-            })
-            if (response.status === 201) {
-                var keys = [];
-                console.log(this);
+            
+            var keys = [];
                 for (var key of this.state.chips) {
                     keys.push({
                         id: uuidv4(),
@@ -47,11 +37,17 @@ class Register extends React.Component {
                     });
                 }
 
-                _api.insert({
-                    api: 'keywords',
-                    data: keys
-                });
-            }
+            let response = await _api.insert({
+                api: "items",
+                data: {
+                    id: newId,
+                    title: this.state.txtTitle,
+                    description: this.state.txtDescription,
+                    keyWords: keys
+                }
+            })
+
+            console.log(response);
         }
     }
 

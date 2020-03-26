@@ -72,45 +72,46 @@ class Search extends React.Component {
         }
     }
 
-    searchItems = (value) => {
-        this.state.api.search({
+    async searchItems(value) {
+        let response = await this.state.api.search({
             api: "items",
             searchString: value
-        }).then(response => {
-            this.setState({
-                itemsResult: [...this.state.itemsResult, response.data]
-            });
         });
-    }
-
-    searchSecrets = (value) => {
-        this.state.api.search({
-            api: "secrets",
-            searchString: value
-        }).then(response => {
-            this.setState({
-                secretsResult: [...this.state.secretsResult, response.data]
-            });
-        });
-    }
-
-    getAllItems = () => {
-        this.state.api.getAll({
-            api: "items"
-        }).then(response => {
-            this.setState({
-                itemsResult: [...this.state.itemsResult, response.data]
-            })
+        this.setState({
+            itemsResult: [...this.state.itemsResult, response.data]
         })
     }
 
-    getAllSecrets = () => {
-        this.state.api.getAll({
+    async searchSecrets(value) {
+        let response = await this.state.api.search({
+            api: "secrets",
+            searchString: value
+        })
+
+        this.setState({
+            secretsResult: [...this.state.secretsResult, response.data]
+        });
+
+    }
+
+    async getAllItems() {
+        let response = await this.state.api.getAll({
+            api: "items"
+        });
+
+        this.setState({
+            itemsResult: [...this.state.itemsResult, response.data]
+        })
+
+    }
+
+    async getAllSecrets() {
+        let response = await this.state.api.getAll({
             api: "secrets"
-        }).then(response => {
-            this.setState({
-                secretsResult: [...this.state.secretsResult, response.data]
-            })
+        });
+
+        this.setState({
+            secretsResult: [...this.state.secretsResult, response.data]
         })
     }
 
@@ -226,12 +227,12 @@ class Search extends React.Component {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails className="listItem">
                                     <List key="list" className="list">
-                                        {data.map( ( item, index ) => {
+                                        {data.map((item, index) => {
                                             return (
                                                 <div key={"items" + item.id} >
-                                                    <ListItem 
-                                                        alignItems="flex-start" 
-                                                        button 
+                                                    <ListItem
+                                                        alignItems="flex-start"
+                                                        button
                                                         key={"item" + item.id}
                                                         onClick={() => this.handleItemClick(index)} >
                                                         <ListItemAvatar key={"itemAvatar" + item.id}>
@@ -281,11 +282,11 @@ class Search extends React.Component {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails className="listItem" key="expPanelDetailsSecrets">
                                     <List key="list" className="list">
-                                        {secrets.map( (sec, index) => {
+                                        {secrets.map((sec, index) => {
                                             return (
                                                 <div key={"items" + sec.id} >
-                                                    <ListItem 
-                                                        button 
+                                                    <ListItem
+                                                        button
                                                         key={"item" + sec.id}
                                                         onClick={() => this.handleSecretClick(index)}>
                                                         <ListItemIcon key={"itemIcon" + sec.id}>

@@ -33,15 +33,11 @@ class Api {
     }
 
     insert({ api, data }) {
-        return axios.post(this.concatUrl(api), data).then(response => {
-            return response
-        });
+        return axios.post(this.concatUrl(api), data);
     }
 
     search({api, searchString}) {
-        return axios.get(`${this.concatUrl(api)}/search/${searchString}`).then( response => {
-            return response
-        });
+        return axios.get(`${this.concatUrl(api)}/search/${searchString}`);
     }
 
     setMessageText(value) {
@@ -55,10 +51,7 @@ class Api {
     }
     
     update({api, data}){
-        return axios.put(`${this.concatUrl(api)}/${data.id}`, data).then( response => {
-            return response
-        });
-
+        return axios.put(`${this.concatUrl(api)}/${data.id}`, data);
     }
 }
 

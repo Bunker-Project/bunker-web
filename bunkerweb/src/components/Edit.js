@@ -35,37 +35,36 @@ function Edit(props) {
     }, []);
 
 
-    function save() {
+    async function save() {
         var _api;
         if (validate()) {
             _api = new Api({ isDev: true });
             //First tries to insert the items, if successful then inserts the keywords
-            _api.update({
+            let response = await _api.update({
                 api: "items",
                 data: {
                     id: item.id,
                     title: title,
                     description: description
                 }
-            }).then(data => {
-                if (data.status === 201) {
-                    var keys = [];
-                    console.log(this);
-                    for (var key of item.keyWords) {
-                        keys.push({
-                            id: key.id,
-                            description: key.description,
-                            itemId: item.id
-                        });
-                    }
+            });
 
-                    _api.update({
-                        api: 'keywords',
-                        data: keys
+            if (response.status === 201) {
+                var keys = [];
+                console.log(this);
+                for (var key of item.keyWords) {
+                    keys.push({
+                        id: key.id,
+                        description: key.description,
+                        itemId: item.id
                     });
                 }
+
+                _api.update({
+                    api: 'keywords',
+                    data: keys
+                });
             }
-            );
         }
     }
 

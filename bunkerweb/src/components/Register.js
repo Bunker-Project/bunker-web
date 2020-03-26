@@ -22,38 +22,36 @@ class Register extends React.Component {
         }
     }
 
-    save() {
+    async save() {
         var _api;
         let newId = uuidv4();//Creates a random GUID as PK
         if (this.validate()) {
             _api = new Api({ isDev: true });
             //First tries to insert the items, if successful then inserts the keywords
-            _api.insert({
+            let response = await _api.insert({
                 api: "items",
                 data: {
                     id: newId,
                     title: this.state.txtTitle,
                     description: this.state.txtDescription
                 }
-            }).then(data =>{
-                    if (data.status === 201) {
-                        var keys = [];
-                        console.log(this);
-                        for (var key of this.state.chips) {
-                            keys.push({
-                                id: uuidv4(),
-                                description: key,
-                                itemId: newId
-                            });
-                        }
-
-                        _api.insert({
-                            api: 'keywords',
-                            data: keys
-                        });
-                    }
+            })
+            if (response.status === 201) {
+                var keys = [];
+                console.log(this);
+                for (var key of this.state.chips) {
+                    keys.push({
+                        id: uuidv4(),
+                        description: key,
+                        itemId: newId
+                    });
                 }
-            );
+
+                _api.insert({
+                    api: 'keywords',
+                    data: keys
+                });
+            }
         }
     }
 

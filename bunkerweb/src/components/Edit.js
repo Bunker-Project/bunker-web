@@ -6,9 +6,17 @@ import CheckIcon from '@material-ui/icons/Check';
 import Api from '../Api';
 import DeleteIcon from '@material-ui/icons/Delete';
 import './Edit.css';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { useHistory } from 'react-router-dom';
 
 // class Edit extends React.Component {
 function Edit(props) {
+
+    const history = useHistory();
 
     const [isErrorTitle, setErrorTitle] = useState(false);
     const [isErrorDescription, setErrorDescription] = useState(false);
@@ -18,6 +26,7 @@ function Edit(props) {
     const [chips, setChips] = useState(props.location.state.keyWords);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [open, setOpen] = useState(false);
 
     //If you pass something to the array it will execute every time something change otherwise just once
 
@@ -110,6 +119,19 @@ function Edit(props) {
         setDescription(item.description);
     }
 
+    function openDialog() {
+        setOpen(true);
+    }
+
+    function closeDialog() {
+        setOpen(false);
+    }
+
+    function redirectToMain() {
+        closeDialog();
+        history.push('/');
+    }
+
     return (
         <div className="container">
             <TextField
@@ -179,11 +201,33 @@ function Edit(props) {
                     key="cancelButton"
                     variant="outlined"
                     color="secondary"
-                    onClick={() => save()}
+                    onClick={() => openDialog()}
                     startIcon={<DeleteIcon />}>
                     cancel
                     </Button>
             </div>
+
+            <Dialog
+                open={open}
+                onClose={closeDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Are you sure?"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        The changes made will not be saved, are you sure that you want to cancel?
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDialog} color="primary" autoFocus>
+                        No
+                    </Button>
+                    <Button onClick={redirectToMain} color="primary">
+                        Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

@@ -6,6 +6,9 @@ import Button from '@material-ui/core/Button';
 import CheckIcon from '@material-ui/icons/Check';
 import Api from '../Api';
 import { v4 as uuidv4 } from 'uuid'
+import SnackBar from '@material-ui/core/Snackbar';
+import Slide from '@material-ui/core/Slide';
+import MuiAlert from '@material-ui/lab/Alert';
 
 class Register extends React.Component {
 
@@ -13,12 +16,15 @@ class Register extends React.Component {
         super(props);
         this.state = {
             chips: [],
-            txtTitle: '',
-            txtDescription: '',
+            title: '',
+            description: '',
             isErrorTitle: false,
             isErrorDescription: false,
             errorTitleText: '',
-            errorDescText: ''
+            errorDescText: '',
+            openSnackBar: false,
+            message: '',
+            messageType: 'info'
         }
     }
 
@@ -27,34 +33,34 @@ class Register extends React.Component {
         let newId = uuidv4();//Creates a random GUID as PK
         if (this.validate()) {
             _api = new Api({ isDev: true });
-            
+
             var keys = [];
-                for (var key of this.state.chips) {
-                    keys.push({
-                        id: uuidv4(),
-                        description: key,
-                        itemId: newId
-                    });
-                }
+            for (var key of this.state.chips) {
+                keys.push({
+                    id: key.id,
+                    description: key.description,
+                    itemId: newId
+                });
+            }
 
             let response = await _api.insert({
                 api: "items",
                 data: {
                     id: newId,
-                    title: this.state.txtTitle,
-                    description: this.state.txtDescription,
+                    title: this.state.title,
+                    description: this.state.description,
                     keyWords: keys
                 }
-            })
+            });
 
-            console.log(response);
+            this.configureAfterSave(response);
         }
     }
 
     validate() {
         let validated = true;
 
-        if (this.state.txtTitle.length === 0) {
+        if (this.state.title.length === 0) {
             this.setState({
                 isErrorTitle: true,
                 errorTitleText: 'The title must have a value'
@@ -67,7 +73,7 @@ class Register extends React.Component {
             });
         }
 
-        if (this.state.txtDescription.length === 0) {
+        if (this.state.description.length === 0) {
             this.setState({
                 isErrorDescription: true,
                 errorDescText: 'The description must have a value'
@@ -83,17 +89,20 @@ class Register extends React.Component {
         return validated;
     }
 
-    updateVariables = event => {
-        this.setState({
-            [event.target.id]: event.target.value,
-        });
-    }
+    // updateVariables = event => {
+    //     this.setState({
+    //         [event.target.id]: event.target.value,
+    //     });
+    // }
 
     handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
             this.setState({
-                chips: [...this.state.chips, e.target.value]
+                chips: [...this.state.chips, {
+                    id: uuidv4(),
+                    description: e.target.value
+                }]
             });
             e.target.value = "";
         }
@@ -101,7 +110,34 @@ class Register extends React.Component {
 
     handleDelete = (data) => {
         this.setState({
-            chips: this.state.chips.filter(chip => chip !== data)
+            chips: this.state.chips.filter(chip => chip.id !== data.id)
+        });
+    }
+
+    openSnackBar = (message, messageType) => {
+        this.setState({
+            openSnackBar: true,
+            message: message,
+            messageType: messageType
+        });
+    }
+
+    closeSnackBar = () => {
+        this.setState({
+            openSnackBar: false
+        });
+    }
+
+    configureAfterSave = (response) => {
+        if (response.status === 201)
+            this.openSnackBar("Created successfully", "success");
+        else
+            this.openSnackBar(response.statusText, "error");
+
+        this.setState({
+            title: '',
+            description: '',
+            chips: []
         });
     }
 
@@ -118,9 +154,13 @@ class Register extends React.Component {
                     helperText={this.state.errorTitleText}
                     fullWidth
                     margin="normal"
+                    autoFocus={true}
                     error={this.state.isErrorTitle}
-                    onChange={this.updateVariables}
+                    onChange={e => this.setState({title: e.target.value})}
                     value={this.state.title}
+                    ref={input => {
+                        this.textInput = input
+                    }}
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -142,8 +182,8 @@ class Register extends React.Component {
                     {this.state.chips.map(data => {
                         return (
                             <Chip
-                                key={data}
-                                label={data}
+                                key={data.id}
+                                label={data.description}
                                 onDelete={() => this.handleDelete(data)}
                                 variant="outlined"
                                 color="primary"
@@ -160,7 +200,7 @@ class Register extends React.Component {
                     rows="4"
                     value={this.state.description}
                     variant="outlined"
-                    onChange={this.updateVariables}
+                    onChange={e => this.setState({description: e.target.value})}
                     helperText={this.state.errorDescText}
                     error={this.state.isErrorDescription}
                 />
@@ -173,6 +213,15 @@ class Register extends React.Component {
                         Save
                     </Button>
                 </div>
+
+                <SnackBar
+                    open={this.state.openSnackBar}
+                    onClose={this.closeSnackBar}
+                    autoHideDuration={2000}>
+                    <MuiAlert elevation={6} variant="filled" severity={this.state.messageType}>
+                        {this.state.message}
+                    </MuiAlert>
+                </SnackBar>
             </div>
         );
     }

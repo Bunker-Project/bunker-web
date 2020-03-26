@@ -3,17 +3,16 @@ import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import SearchIcon from '@material-ui/icons/Search';
-import Form from './Form.js';
 import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import './Fab.css'
+import { useHistory } from 'react-router-dom';
 
 function Fab(props) {
 
+    const history = useHistory();
     const direction = 'right';
     const [open, setOpen] = useState(false);
-    const [showForm, setShowForm] = useState(false);
-    const [id, setId] = useState('');
 
     function handleClose() {
         setOpen(false);
@@ -24,18 +23,25 @@ function Fab(props) {
     }
 
     function handleClick(idClicked) {
-        setShowForm(true);
-        setId(idClicked);
-    }
-
-    function handleCloseForm() {
-        setShowForm(false);
+        switch (idClicked) {
+            case "search":
+                history.push('/search');
+                break;
+            case "register":
+                history.push('/register');
+                break;
+            case "secret":
+                history.push('/secret');
+                break;
+            default:
+                break;
+        }
     }
 
     const actions = [
         { icon: <SearchIcon />, name: 'Search', id: 'search' },
-        { icon: <SpeakerNotesIcon />, name: "Add new item", id: 'newItem' },
-        { icon: <VpnKeyIcon />, name: "Add new secret", id: 'newSecret' },
+        { icon: <SpeakerNotesIcon />, name: "Add new item", id: 'register' },
+        { icon: <VpnKeyIcon />, name: "Add new secret", id: 'secret' },
     ];
 
     return (
@@ -58,7 +64,7 @@ function Fab(props) {
                     />
                 ))}
             </SpeedDial>
-            <Form show={showForm} onClose={handleCloseForm} id={id}></Form>
+            {/* <Form show={showForm} onClose={handleCloseForm} id={id}></Form> */}
         </div>
     );
 };

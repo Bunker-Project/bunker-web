@@ -102,7 +102,6 @@ class Search extends React.Component {
         this.setState({
             itemsResult: [...this.state.itemsResult, response.data]
         })
-
     }
 
     async getAllSecrets() {
@@ -124,10 +123,10 @@ class Search extends React.Component {
     }
 
     //Show all the results from the database
-    showAllClick() {
+    async showAllClick() {
         this.clearCurrentData();
-        this.getAllItems();
-        this.getAllSecrets();
+        await this.getAllItems();
+        await this.getAllSecrets();
     }
 
     //Keep updated the variables to use to make requests later on

@@ -1,4 +1,6 @@
+import jwt from 'jsonwebtoken';
 const axios = require('axios');
+
 
 class Api {
     constructor({ isDev }) {
@@ -16,6 +18,46 @@ class Api {
             // Do something with response error
             return Promise.reject(error);
         });
+
+    }
+
+    validateToken() {
+        let token = localStorage.getItem("token");
+        let validated = true;
+
+        if (token === null || token === "null")
+            return false;
+
+        jwt.verify(token, 'anVzdGF0ZXN0Zm9ydGhlYXBp', async function (err, decoded) {
+            if (err) {
+                if (err.name === 'TokenExpiredError') {
+                    localStorage.setItem("token", null);
+                    validated = false;
+                }
+            }
+        });
+
+        return validated;
+    }
+
+    async handleToken() {
+        let response = await this.getToken();
+        localStorage.setItem("token", response.data);
+    }
+
+    async getToken() {
+        return await axios.post(`${this.state.url}/login`, {
+            username: 'doug',
+            password: 'apiapi'
+        });
+    }
+
+    getHeaders() {
+        return {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        }
     }
 
     //Concats the url 
@@ -24,20 +66,23 @@ class Api {
     }
 
     //Returns all the data of an object
-    getAll({ api }) {
-        return axios.get(this.concatUrl(api));
+    async getAll({ api }) {
+        if (!this.validateToken())
+            await this.handleToken();
+
+        return axios.get(this.concatUrl(api), this.getHeaders());
     }
 
     getById({ api, id }) {
-        return axios.get(`${this.concatUrl(api)}/${id}`);
+        return axios.get(`${this.concatUrl(api)}/${id}`, this.getHeaders());
     }
 
     insert({ api, data }) {
-        return axios.post(this.concatUrl(api), data);
+        return axios.post(this.concatUrl(api), data, this.getHeaders());
     }
 
-    search({api, searchString}) {
-        return axios.get(`${this.concatUrl(api)}/search/${searchString}`);
+    search({ api, searchString }) {
+        return axios.get(`${this.concatUrl(api)}/search/${searchString}`, this.getHeaders());
     }
 
     setMessageText(value) {
@@ -49,9 +94,9 @@ class Api {
     getErrorMessage() {
         return this.state.errorMessage;
     }
-    
-    update({api, data}){
-        return axios.put(`${this.concatUrl(api)}/${data.id}`, data);
+
+    update({ api, data }) {
+        return axios.put(`${this.concatUrl(api)}/${data.id}`, data, this.getHeaders());
     }
 }
 

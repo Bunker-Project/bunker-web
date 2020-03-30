@@ -1,6 +1,12 @@
-.Brand{
-    
-    margin: 0 auto;
+.icon
+ {
+    height: auto;
+    width: 50px;
+}
+
+.title {
+    margin-left: 1px;
+    flex: 1;
 }
 
 

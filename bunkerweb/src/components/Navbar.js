@@ -14,8 +14,6 @@ function NavBar(props) {
     const [showReturnButton, setButton] = useState(props.showReturnButton);
 
     function handleClick() {
-        console.log("here");
-        console.log(history);
         history.push('/');
     }
 

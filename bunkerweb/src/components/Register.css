@@ -18,13 +18,16 @@
     margin: 2px;
 }
 
-.mainText {
-    padding-top: 50px;
-}
-
 .save {
-    padding-top: 10px;
+    margin-top: 0px;
+    margin-left: 7px;
 }
 
+.description {
+    margin-left: 7px;
+}
 
+.inputs {
+    margin-right: 10px;
+}
 

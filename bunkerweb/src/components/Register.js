@@ -7,8 +7,8 @@ import CheckIcon from '@material-ui/icons/Check';
 import Api from '../Api';
 import { v4 as uuidv4 } from 'uuid'
 import SnackBar from '@material-ui/core/Snackbar';
-import Slide from '@material-ui/core/Slide';
 import MuiAlert from '@material-ui/lab/Alert';
+import '../global.css'
 
 class Register extends React.Component {
 
@@ -89,12 +89,6 @@ class Register extends React.Component {
         return validated;
     }
 
-    // updateVariables = event => {
-    //     this.setState({
-    //         [event.target.id]: event.target.value,
-    //     });
-    // }
-
     handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -146,38 +140,40 @@ class Register extends React.Component {
 
         return (
             <div className="container">
-                <TextField
-                    id="txtTitle"
-                    label="Title"
-                    style={{ margin: 8 }}
-                    placeholder="Type the title"
-                    helperText={this.state.errorTitleText}
-                    fullWidth
-                    margin="normal"
-                    autoFocus={true}
-                    error={this.state.isErrorTitle}
-                    onChange={e => this.setState({title: e.target.value})}
-                    value={this.state.title}
-                    ref={input => {
-                        this.textInput = input
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
+                <div className="inputs">
+                    <TextField
+                        id="txtTitle"
+                        label="Title"
+                        style={{ margin: 8 }}
+                        placeholder="Type the title"
+                        helperText={this.state.errorTitleText}
+                        fullWidth
+                        margin="normal"
+                        autoFocus={true}
+                        error={this.state.isErrorTitle}
+                        onChange={e => this.setState({ title: e.target.value })}
+                        value={this.state.title}
+                        ref={input => {
+                            this.textInput = input
+                        }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
 
-                <TextField
-                    id="txtKeyword"
-                    label="Keywords"
-                    style={{ margin: 8 }}
-                    placeholder="Type and press enter to create a keyword"
-                    fullWidth
-                    margin="normal"
-                    onKeyDown={this.handleKeyDown}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
+                    <TextField
+                        id="txtKeyword"
+                        label="Keywords"
+                        style={{ margin: 8 }}
+                        placeholder="Type and press enter to create a keyword"
+                        fullWidth
+                        margin="normal"
+                        onKeyDown={this.handleKeyDown}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                </div>
                 <div className="chips">
                     {this.state.chips.map(data => {
                         return (
@@ -192,18 +188,21 @@ class Register extends React.Component {
                         );
                     })}
                 </div>
-                <TextField
-                    id="txtDescription"
-                    label="What do you want to keep here?"
-                    placeholder="Type something, feel free :). I'll keep the secret"
-                    multiline
-                    rows="4"
-                    value={this.state.description}
-                    variant="outlined"
-                    onChange={e => this.setState({description: e.target.value})}
-                    helperText={this.state.errorDescText}
-                    error={this.state.isErrorDescription}
-                />
+                <div className="description">
+                    <TextField
+                        id="txtDescription"
+                        label="What do you want to keep here?"
+                        placeholder="Type something, feel free :). I'll keep the secret"
+                        multiline
+                        fullWidth
+                        rows="4"
+                        value={this.state.description}
+                        variant="outlined"
+                        onChange={e => this.setState({ description: e.target.value })}
+                        helperText={this.state.errorDescText}
+                        error={this.state.isErrorDescription}
+                    />
+                </div>
                 <div className="save">
                     <Button
                         variant="outlined"

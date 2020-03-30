@@ -199,16 +199,18 @@ class Search extends React.Component {
                                     {<SearchOutlinedIcon color="action"></SearchOutlinedIcon>}
                                 </IconButton>
                             </InputAdornment>}
+                            endAdornment={<InputAdornment position="end">
+                                <button className="seeAll">
+                                    See all results
+                                </button>
+                            </InputAdornment>
+                            }
                             labelWidth={140}
                             onKeyDown={this.handleKeyDown}
                             value={this.state.txtSearch}
                             onChange={this.updateVariables}
                         />
                     </FormControl>
-
-                    <div className="showAll">
-                        <Button variant="outlined" onClick={() => this.showAllClick()}>Show all</Button>
-                    </div>
                 </div>
                 <div key="search" className="results">
 
@@ -222,7 +224,6 @@ class Search extends React.Component {
                                     key="panel1bh-header"
                                 >
                                     <Typography className="heading" key="itemsHeadingText">Items</Typography>
-                                    {/* <Typography className="secondaryHeading" key="itemSecondaryHeading">Put a badge with the number of results</Typography> */}
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails className="listItem">
                                     <List key="list" className="list">
@@ -277,7 +278,6 @@ class Search extends React.Component {
                                     key="panel2bh-header"
                                 >
                                     <Typography className="heading" key="secretsText">Secrets</Typography>
-                                    {/* <Typography className="secondaryHeading" key="badgesSecrets">Put a badge with the number of results</Typography> */}
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails className="listItem" key="expPanelDetailsSecrets">
                                     <List key="list" className="list">

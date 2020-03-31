@@ -11,6 +11,8 @@ import Api from '../Api';
 import { v4 as uuidv4 } from 'uuid'
 import '../global.css';
 import LockIcon from '@material-ui/icons/Lock';
+import SnackBar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 // class Secret extends React.Component {
 function Secret(props) {
@@ -19,7 +21,9 @@ function Secret(props) {
     const [showPassword, setShowPassword] = useState(false);
     const [txtId, setTxtId] = useState('');
     const [txtPassword, setTxtPassword] = useState('');
-
+    const [open, setOpen] = useState(false);
+    const [messageType, setMessageType] = useState('');
+    const [message, setMessage] = useState('');
 
     function handleClickShowPassword() {
         setShowPassword(!showPassword);
@@ -29,15 +33,36 @@ function Secret(props) {
         event.preventDefault();
     }
 
-    function save() {
-        api.insert({
-            api: "secrets",
-            data: {
-                id: uuidv4(),
-                secretId: txtId,
-                description: txtPassword
-            }
-        });
+    async function save() {
+        let response = await api.insert({
+                            api: "secrets",
+                            data: {
+                                id: uuidv4(),
+                                secretId: txtId,
+                                password: txtPassword
+                            }
+                        });
+        if(response.status === 201){
+            clearAllData();
+            openMessage('Secret created successfully', 'success');
+        }else{
+            openMessage(response.statusText, 'error');
+        }
+    }
+
+    function clearAllData(){
+       setTxtId('');
+       setTxtPassword('');
+    }
+
+    function closeMessage(){
+        setOpen(false);
+    }
+
+    function openMessage(message, messageType){
+        setMessage(message);
+        setMessageType(messageType);
+        setOpen(true);
     }
 
     return (
@@ -96,6 +121,15 @@ function Secret(props) {
                     Save
                     </Button>
             </div>
+
+            <SnackBar
+                    open={open}
+                    onClose={() => closeMessage()}
+                    autoHideDuration={2000}>
+                    <MuiAlert elevation={6} variant="filled" severity={messageType}>
+                        {message}
+                    </MuiAlert>
+                </SnackBar>
         </div>
     );
 }

@@ -10,22 +10,18 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
-import Chip from '@material-ui/core/Chip';
+// import Chip from '@material-ui/core/Chip';
 import Api from '../Api';
-import Button from '@material-ui/core/Button';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import { withRouter } from 'react-router-dom';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import EditIcon from '@material-ui/icons/Edit';
 
 class Search extends React.Component {
 
@@ -34,13 +30,16 @@ class Search extends React.Component {
         this.state = {
             itemsResult: [],
             secretsResult: [],
+            results: [],
             mergedArray: Object,
             api: new Api({ isDev: true }),
             txtSearch: '',
             noValueSnackBarOpen: false,
             value: null,
             expanded: false,
-            history: props.history
+            history: props.history,
+            dense: false,
+            secondary: false
         };
     }
 
@@ -73,7 +72,7 @@ class Search extends React.Component {
     }
 
     async searchItems(value) {
-        let response = await this.state.api.search({
+        let response = await this.state.api.searchByEntity({
             api: "items",
             searchString: value
         });
@@ -83,7 +82,7 @@ class Search extends React.Component {
     }
 
     async searchSecrets(value) {
-        let response = await this.state.api.search({
+        let response = await this.state.api.searchByEntity({
             api: "secrets",
             searchString: value
         })
@@ -125,8 +124,11 @@ class Search extends React.Component {
     //Show all the results from the database
     async showAllClick() {
         this.clearCurrentData();
-        await this.getAllItems();
-        await this.getAllSecrets();
+        let response = await this.state.api.searchAllTogether();
+
+        this.setState({
+            results: [...this.state.results, response.data]
+        });
     }
 
     //Keep updated the variables to use to make requests later on
@@ -180,12 +182,84 @@ class Search extends React.Component {
         })
     }
 
+    generate(element) {
+        return [0, 1, 2].map((value) =>
+            React.cloneElement(element, {
+                key: value,
+            }),
+        );
+    }
+
     handleSecretClick = index => {
         console.log("The index is: " + index);
     }
 
-    render() {
+    createObjectByType(item, index) {
+        if (item.type === 'secret') {
+            return (
+                <ListItem
+                    button>
+                    <ListItemAvatar key={`listSecretAvatar${index}`}>
+                        <Avatar key={`avatarSecret${index}`}>
+                            <VpnKeyIcon key={`iconKey${index}`} />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                        key={item.value.id}
+                        primary={item.value.secretId}
+                    />
+                    <ListItemSecondaryAction>
+                        <IconButton edge="end" aria-label="delete">
+                            <DeleteIcon />
+                        </IconButton>
+                        <IconButton edge="end" aria-label="edit">
+                            <EditIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+            )
+        }
+        else {
+            return (
 
+                <ListItem
+                    button>
+                    <ListItemAvatar key={`listItemAvatar${index}`}>
+                        <Avatar key={`avatarItem${index}`}>
+                            <DescriptionOutlinedIcon key={`iconDesc${index}`} />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                        key={item.value.id}
+                        primary={item.value.title}
+                        secondary={item.value.description}
+                        // secondary={
+                        //     <div key={"frag" + item.id}>
+                        //         {item.value.description}
+                        //         <br></br>
+                        //         {item.value.keyWords.map(keyword => {
+                        //             return (
+                        //                 <Chip key={keyword.id} label={keyword.description} className="keys"></Chip>
+                        //             );
+                        //         })}
+                        //     </div>
+                        // }
+                    />
+                    <ListItemSecondaryAction>
+                        <IconButton edge="end" aria-label="delete">
+                            <DeleteIcon />
+                        </IconButton>
+                        <IconButton edge="end" aria-label="edit">
+                            <EditIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+
+            )
+        }
+    }
+
+    render() {
         return (
             <div className="container">
                 <div className="textBar">
@@ -200,7 +274,9 @@ class Search extends React.Component {
                                 </IconButton>
                             </InputAdornment>}
                             endAdornment={<InputAdornment position="end">
-                                <button className="seeAll">
+                                <button
+                                    className="seeAll"
+                                    onClick={() => this.showAllClick()}>
                                     See all results
                                 </button>
                             </InputAdornment>
@@ -215,97 +291,24 @@ class Search extends React.Component {
                 <div key="search" className="results">
 
                     {/* Build the items results */}
-                    {this.state.itemsResult.map(data => {
-                        return (
-                            <ExpansionPanel key="expPanelItems" expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
-                                <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1bh-content"
-                                    key="panel1bh-header"
-                                >
-                                    <Typography className="heading" key="itemsHeadingText">Items</Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails className="listItem">
-                                    <List key="list" className="list">
-                                        {data.map((item, index) => {
+                    <List dense={this.state.dense}>
+                        {this.state.results.map((data, index) => {
+                            return (
+                                <div key={"divWrap" + index}>
+                                    {
+                                        data.map((item, index) => {
                                             return (
-                                                <div key={"items" + item.id} >
-                                                    <ListItem
-                                                        alignItems="flex-start"
-                                                        button
-                                                        key={"item" + item.id}
-                                                        onClick={() => this.handleItemClick(index)} >
-                                                        <ListItemAvatar key={"itemAvatar" + item.id}>
-                                                            <Avatar key={"avatar" + item.id}>
-                                                                <DescriptionOutlinedIcon key={"descIcon" + item.id} />
-                                                            </Avatar>
-                                                        </ListItemAvatar>
-                                                        <ListItemText
-                                                            key={"itemText" + item.id}
-                                                            primary={item.title}
-                                                            secondary={
-                                                                // <React.Fragment key={"frag" + item.id}>
-                                                                <div key={"frag" + item.id}>
-                                                                    {item.description}
-                                                                    <br></br>
-                                                                    {item.keyWords.map(keyword => {
-                                                                        return (
-                                                                            <Chip key={keyword.id} label={keyword.description} className="keys"></Chip>
-                                                                        );
-                                                                    })}
-                                                                    {/* </React.Fragment> */}
-                                                                </div>
-                                                            }
-                                                        />
-                                                    </ListItem>
-                                                    <Divider key={"divider" + item.id} variant="inset" component="li" />
+                                                <div key={"divInternal" + index}>
+                                                    {this.createObjectByType(item)}
+                                                    <Divider key={"divider" + index} variant="inset" component="li" />
                                                 </div>
-                                            );
+                                            )
                                         })}
+                                </div>
+                            )
+                        })}
 
-                                    </List>
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                        )
-                    })}
-
-                    {this.state.secretsResult.map(secrets => {
-                        return (
-                            <ExpansionPanel key="expPanelSecrets" expanded={this.state.expanded === 'panel2'} onChange={this.handleChange('panel2')}>
-                                <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2bh-content"
-                                    key="panel2bh-header"
-                                >
-                                    <Typography className="heading" key="secretsText">Secrets</Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails className="listItem" key="expPanelDetailsSecrets">
-                                    <List key="list" className="list">
-                                        {secrets.map((sec, index) => {
-                                            return (
-                                                <div key={"items" + sec.id} >
-                                                    <ListItem
-                                                        button
-                                                        key={"item" + sec.id}
-                                                        onClick={() => this.handleSecretClick(index)}>
-                                                        <ListItemIcon key={"itemIcon" + sec.id}>
-                                                            <Avatar key={"avatar" + sec.id}>
-                                                                <VpnKeyIcon key={"secretIcon" + sec.id} />
-                                                            </Avatar>
-                                                        </ListItemIcon>
-                                                        <ListItemText primary={sec.secretId} />
-                                                    </ListItem>
-                                                    <Divider key={"divider" + sec.id} variant="inset" component="li" />
-                                                </div>
-                                            );
-                                        })}
-                                    </List>
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                        )
-                    })}
-
-
+                    </List>
                 </div>
 
                 <SnackBar

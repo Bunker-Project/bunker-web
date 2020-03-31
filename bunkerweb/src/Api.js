@@ -52,7 +52,8 @@ class Api {
         });
     }
 
-    getHeaders() {
+    async getHeaders() {
+        await this.handleToken();
         return {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -70,19 +71,19 @@ class Api {
         if (!this.validateToken())
             await this.handleToken();
 
-        return axios.get(this.concatUrl(api), this.getHeaders());
+        return axios.get(this.concatUrl(api), await this.getHeaders());
     }
 
-    getById({ api, id }) {
-        return axios.get(`${this.concatUrl(api)}/${id}`, this.getHeaders());
+    async getById({ api, id }) {
+        return axios.get(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
     }
 
-    insert({ api, data }) {
-        return axios.post(this.concatUrl(api), data, this.getHeaders());
+    async insert({ api, data }) {
+        return axios.post(this.concatUrl(api), data, await this.getHeaders());
     }
 
-    search({ api, searchString }) {
-        return axios.get(`${this.concatUrl(api)}/search/${searchString}`, this.getHeaders());
+    async searchByEntity({ api, searchString }) {
+        return axios.get(`${this.concatUrl(api)}/search/${searchString}`, await this.getHeaders());
     }
 
     setMessageText(value) {
@@ -95,8 +96,16 @@ class Api {
         return this.state.errorMessage;
     }
 
-    update({ api, data }) {
-        return axios.put(`${this.concatUrl(api)}/${data.id}`, data, this.getHeaders());
+    async update({ api, data }) {
+        return axios.put(`${this.concatUrl(api)}/${data.id}`, data, await this.getHeaders());
+    }
+
+    async searchAllTogether() {
+        return axios.get(`${this.state.url}/search`, await this.getHeaders());
+    }
+
+    async searchAllByString(searchString) {
+        return axios.get(`${this.state.url}/search/${searchString}`, await this.getHeaders());
     }
 }
 

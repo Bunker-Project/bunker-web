@@ -100,8 +100,8 @@ class Api {
         return axios.put(`${this.concatUrl(api)}/${data.id}`, data, await this.getHeaders());
     }
 
-    async searchAllTogether() {
-        return axios.get(`${this.state.url}/search`, await this.getHeaders());
+    async searchAllTogether(pageNumber) {
+        return axios.get(`${this.state.url}/search?pageNumber${pageNumber}`, await this.getHeaders());
     }
 
     async searchAllByString(searchString) {

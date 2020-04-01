@@ -48,3 +48,7 @@ a:hover, a:visited, a:link, a:active{
     /*input has OS specific font-family*/
     color: #3F51B5;
   }
+
+.pagination {
+    padding-left: 30%;
+}

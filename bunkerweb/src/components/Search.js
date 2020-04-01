@@ -22,13 +22,13 @@ import { withRouter } from 'react-router-dom';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import EditIcon from '@material-ui/icons/Edit';
+import Pagination from '@material-ui/lab/Pagination';
 
 class Search extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            itemsResult: [],
             secretsResult: [],
             results: [],
             mergedArray: Object,
@@ -39,7 +39,10 @@ class Search extends React.Component {
             expanded: false,
             history: props.history,
             dense: false,
-            secondary: false
+            secondary: false,
+            totalPages: 0,
+            currentPage: 1,
+            hasNext: false
         };
     }
 
@@ -66,68 +69,54 @@ class Search extends React.Component {
     search = (value) => {
         this.clearCurrentData();
         if (this.validateText()) {
-            this.searchItems(value);
-            this.searchSecrets(value);
+            alert('Not implemented');
+            // this.searchItems(value);
+            // this.searchSecrets(value);
         }
     }
 
-    async searchItems(value) {
-        let response = await this.state.api.searchByEntity({
-            api: "items",
-            searchString: value
-        });
-        this.setState({
-            itemsResult: [...this.state.itemsResult, response.data]
-        })
-    }
+    // async searchItems(value) {
+    //     let response = await this.state.api.searchByEntity({
+    //         api: "items",
+    //         searchString: value
+    //     });
+    //     this.setState({
+    //         results: [...this.state.results, response.data]
+    //     })
+    // }
 
-    async searchSecrets(value) {
-        let response = await this.state.api.searchByEntity({
-            api: "secrets",
-            searchString: value
-        })
+    // async searchSecrets(value) {
+    //     let response = await this.state.api.searchByEntity({
+    //         api: "secrets",
+    //         searchString: value
+    //     })
 
-        this.setState({
-            secretsResult: [...this.state.secretsResult, response.data]
-        });
+    //     this.setState({
+    //         secretsResult: [...this.state.secretsResult, response.data]
+    //     });
 
-    }
-
-    async getAllItems() {
-        let response = await this.state.api.getAll({
-            api: "items"
-        });
-
-        this.setState({
-            itemsResult: [...this.state.itemsResult, response.data]
-        })
-    }
-
-    async getAllSecrets() {
-        let response = await this.state.api.getAll({
-            api: "secrets"
-        });
-
-        this.setState({
-            secretsResult: [...this.state.secretsResult, response.data]
-        })
-    }
+    // }
 
     //Clear all the list to not duplicate the results
     clearCurrentData() {
         this.setState({
-            itemsResult: [],
-            secretsResult: []
+            results: []
         })
     }
 
     //Show all the results from the database
-    async showAllClick() {
+    async showAllClick(page) {
         this.clearCurrentData();
-        let response = await this.state.api.searchAllTogether();
+        let response = await this.state.api.searchAllTogether(page);
+
+        console.log(response);
+        let paginationHeader = JSON.parse(response.headers['x-pagination']);
 
         this.setState({
-            results: [...this.state.results, response.data]
+            results: [...this.state.results, response.data],
+            totalPages: paginationHeader.TotalPages,
+            currentPage: paginationHeader.CurrentPage,
+            hasNext: paginationHeader.HasNext
         });
     }
 
@@ -165,7 +154,7 @@ class Search extends React.Component {
     }
 
     handleItemClick = index => {
-        let firstIndex = this.state.itemsResult[0];
+        let firstIndex = this.state.results[0];
 
         let item = firstIndex[index];
 
@@ -233,17 +222,6 @@ class Search extends React.Component {
                         key={item.value.id}
                         primary={item.value.title}
                         secondary={item.value.description}
-                        // secondary={
-                        //     <div key={"frag" + item.id}>
-                        //         {item.value.description}
-                        //         <br></br>
-                        //         {item.value.keyWords.map(keyword => {
-                        //             return (
-                        //                 <Chip key={keyword.id} label={keyword.description} className="keys"></Chip>
-                        //             );
-                        //         })}
-                        //     </div>
-                        // }
                     />
                     <ListItemSecondaryAction>
                         <IconButton edge="end" aria-label="delete">
@@ -257,6 +235,10 @@ class Search extends React.Component {
 
             )
         }
+    }
+
+    handleChange = (event, value) => {
+        this.showAllClick(value);
     }
 
     render() {
@@ -276,7 +258,7 @@ class Search extends React.Component {
                             endAdornment={<InputAdornment position="end">
                                 <button
                                     className="seeAll"
-                                    onClick={() => this.showAllClick()}>
+                                    onClick={() => this.showAllClick(1)}>
                                     See all results
                                 </button>
                             </InputAdornment>
@@ -304,7 +286,12 @@ class Search extends React.Component {
                                                 </div>
                                             )
                                         })}
+                                    <Pagination
+                                        count={this.state.totalPages}
+                                        className="pagination"
+                                        onChange={this.handleChange} />
                                 </div>
+
                             )
                         })}
 
@@ -319,6 +306,7 @@ class Search extends React.Component {
                         Please type a value or click on "Show all" on the right side
                          </MuiAlert>
                 </SnackBar>
+
             </div >
         );
     }

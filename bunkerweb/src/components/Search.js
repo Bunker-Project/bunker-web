@@ -50,7 +50,7 @@ class Search extends React.Component {
         if (event.key === 'Enter') {
             if (this.validateText()) {
                 event.preventDefault();
-                this.search(event.target.value);
+                this.search(event.target.value, 1);
             }
         }
     }
@@ -66,36 +66,15 @@ class Search extends React.Component {
     }
 
     //Calls the api and returns the values
-    search = (value) => {
+    async search(value, page) {
         this.clearCurrentData();
         if (this.validateText()) {
-            alert('Not implemented');
-            // this.searchItems(value);
-            // this.searchSecrets(value);
+            let response = await this.state.api.searchAllByString(value, page);
+
+            this.setResults(response);
         }
     }
 
-    // async searchItems(value) {
-    //     let response = await this.state.api.searchByEntity({
-    //         api: "items",
-    //         searchString: value
-    //     });
-    //     this.setState({
-    //         results: [...this.state.results, response.data]
-    //     })
-    // }
-
-    // async searchSecrets(value) {
-    //     let response = await this.state.api.searchByEntity({
-    //         api: "secrets",
-    //         searchString: value
-    //     })
-
-    //     this.setState({
-    //         secretsResult: [...this.state.secretsResult, response.data]
-    //     });
-
-    // }
 
     //Clear all the list to not duplicate the results
     clearCurrentData() {
@@ -107,9 +86,14 @@ class Search extends React.Component {
     //Show all the results from the database
     async showAllClick(page) {
         this.clearCurrentData();
+
         let response = await this.state.api.searchAllTogether(page);
 
-        console.log(response);
+        this.setResults(response);
+    }
+
+    //Set the results and states to update pagination component
+    setResults(response) {
         let paginationHeader = JSON.parse(response.headers['x-pagination']);
 
         this.setState({
@@ -238,7 +222,12 @@ class Search extends React.Component {
     }
 
     handleChange = (event, value) => {
-        this.showAllClick(value);
+        if (value !== this.state.currentPage) {
+            if (this.state.txtSearch.length === 0)
+                this.showAllClick(value);
+            else
+                this.search(this.state.txtSearch, 1);
+        }
     }
 
     render() {
@@ -288,6 +277,7 @@ class Search extends React.Component {
                                         })}
                                     <Pagination
                                         count={this.state.totalPages}
+                                        defaultPage={this.state.currentPage}
                                         className="pagination"
                                         onChange={this.handleChange} />
                                 </div>

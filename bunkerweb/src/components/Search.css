@@ -50,5 +50,7 @@ a:hover, a:visited, a:link, a:active{
   }
 
 .pagination {
-    padding-left: 30%;
+    position: relative;
+    left: 40%;
+    padding-top: 20px;
 }

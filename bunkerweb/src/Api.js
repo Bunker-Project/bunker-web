@@ -101,7 +101,7 @@ class Api {
     }
 
     async searchAllTogether(pageNumber) {
-        return axios.get(`${this.state.url}/search?pageNumber${pageNumber}`, await this.getHeaders());
+        return axios.get(`${this.state.url}/search?pageNumber=${pageNumber}`, await this.getHeaders());
     }
 
     async searchAllByString(searchString) {

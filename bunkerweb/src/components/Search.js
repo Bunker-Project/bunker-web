@@ -79,7 +79,8 @@ class Search extends React.Component {
     //Clear all the list to not duplicate the results
     clearCurrentData() {
         this.setState({
-            results: []
+            results: [],
+            txtSearch: ''
         })
     }
 

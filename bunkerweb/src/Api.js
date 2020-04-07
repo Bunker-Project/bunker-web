@@ -5,9 +5,9 @@ const axios = require('axios');
 class Api {
     constructor({ isDev }) {
         this.state = {
-            url: isDev ? 'https://localhost:44305/api' : '',
+            url: isDev ? 'http://localhost:44305/api' : '',
             errorMessage: ''
-        }
+        };
 
         axios.interceptors.response.use(function (response) {
             // Any status code that lie within the range of 2xx cause this function to trigger

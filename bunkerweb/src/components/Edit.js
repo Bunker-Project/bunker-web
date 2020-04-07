@@ -68,8 +68,10 @@ function Edit(props) {
         }
     }
 
+
     function validate() {
         let validated = true;
+
 
         if (title.length === 0) {
             setErrorTitle(true);

@@ -24,6 +24,10 @@ function Secret(props) {
     const [open, setOpen] = useState(false);
     const [messageType, setMessageType] = useState('');
     const [message, setMessage] = useState('');
+    const [isErrorId, setIdError] = useState(false);
+    const [isErrorPassword, setPasswordError] = useState(false);
+    const [idErrorMessage, setIdErrorMessage] = useState('* This field is required, otherwise we can not find the key for you afterwards :)');
+    const [passwordErrorMessage, setPasswordMessage] = useState('');
 
     function handleClickShowPassword() {
         setShowPassword(!showPassword);
@@ -34,35 +38,65 @@ function Secret(props) {
     }
 
     async function save() {
-        let response = await api.insert({
-                            api: "secrets",
-                            data: {
-                                id: uuidv4(),
-                                secretId: txtId,
-                                password: txtPassword
-                            }
-                        });
-        if(response.status === 201){
-            clearAllData();
-            openMessage('Secret created successfully', 'success');
-        }else{
-            openMessage(response.statusText, 'error');
+        if (validate()) {
+            let response = await api.insert({
+                api: "secrets",
+                data: {
+                    id: uuidv4(),
+                    secretId: txtId,
+                    password: txtPassword
+                }
+            });
+            if (response.status === 201) {
+                clearAllData();
+                openMessage('Secret created successfully', 'success');
+            } else {
+                openMessage(response.statusText, 'error');
+            }
         }
     }
 
-    function clearAllData(){
-       setTxtId('');
-       setTxtPassword('');
+    function clearAllData() {
+        setTxtId('');
+        setTxtPassword('');
     }
 
-    function closeMessage(){
+    function closeMessage() {
         setOpen(false);
     }
 
-    function openMessage(message, messageType){
+    function openMessage(message, messageType) {
         setMessage(message);
         setMessageType(messageType);
         setOpen(true);
+    }
+
+    //Clean the validation before make a new one
+    function clearPreviousValidation() {
+        setIdError(false);
+        setIdErrorMessage('');
+        setPasswordError(false);
+        setPasswordMessage('');
+    }
+
+    //Validates the form
+    function validate() {
+        clearPreviousValidation();
+        let validated = true;
+
+        if (txtId.length === 0) {
+            setIdError(true);
+            setIdErrorMessage('An ID must have a value');
+            validated = false;
+        }
+
+        if (txtPassword.length === 0) {
+            setPasswordError(true);
+            setPasswordMessage('The password must have a value');
+            validated = false;
+        }
+
+        return validated;
     }
 
     return (
@@ -73,41 +107,44 @@ function Secret(props) {
                     label="Your ID"
                     style={{ margin: 8 }}
                     placeholder="Type an ID to identify your key in the future"
-                    helperText="* This field is required, otherwise we can not find the key for you afterwards :)"
+                    helperText={idErrorMessage}
                     fullWidth
+                    error={isErrorId}
                     margin="normal"
                     value={txtId}
                     onChange={e => setTxtId(e.target.value)}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
-                                <LockIcon color="action" className="lockIcon"/>
+                                <LockIcon color="action" className="lockIcon" />
                             </InputAdornment>
                         ),
                         shrink: true
                     }}
                 />
-                </div>
-                <div className="inputPassword">
+            </div>
+            <div className="inputPassword">
                 <TextField
                     label="Your password"
                     id="txtPassword"
                     fullWidth
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Type the password you want"
+                    helperText={passwordErrorMessage}
+                    error={isErrorPassword}
                     value={txtPassword}
                     onChange={e => setTxtPassword(e.target.value)}
                     InputProps={{
                         startAdornment: (
-                        <InputAdornment position="start">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                            >
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>),
+                            <InputAdornment position="start">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                >
+                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>),
                         shrink: true
                     }}
                 />
@@ -123,13 +160,13 @@ function Secret(props) {
             </div>
 
             <SnackBar
-                    open={open}
-                    onClose={() => closeMessage()}
-                    autoHideDuration={2000}>
-                    <MuiAlert elevation={6} variant="filled" severity={messageType}>
-                        {message}
-                    </MuiAlert>
-                </SnackBar>
+                open={open}
+                onClose={() => closeMessage()}
+                autoHideDuration={2000}>
+                <MuiAlert elevation={6} variant="filled" severity={messageType}>
+                    {message}
+                </MuiAlert>
+            </SnackBar>
         </div>
     );
 }

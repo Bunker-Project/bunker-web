@@ -5,10 +5,10 @@ import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import CheckIcon from '@material-ui/icons/Check';
 import Api from '../Api';
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import '../global.css'
+import '../global.css';
 
 class Register extends React.Component {
 
@@ -25,7 +25,7 @@ class Register extends React.Component {
             openSnackBar: false,
             message: '',
             messageType: 'info'
-        }
+        };
     }
 
     async save() {
@@ -102,11 +102,12 @@ class Register extends React.Component {
         }
     }
 
+    
     handleDelete = (data) => {
         this.setState({
             chips: this.state.chips.filter(chip => chip.id !== data.id)
         });
-    }
+    };
 
     openSnackBar = (message, messageType) => {
         this.setState({
@@ -114,13 +115,13 @@ class Register extends React.Component {
             message: message,
             messageType: messageType
         });
-    }
+    };
 
     closeSnackBar = () => {
         this.setState({
             openSnackBar: false
         });
-    }
+    };
 
     configureAfterSave = (response) => {
         if (response.status === 201)
@@ -133,8 +134,16 @@ class Register extends React.Component {
             description: '',
             chips: []
         });
-    }
 
+        document.getElementById("txtTitle").focus();
+    };
+
+    enterWasPressed = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            this.save();
+        }
+    }
 
     render() {
 
@@ -153,9 +162,6 @@ class Register extends React.Component {
                         error={this.state.isErrorTitle}
                         onChange={e => this.setState({ title: e.target.value })}
                         value={this.state.title}
-                        ref={input => {
-                            this.textInput = input
-                        }}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -201,6 +207,7 @@ class Register extends React.Component {
                         onChange={e => this.setState({ description: e.target.value })}
                         helperText={this.state.errorDescText}
                         error={this.state.isErrorDescription}
+                        onKeyDown={this.enterWasPressed}
                     />
                 </div>
                 <div className="save">

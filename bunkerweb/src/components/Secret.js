@@ -17,6 +17,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 // class Secret extends React.Component {
 function Secret(props) {
 
+    const defaultIdHelperMessage = '* This field is required, otherwise we can not find the key for you afterwards :)';
     const api = new Api({ isDev: true });
     const [showPassword, setShowPassword] = useState(false);
     const [txtId, setTxtId] = useState('');
@@ -26,7 +27,7 @@ function Secret(props) {
     const [message, setMessage] = useState('');
     const [isErrorId, setIdError] = useState(false);
     const [isErrorPassword, setPasswordError] = useState(false);
-    const [idErrorMessage, setIdErrorMessage] = useState('* This field is required, otherwise we can not find the key for you afterwards :)');
+    const [idErrorMessage, setIdErrorMessage] = useState(defaultIdHelperMessage);
     const [passwordErrorMessage, setPasswordMessage] = useState('');
 
     function handleClickShowPassword() {
@@ -53,6 +54,8 @@ function Secret(props) {
             } else {
                 openMessage(response.statusText, 'error');
             }
+
+            document.getElementById("txtId").focus();
         }
     }
 
@@ -74,7 +77,7 @@ function Secret(props) {
     //Clean the validation before make a new one
     function clearPreviousValidation() {
         setIdError(false);
-        setIdErrorMessage('');
+        setIdErrorMessage(defaultIdHelperMessage);
         setPasswordError(false);
         setPasswordMessage('');
     }
@@ -97,6 +100,14 @@ function Secret(props) {
         }
 
         return validated;
+    }
+
+    //Check if enter was pressed and then fires up the save method
+    function enterWasPressed(e){
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            save();
+        }
     }
 
     return (
@@ -134,6 +145,7 @@ function Secret(props) {
                     error={isErrorPassword}
                     value={txtPassword}
                     onChange={e => setTxtPassword(e.target.value)}
+                    onKeyDown={enterWasPressed}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">

@@ -21,8 +21,13 @@ import Avatar from '@material-ui/core/Avatar';
 import { withRouter } from 'react-router-dom';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import EditIcon from '@material-ui/icons/Edit';
 import Pagination from '@material-ui/lab/Pagination';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 
 class Search extends React.Component {
 
@@ -42,8 +47,14 @@ class Search extends React.Component {
             secondary: false,
             totalPages: 0,
             currentPage: 1,
-            hasNext: false
+            hasNext: false,
+            deleteItem: false,
+            deleteSecret: false,
+            currentIndex: -1
         };
+
+        this.handleDeleteItem = this.handleDeleteItem.bind(this);
+        this.handleDeleteSecret = this.handleDeleteSecret.bind(this);
     }
 
     handleKeyDown = (event) => {
@@ -75,7 +86,6 @@ class Search extends React.Component {
         }
     }
 
-
     //Clear all the list to not duplicate the results
     clearCurrentData() {
         this.setState({
@@ -98,7 +108,7 @@ class Search extends React.Component {
         let paginationHeader = JSON.parse(response.headers['x-pagination']);
 
         this.setState({
-            results: [...this.state.results, response.data],
+            results: response.data,
             totalPages: paginationHeader.TotalPages,
             currentPage: paginationHeader.CurrentPage,
             hasNext: paginationHeader.HasNext
@@ -139,19 +149,17 @@ class Search extends React.Component {
     }
 
     handleItemClick = index => {
-        let firstIndex = this.state.results[0];
+        let item = this.state.results[0][index];
 
-        let item = firstIndex[index];
-
-        console.log(item.keyWords);
+        console.log(item.value);
 
         this.state.history.push({
             pathname: '/edit',
             state: {
-                id: item.id,
-                description: item.description,
-                title: item.title,
-                keyWords: item.keyWords
+                id: item.value.id,
+                description: item.value.description,
+                title: item.value.title,
+                keyWords: item.value.keyWords
             }
         })
     }
@@ -168,11 +176,75 @@ class Search extends React.Component {
         console.log("The index is: " + index);
     }
 
+    //To open the confirmation dialog
+    openDeleteItemDialog = index => {
+        console.log("Current index is: " + index);
+        this.setState({
+            deleteItem: true,
+            currentIndex: index
+        });
+    }
+
+    //Calls the api and delete an item
+    async handleDeleteItem() {
+        this.closeDeleteItemDialog();
+        let item = this.state.results[this.state.currentIndex];
+        let response = await this.state.api.delete({
+            api: "items",
+            id: item.value.id
+        });
+
+        if (response.status === 200) {
+            this.setState({
+                results: this.state.results.filter(data => data.value.id !== item.value.id)
+            })
+        }
+    }
+
+    //To close the item's dialog
+    closeDeleteItemDialog = () => {
+        this.setState({
+            deleteItem: false,
+        });
+    }
+
+    //To open the confirmation dialog
+    openDeleteSecretDialog = index => {
+        this.setState({
+            deleteSecret: true,
+            currentIndex: index
+        });
+    }
+
+    //To close the secrets's dialog
+    closeDeleteSecretDialog = () => {
+        this.setState({
+            deleteSecret: false
+        });
+    }
+
+    async handleDeleteSecret() {
+        this.closeDeleteSecretDialog();
+        let item = this.state.results[this.state.currentIndex];
+
+        let response = await this.state.api.delete({
+                                        api: "secrets",
+                                        id: item.value.id
+                                    });
+
+        if (response.status === 200) {
+            this.setState({
+                results: this.state.results.filter(data => data.value.id !== item.value.id)
+            })
+        }
+    }
+
     createObjectByType(item, index) {
         if (item.type === 'secret') {
             return (
                 <ListItem
-                    button>
+                    button
+                    onClick={() => this.handleSecretClick(index)}>
                     <ListItemAvatar key={`listSecretAvatar${index}`}>
                         <Avatar key={`avatarSecret${index}`}>
                             <VpnKeyIcon key={`iconKey${index}`} />
@@ -183,12 +255,15 @@ class Search extends React.Component {
                         primary={item.value.secretId}
                     />
                     <ListItemSecondaryAction>
-                        <IconButton edge="end" aria-label="delete">
+                        <IconButton
+                            edge="end"
+                            aria-label="delete"
+                            onClick={() => this.openDeleteSecretDialog(index)}>
                             <DeleteIcon />
                         </IconButton>
-                        <IconButton edge="end" aria-label="edit">
+                        {/* <IconButton edge="end" aria-label="edit">
                             <EditIcon />
-                        </IconButton>
+                        </IconButton> */}
                     </ListItemSecondaryAction>
                 </ListItem>
             )
@@ -197,7 +272,8 @@ class Search extends React.Component {
             return (
 
                 <ListItem
-                    button>
+                    button
+                    onClick={() => this.handleItemClick(index)}>
                     <ListItemAvatar key={`listItemAvatar${index}`}>
                         <Avatar key={`avatarItem${index}`}>
                             <DescriptionOutlinedIcon key={`iconDesc${index}`} />
@@ -209,12 +285,15 @@ class Search extends React.Component {
                         secondary={item.value.description}
                     />
                     <ListItemSecondaryAction>
-                        <IconButton edge="end" aria-label="delete">
+                        <IconButton
+                            edge="end"
+                            aria-label="delete"
+                            onClick={() => this.openDeleteItemDialog(index)}>
                             <DeleteIcon />
                         </IconButton>
-                        <IconButton edge="end" aria-label="edit">
+                        {/* <IconButton edge="end" aria-label="edit">
                             <EditIcon />
-                        </IconButton>
+                        </IconButton> */}
                     </ListItemSecondaryAction>
                 </ListItem>
 
@@ -267,25 +346,25 @@ class Search extends React.Component {
                         {this.state.results.map((data, index) => {
                             return (
                                 <div key={"divWrap" + index}>
-                                    {
+                                    {/* {
                                         data.map((item, index) => {
-                                            return (
-                                                <div key={"divInternal" + index}>
-                                                    {this.createObjectByType(item)}
-                                                    <Divider key={"divider" + index} variant="inset" component="li" />
-                                                </div>
-                                            )
-                                        })}
-                                    <Pagination
-                                        count={this.state.totalPages}
-                                        defaultPage={this.state.currentPage}
-                                        className="pagination"
-                                        onChange={this.handleChange} />
+                                            return ( */}
+                                    <div key={"divInternal" + index}>
+                                        {this.createObjectByType(data, index)}
+                                        <Divider key={"divider" + index} variant="inset" component="li" />
+                                    </div>
+                                    {/* )
+                                        })} */}
+
                                 </div>
 
                             )
                         })}
-
+                        <Pagination
+                            count={this.state.totalPages}
+                            defaultPage={this.state.currentPage}
+                            className="pagination"
+                            onChange={this.handleChange} />
                     </List>
                 </div>
 
@@ -297,6 +376,52 @@ class Search extends React.Component {
                         Please type a value or click on "Show all" on the right side
                          </MuiAlert>
                 </SnackBar>
+
+                {/* Dialog for delete an item */}
+                <Dialog
+                    open={this.state.deleteItem}
+                    onClose={this.closeDeleteItemDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Delete an item?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure that you want to delete this item?
+                </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.closeDeleteItemDialog} color="primary" autoFocus>
+                            No
+                    </Button>
+                        <Button onClick={this.handleDeleteItem} color="primary">
+                            Yes
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+
+                {/* Dialog for delete a secret */}
+                <Dialog
+                    open={this.state.deleteSecret}
+                    onClose={this.close}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Delete a secret?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure that you want to delete this secret?
+                </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.closeDeleteSecretDialog} color="primary" autoFocus>
+                            No
+                    </Button>
+                        <Button onClick={this.handleDeleteSecret} color="primary">
+                            Yes
+                    </Button>
+                    </DialogActions>
+                </Dialog>
 
             </div >
         );

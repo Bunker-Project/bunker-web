@@ -133,6 +133,28 @@ function Edit(props) {
         history.push('/');
     }
 
+    //Returns the chips in case of the aren't null
+    function getChips() {
+        console.log(item.keyWords);
+        if (item.keyWords !== null || item.keyWords !== undefined) {
+            console.log("It's inside");
+            return (
+                item.keyWords.map(data => {
+                    return (
+                        <Chip
+                            key={data.id}
+                            label={data.description}
+                            onDelete={() => handleDelete(data)}
+                            variant="outlined"
+                            color="primary"
+                            className="chipItem"
+                        />
+                    );
+                })
+            );
+        }
+    }
+
     return (
         <div className="container">
             <TextField
@@ -164,18 +186,7 @@ function Edit(props) {
                 }}
             />
             <div className="chips">
-                {item.keyWords.map(data => {
-                    return (
-                        <Chip
-                            key={data.id}
-                            label={data.description}
-                            onDelete={() => handleDelete(data)}
-                            variant="outlined"
-                            color="primary"
-                            className="chipItem"
-                        />
-                    );
-                })}
+                {getChips()}
             </div>
             <TextField
                 id="txtDescription"

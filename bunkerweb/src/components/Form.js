@@ -26,7 +26,7 @@ function Form(props) {
     return (
         <div>
             <Dialog fullScreen open={true} onClose={props.onClose} TransitionComponent={Transition}>
-                <NavBar showReturnButton={false}></NavBar>
+                <NavBar hiddenReturnButton={false}></NavBar>
                 <div key="formType" className="form">
                     {handleFormType()}
                 </div>

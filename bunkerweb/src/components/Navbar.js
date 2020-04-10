@@ -11,7 +11,7 @@ import { ReactComponent as BunkerIcon } from '../icons/bunker.svg';
 function NavBar(props) {
 
     const history = useHistory();
-    const [showReturnButton, setButton] = useState(props.showReturnButton);
+    const [hiddenReturnButton, setButton] = useState(props.hiddenReturnButton);
 
     function handleClick() {
         history.push('/');
@@ -32,7 +32,7 @@ function NavBar(props) {
                     </Link>
                 <IconButton
                     color="inherit"
-                    hidden={showReturnButton}
+                    hidden={hiddenReturnButton}
                     onClick={() => handleClick()}>
                     <ArrowBackIosOutlinedIcon />
                 </IconButton>

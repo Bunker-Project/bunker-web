@@ -107,6 +107,10 @@ class Api {
     async searchAllByString(searchString) {
         return axios.get(`${this.state.url}/search/${searchString}`, await this.getHeaders());
     }
+
+    async delete({api, id}){
+        return axios.delete(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
+    }
 }
 
 export default Api;

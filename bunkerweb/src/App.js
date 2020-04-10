@@ -10,7 +10,7 @@ function App() {
   return (
     <div>
       <Router className="container">
-        <NavBar showReturnButton={true}></NavBar>
+        <NavBar hiddenReturnButton={true}></NavBar>
       </Router>
       <Routes />
     </div>

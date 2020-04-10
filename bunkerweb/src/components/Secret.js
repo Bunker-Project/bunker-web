@@ -45,7 +45,7 @@ function Secret(props) {
                 data: {
                     id: uuidv4(),
                     secretId: txtId,
-                    password: txtPassword
+                    passwordAsString: txtPassword
                 }
             });
             if (response.status === 201) {

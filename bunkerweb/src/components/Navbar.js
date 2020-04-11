@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import './Navbar.css'
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
-import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 import { useHistory } from 'react-router-dom';
-import { ReactComponent as BunkerIcon } from '../icons/bunker.svg';
+
+import logo from '../icons/logo.png';
+
 
 function NavBar(props) {
 
@@ -18,26 +16,18 @@ function NavBar(props) {
     }
 
     return (
-        <AppBar position="static">
-            <Toolbar>
-                <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                    onClick={() => handleClick()}>
-                    <BunkerIcon className="icon" />
-                </IconButton>
-                <Link className="title">
-                    Bunker
-                    </Link>
-                <IconButton
-                    color="inherit"
-                    hidden={hiddenReturnButton}
-                    onClick={() => handleClick()}>
-                    <ArrowBackIosOutlinedIcon />
-                </IconButton>
-            </Toolbar>
-        </AppBar>
+        <div className="title">
+            <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                className="logoButton"
+                onClick={() => handleClick()}>
+                <img src={logo} alt="Bunker logo" className="icon" />
+            </IconButton>
+
+        </div>
+
     )
 
 }

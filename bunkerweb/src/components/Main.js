@@ -2,34 +2,89 @@ import React from 'react';
 import './Main.css';
 import '../global.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Row from 'react-bootstrap/Row'
-import Fab from './Fab.js';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import search from '../icons/search.png';
+import SearchIcon from '@material-ui/icons/Search';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+import MessageIcon from '@material-ui/icons/Message';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import PersonIcon from '@material-ui/icons/Person';
 
 export default function Main() {
 
+    const palette = {
+        primary: {
+            main: '#fff'
+        }
+    };
+
+    const theme = createMuiTheme({ palette });
+
+    function handleButtonClick() {
+        alert('clicked');
+    }
+
     return (
         <div className="row">
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                    <Button className="mainButton">
-                        {/* <img src={search} alt="search icon"></img> */}
-                    </Button>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Paper className="paper">xs=12 sm=6</Paper>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Paper className="paper">xs=12 sm=6</Paper>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Paper className="paper">xs=12 sm=6</Paper>
-                </Grid>
-            </Grid>
+            <div className="inner">
+                <ThemeProvider theme={theme}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={6}>
+                            <div className="paper">
+                                <button
+                                    className="mainButton"
+                                    onClick={handleButtonClick}>
+                                    <i>
+                                        <SearchIcon
+                                            color="primary"
+                                            style={{ fontSize: 40 }} />
+                                    </i>
+                                </button>
+                            </div>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <div className="paper">
+                                <button
+                                    className="mainButton"
+                                    onClick={handleButtonClick}>
+                                    <i>
+                                        <MessageIcon
+                                            color="primary"
+                                            style={{ fontSize: 40 }} />
+                                    </i>
+                                </button>
+                            </div>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <div className="paper">
+                                <button
+                                    className="mainButton"
+                                    onClick={handleButtonClick}>
+                                    <i>
+                                        <VpnKeyIcon
+                                            color="primary"
+                                            style={{ fontSize: 40 }} />
+                                    </i>
+                                </button>
+                            </div>
+
+                        </Grid>
+                        <Grid item xs={6}>
+                            <div className="paper">
+                                <button
+                                    className="mainButton"
+                                    onClick={handleButtonClick}>
+                                    <i>
+                                        <PersonIcon
+                                            color="primary"
+                                            style={{ fontSize: 40 }} />
+                                    </i>
+                                </button>
+                            </div>
+                        </Grid>
+                    </Grid>
+                </ThemeProvider>
+            </div>
         </div>
     )
 }

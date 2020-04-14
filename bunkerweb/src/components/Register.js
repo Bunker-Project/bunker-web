@@ -1,15 +1,12 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
 import './Register.css';
-import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
-import CheckIcon from '@material-ui/icons/Check';
 import Api from '../Api';
 import { v4 as uuidv4 } from 'uuid';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import '../global.css';
-import NewChip from './Chip';
+import Chip from './Chip';
+import { useHistory } from 'react-router-dom';
 
 class Register extends React.Component {
 
@@ -146,6 +143,12 @@ class Register extends React.Component {
         }
     }
 
+    returnToHome = () => {
+        console.log('Its here');
+        const history = useHistory();
+        history.push('/');
+    }
+
     render() {
 
         return (
@@ -221,25 +224,63 @@ class Register extends React.Component {
                     </Button>
                 </div> */}
                 <label
-                    for="txtDescription"
+                    htmlFor="txtTitle"
                     className="label"> Title:</label>
                 <input
                     type="text"
-                    id="txtDescription"
+                    id="txtTitle"
                     className="defaultTextBox"
-                    placeholder="Type the title"></input>
+                    placeholder="Type the title"
+                    autoFocus
+                    onChange={e => this.setState({ title: e.target.value })}
+                    value={this.state.title}></input>
 
                 <label
                     id="labelKeyword"
-                    for="txtKeyword"
+                    htmlFor="txtKeyword"
                     className="label"> Keywords:</label>
                 <input
                     type="text"
                     id="txtKeyword"
                     className="defaultTextBox"
-                    placeholder="Type and press enter to create a keyword"></input>
+                    placeholder="Type and press enter to create a keyword"
+                    onKeyDown={this.handleKeyDown}
+                    value={this.state.description}
+                    onChange={e => this.setState({ description: e.target.value })}></input>
+
                 <div className="chips">
-                    <NewChip />
+                    {this.state.chips.map(data => {
+                        return (
+                            <Chip
+                                key={data.id}
+                                label={data.description}
+                                onDelete={() => this.handleDelete(data)}
+                            />
+                        );
+                    })}
+                </div>
+
+                <label
+                    id="labelContent"
+                    htmlFor="txtContent"
+                    className="label">Content: </label>
+                <textarea
+                    id="txtContent"
+                    rows="5"
+                    cols="30"
+                    placeholder="What do you want to keep here?"
+                    onKeyDown={this.enterWasPressed}>
+                </textarea>
+
+                <div className="buttons">
+                    <button
+                        className="saveButton"
+                        onClick={() => this.save()}>SAVE
+                    </button>
+                    <button
+                        className="backButton"
+                        onClick={() => this.returnToHome()}>BACK
+                    </button>
                 </div>
 
                 <SnackBar

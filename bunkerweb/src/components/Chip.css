@@ -9,6 +9,7 @@
     display: flex;
     padding-right: 3px;
     cursor: pointer;
+    margin: 3px;
 }
 
 .rectangle:hover {

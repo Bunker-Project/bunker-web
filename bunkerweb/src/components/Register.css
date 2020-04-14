@@ -1,13 +1,16 @@
 .container {
     display: flex;
     flex-direction: column;
+    position: absolute;
+    top: 15%;
+    left: 8%;
 }
 
 .chips {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .chipItem {
@@ -34,4 +37,54 @@
 #txtKeyword {
     margin-bottom: 10px;
 }
+
+#txtContent {
+    background-color: rgb(255, 255, 255);
+    box-shadow: inset 0px 4px 5.76px 0.24px rgba(37, 35, 35, 0.004);
+    font-family: 'Rubik', sans-serif;
+    color: black;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.buttons {
+    position: relative;
+    width: 20%;
+    margin-top: 1%;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.backButton {
+    background-color: rgb(240, 81, 82);
+    box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
+    position: relative;
+    width: 80px;
+    height: 35px;
+    padding: 2px;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    color: white;
+    font-family: 'Rubik', sans-serif;
+    font-weight: bold;
+    margin-left: 20%;
+}
+
+.backButton:focus {
+    outline: none;
+}
+
+.backButton:hover {
+    background-color: #f92a2b;
+    box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
+}
+
+.backButton:active {
+    position: relative;
+    top: 5px;
+    box-shadow: none;
+}
+
+
 

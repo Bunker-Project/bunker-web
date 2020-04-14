@@ -59,7 +59,7 @@ export default function Main() {
                         </Grid>
                         <Grid item xs={6}>
                             <div className="paper">
-                                <Tooltip TransitionComponent={Zoom} title="Register an item" >
+                                <Tooltip TransitionComponent={Zoom} title="Register an item" placement="top" >
                                     <button
                                         className="mainButton"
                                         onClick={goToRegisterItem}>

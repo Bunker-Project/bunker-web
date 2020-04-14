@@ -1,9 +1,17 @@
+.title {
+    width: auto;
+    height: auto;
+    position: absolute;
+    left: 49%;
+    top: 3%;
+    transform: translate(-50%);
+    
+}
+
 .icon
  {
     height: auto;
-    width: 150px;
-    margin-left: 10px;
-    margin-top: 10px;
+    width: 200px;
 }
 
 .logoButton:focus {
@@ -11,10 +19,6 @@
     border: none;
 }
 
-.title {
-    margin-left: 1px;
-    flex: 1;
-}
 
 
 

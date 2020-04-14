@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import '../global.css';
+import NewChip from './Chip';
 
 class Register extends React.Component {
 
@@ -102,7 +103,7 @@ class Register extends React.Component {
         }
     }
 
-    
+
     handleDelete = (data) => {
         this.setState({
             chips: this.state.chips.filter(chip => chip.id !== data.id)
@@ -149,7 +150,7 @@ class Register extends React.Component {
 
         return (
             <div className="container">
-                <div className="inputs">
+                {/* <div className="inputs">
                     <TextField
                         id="txtTitle"
                         label="Title"
@@ -218,6 +219,27 @@ class Register extends React.Component {
                         startIcon={<CheckIcon></CheckIcon>}>
                         Save
                     </Button>
+                </div> */}
+                <label
+                    for="txtDescription"
+                    className="label"> Title:</label>
+                <input
+                    type="text"
+                    id="txtDescription"
+                    className="defaultTextBox"
+                    placeholder="Type the title"></input>
+
+                <label
+                    id="labelKeyword"
+                    for="txtKeyword"
+                    className="label"> Keywords:</label>
+                <input
+                    type="text"
+                    id="txtKeyword"
+                    className="defaultTextBox"
+                    placeholder="Type and press enter to create a keyword"></input>
+                <div className="chips">
+                    <NewChip />
                 </div>
 
                 <SnackBar

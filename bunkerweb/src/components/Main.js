@@ -9,6 +9,9 @@ import { ThemeProvider } from '@material-ui/styles';
 import MessageIcon from '@material-ui/icons/Message';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import PersonIcon from '@material-ui/icons/Person';
+import { useHistory } from 'react-router-dom';
+import Tooltip from '@material-ui/core/Tooltip';
+import Zoom from '@material-ui/core/Zoom';
 
 export default function Main() {
 
@@ -18,10 +21,20 @@ export default function Main() {
         }
     };
 
+    const history = useHistory();
+
     const theme = createMuiTheme({ palette });
 
-    function handleButtonClick() {
-        alert('clicked');
+    function goToRegisterItem() {
+        history.push('/register');
+    }
+
+    function goToRegisterSecret() {
+        history.push('/secret');
+    }
+
+    function goToSearch() {
+        history.push('/search');
     }
 
     return (
@@ -31,55 +44,61 @@ export default function Main() {
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             <div className="paper">
-                                <button
-                                    className="mainButton"
-                                    onClick={handleButtonClick}>
-                                    <i>
-                                        <SearchIcon
-                                            color="primary"
-                                            style={{ fontSize: 40 }} />
-                                    </i>
-                                </button>
+                                <Tooltip TransitionComponent={Zoom} title="Search" placement="top">
+                                    <button
+                                        className="mainButton"
+                                        onClick={goToSearch}>
+                                        <i>
+                                            <SearchIcon
+                                                color="primary"
+                                                style={{ fontSize: 40 }} />
+                                        </i>
+                                    </button>
+                                </Tooltip>
                             </div>
                         </Grid>
                         <Grid item xs={6}>
                             <div className="paper">
-                                <button
-                                    className="mainButton"
-                                    onClick={handleButtonClick}>
-                                    <i>
-                                        <MessageIcon
-                                            color="primary"
-                                            style={{ fontSize: 40 }} />
-                                    </i>
-                                </button>
+                                <Tooltip TransitionComponent={Zoom} title="Register an item" >
+                                    <button
+                                        className="mainButton"
+                                        onClick={goToRegisterItem}>
+                                        <i>
+                                            <MessageIcon
+                                                color="primary"
+                                                style={{ fontSize: 40 }} />
+                                        </i>
+                                    </button>
+                                </Tooltip>
                             </div>
                         </Grid>
                         <Grid item xs={6}>
                             <div className="paper">
-                                <button
-                                    className="mainButton"
-                                    onClick={handleButtonClick}>
-                                    <i>
-                                        <VpnKeyIcon
-                                            color="primary"
-                                            style={{ fontSize: 40 }} />
-                                    </i>
-                                </button>
+                                <Tooltip TransitionComponent={Zoom} title="Register a secret">
+                                    <button
+                                        className="mainButton"
+                                        onClick={goToRegisterSecret}>
+                                        <i>
+                                            <VpnKeyIcon
+                                                color="primary"
+                                                style={{ fontSize: 40 }} />
+                                        </i>
+                                    </button>
+                                </Tooltip>
                             </div>
-
                         </Grid>
                         <Grid item xs={6}>
                             <div className="paper">
-                                <button
-                                    className="mainButton"
-                                    onClick={handleButtonClick}>
-                                    <i>
-                                        <PersonIcon
-                                            color="primary"
-                                            style={{ fontSize: 40 }} />
-                                    </i>
-                                </button>
+                                <Tooltip TransitionComponent={Zoom} title="User's configuration">
+                                    <button
+                                        className="mainButton">
+                                        <i>
+                                            <PersonIcon
+                                                color="primary"
+                                                style={{ fontSize: 40 }} />
+                                        </i>
+                                    </button>
+                                </Tooltip>
                             </div>
                         </Grid>
                     </Grid>

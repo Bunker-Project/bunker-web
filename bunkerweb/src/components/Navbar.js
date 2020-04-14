@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import './Navbar.css'
 import IconButton from '@material-ui/core/IconButton';
 import { useHistory } from 'react-router-dom';
-
 import logo from '../icons/logo.png';
+import '../global.css';
 
 
 function NavBar(props) {

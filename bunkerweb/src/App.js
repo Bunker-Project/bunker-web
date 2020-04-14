@@ -8,12 +8,11 @@ import './global.css';
 
 function App() {
   return (
-    <div>
-      <Router className="container">
+    // <div>
+      <Router>
         <NavBar hiddenReturnButton={true}></NavBar>
+        <Routes />
       </Router>
-      <Routes />
-    </div>
   );
 }
 

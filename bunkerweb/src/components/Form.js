@@ -2,6 +2,7 @@ import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import './Form.css';
+import '../global.css';
 import Register from './Register.js';
 import Search from './Search.js';
 import Secret from './Secret.js';

@@ -3,10 +3,6 @@
     flex-direction: column;
 }
 
-.title {
-    width: 300px;
-}
-
 .chips {
     display: flex;
     justify-content: center;
@@ -29,5 +25,13 @@
 
 .inputs {
     margin-right: 10px;
+}
+
+#labelKeyword{
+    padding-top: 10px;
+}
+
+#txtKeyword {
+    margin-bottom: 10px;
 }
 

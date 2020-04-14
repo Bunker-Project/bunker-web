@@ -13,3 +13,21 @@ body{
 .root{
     position: relative;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+
+.label {
+    font-size: 18px;
+    font-family: 'Rubik', sans-serif;
+    color: rgb(255, 255, 255);
+    line-height: 1.2;
+    text-align: left;
+}
+
+.defaultTextBox {
+    background-color: rgb(255, 255, 255);
+    box-shadow: inset 0px 4px 5.76px 0.24px rgba(37, 35, 35, 0.004);
+    height: 40px;
+    font-family: 'Rubik', sans-serif;
+    padding-left: 10px;
+}

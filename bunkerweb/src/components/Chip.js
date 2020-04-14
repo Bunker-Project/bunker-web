@@ -17,12 +17,13 @@ function Chip({ label, onDelete }) {
     const theme = createMuiTheme({ palette });
 
     return (
-        <div className="rectangle">
+        <div className="rectangle" tabIndex="-1">
             <ThemeProvider theme={theme}>
                 <p className="content">{label}</p>
                 <IconButton
                     size="small"
                     className="close"
+                    tabIndex="-1"
                     onClick={onDelete}>
                         <CloseIcon 
                             color="primary" 

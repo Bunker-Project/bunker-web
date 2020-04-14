@@ -38,7 +38,7 @@
     margin-bottom: 10px;
 }
 
-#txtContent {
+.textboxMultiline {
     background-color: rgb(255, 255, 255);
     box-shadow: inset 0px 4px 5.76px 0.24px rgba(37, 35, 35, 0.004);
     font-family: 'Rubik', sans-serif;
@@ -47,19 +47,31 @@
     padding-left: 10px;
 }
 
+.textboxMultilineError {
+    background-color: rgb(255, 255, 255);
+    box-shadow: inset 0px 4px 5.76px 0.24px rgba(37, 35, 35, 0.004);
+    font-family: 'Rubik', sans-serif;
+    color: black;
+    padding-top: 10px;
+    padding-left: 10px;
+    border: 2px solid #f05152;
+}
+
 .buttons {
     position: relative;
     width: 20%;
+    height: auto;
     margin-top: 1%;
     left: 50%;
     transform: translate(-50%);
+    min-width: 100px;
 }
 
 .backButton {
-    background-color: rgb(240, 81, 82);
+    background-color: #f05152;
     box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
     position: relative;
-    width: 80px;
+    width: 45%;
     height: 35px;
     padding: 2px;
     border: none;
@@ -68,7 +80,7 @@
     color: white;
     font-family: 'Rubik', sans-serif;
     font-weight: bold;
-    margin-left: 20%;
+    margin-left: 5%;
 }
 
 .backButton:focus {
@@ -86,5 +98,20 @@
     box-shadow: none;
 }
 
+.labelError {
+    color: #f05152;
+    font-family: 'Rubik', sans-serif;
+    font-size: 14px;
+    visibility: hidden;
+}
+
+.showLabelError {
+    color: #f05152;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    visibility: visible;
+    margin-top: 0.5%;
+}
 
 

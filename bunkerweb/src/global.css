@@ -13,7 +13,8 @@ body {
     position: relative;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap');
+
 .label {
     font-size: 18px;
     font-family: 'Rubik', sans-serif;
@@ -30,11 +31,20 @@ body {
     padding-left: 10px;
 }
 
+.defaultTextBoxError {
+    background-color: rgb(255, 255, 255);
+    box-shadow: inset 0px 4px 5.76px 0.24px rgba(37, 35, 35, 0.004);
+    height: 40px;
+    font-family: 'Rubik', sans-serif;
+    padding-left: 10px;
+    border: 2px solid #f05152;
+}
+
 .saveButton {
     background-color: rgb(11, 82, 86);
     box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
     position: relative;
-    width: 80px;
+    width: 45%;
     height: 35px;
     padding: 2px;
     border: none;

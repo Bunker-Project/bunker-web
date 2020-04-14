@@ -14,9 +14,18 @@
     width: 200px;
 }
 
+.logoButton {
+    background-color: transparent;
+    border: none;
+}
+
 .logoButton:focus {
     outline: none;
     border: none;
+}
+
+.logoButton:hover {
+    background-color: transparent;
 }
 
 

@@ -17,14 +17,18 @@ function NavBar(props) {
 
     return (
         <div className="title">
-            <IconButton
+            {/* <IconButton
                 edge="start"
                 color="inherit"
                 aria-label="menu"
                 className="logoButton"
-                onClick={() => handleClick()}>
+                onClick={() => handleClick()}> */}
+            <button
+                aria-label="logo menu"
+                className="logoButton">
                 <img src={logo} alt="Bunker logo" className="icon" />
-            </IconButton>
+            </button>
+            {/* </IconButton> */}
 
         </div>
 

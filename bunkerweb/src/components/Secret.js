@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import TextField from '@material-ui/core/TextField';
 import './Secret.css';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import Button from '@material-ui/core/Button';
-import CheckIcon from '@material-ui/icons/Check';
 import Api from '../Api';
 import { v4 as uuidv4 } from 'uuid'
 import '../global.css';
-import LockIcon from '@material-ui/icons/Lock';
+
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -32,10 +25,6 @@ function Secret(props) {
 
     function handleClickShowPassword() {
         setShowPassword(!showPassword);
-    }
-
-    function handleMouseDownPassword(event) {
-        event.preventDefault();
     }
 
     async function save() {
@@ -103,7 +92,7 @@ function Secret(props) {
     }
 
     //Check if enter was pressed and then fires up the save method
-    function enterWasPressed(e){
+    function enterWasPressed(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             save();
@@ -112,63 +101,50 @@ function Secret(props) {
 
     return (
         <div className="container">
-            <div className="inputId">
-                <TextField
-                    id="txtId"
-                    label="Your ID"
-                    style={{ margin: 8 }}
-                    placeholder="Type an ID to identify your key in the future"
-                    helperText={idErrorMessage}
-                    fullWidth
-                    error={isErrorId}
-                    margin="normal"
-                    value={txtId}
-                    onChange={e => setTxtId(e.target.value)}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <LockIcon color="action" className="lockIcon" />
-                            </InputAdornment>
-                        ),
-                        shrink: true
-                    }}
-                />
+            <label
+                htmlFor="txtId"
+                className="label"> Your ID:</label>
+            <input
+                type="text"
+                id="txtId"
+                className={isErrorId ? "defaultTextBoxError" : "defaultTextBox"}
+                placeholder="Type an ID to identify your key in the future"
+                autoFocus
+                onChange={e => setTxtId(e.target.value)}
+                value={txtId}></input>
+            <label
+                className={isErrorId ? "showLabelError" : "labelError"}>
+                {idErrorMessage}
+            </label>
+
+            <label
+                id="labelPassword"
+                htmlFor="txtPassword"
+                className="label"> Your password:</label>
+            <input
+                type={showPassword ? 'text' : 'password'}
+                id="txtPassword"
+                className={isErrorPassword ? "defaultTextBoxError" : "defaultTextBox"}
+                placeholder="Type the password you want"
+                onChange={e => setTxtPassword(e.target.value)}
+                value={txtPassword}></input>
+            <label
+                className={isErrorPassword ? "showLabelError" : "labelError"}>
+                {passwordErrorMessage}
+            </label>
+            <div
+                className="viewPassword">
+                <button
+                    className="buttonPassword"
+                    onClick={() => handleClickShowPassword()}>View password</button>
             </div>
-            <div className="inputPassword">
-                <TextField
-                    label="Your password"
-                    id="txtPassword"
-                    fullWidth
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Type the password you want"
-                    helperText={passwordErrorMessage}
-                    error={isErrorPassword}
-                    value={txtPassword}
-                    onChange={e => setTxtPassword(e.target.value)}
-                    onKeyDown={enterWasPressed}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                >
-                                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>),
-                        shrink: true
-                    }}
-                />
-            </div>
+
             <div className="save">
-                <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => save()}
-                    startIcon={<CheckIcon></CheckIcon>}>
+                <button
+                    className="saveButton"
+                    onClick={() => save()}>
                     Save
-                    </Button>
+                </button>
             </div>
 
             <SnackBar

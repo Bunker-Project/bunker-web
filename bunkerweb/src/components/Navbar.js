@@ -25,7 +25,8 @@ function NavBar(props) {
                 onClick={() => handleClick()}> */}
             <button
                 aria-label="logo menu"
-                className="logoButton">
+                className="logoButton"
+                onClick={() => handleClick()}>
                 <img src={logo} alt="Bunker logo" className="icon" />
             </button>
             {/* </IconButton> */}

@@ -13,23 +13,6 @@
     margin-bottom: 20px;
 }
 
-.chipItem {
-    margin: 2px;
-}
-
-.save {
-    margin-top: 0px;
-    margin-left: 7px;
-}
-
-.description {
-    margin-left: 7px;
-}
-
-.inputs {
-    margin-right: 10px;
-}
-
 #labelKeyword{
     padding-top: 10px;
 }
@@ -96,22 +79,6 @@
     position: relative;
     top: 5px;
     box-shadow: none;
-}
-
-.labelError {
-    color: #f05152;
-    font-family: 'Rubik', sans-serif;
-    font-size: 14px;
-    visibility: hidden;
-}
-
-.showLabelError {
-    color: #f05152;
-    font-family: 'Rubik', sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    visibility: visible;
-    margin-top: 0.5%;
 }
 
 

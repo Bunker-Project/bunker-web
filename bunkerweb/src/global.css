@@ -37,7 +37,8 @@ body {
     height: 40px;
     font-family: 'Rubik', sans-serif;
     padding-left: 10px;
-    border: 2px solid #f05152;
+    /* border: 2px solid #f05152; */
+    border: 2px solid #f75c64;
 }
 
 .saveButton {
@@ -68,4 +69,20 @@ body {
     position: relative;
     top: 5px;
     box-shadow: none;
+}
+
+.labelError {
+    color: #f75c64;
+    font-family: 'Rubik', sans-serif;
+    font-size: 14px;
+    visibility: hidden;
+}
+
+.showLabelError {
+    color: #f75c64;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    visibility: visible;
+    margin-top: 0.5%;
 }

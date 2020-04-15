@@ -1,56 +1,94 @@
-.container {
-    padding: 20px 10px 20px 0px;
-}
-
-.textBar {
-    display: flex;
-    flex-direction: row;
-}
-
-.keys {
-    margin-right: 2px;
-    margin-top: 2px;
-}
-
-.showAll {
-    width: 150px;
-    margin-top: 10px;
-    margin-left: 5px;
-}
-
 .results {
     width: 100%;
     margin-top: 10px;
     margin-left: 0;
 }
 
-.heading {
-    font-size: 0.938rem; /*15px*/
-    flex-basis: 33.33%;
-    flex-shrink: 0;
-}
-
-
-.list {
-    width: 100%;
-}
-
-a:hover, a:visited, a:link, a:active{
+a:hover, a:visited, a:link, a:active {
     text-decoration: none;
 }
 
-.seeAll {
-    background: none!important;
-    border: none;
-    padding: 0!important;
-    /*optional*/
-    font-family: arial, sans-serif;
-    /*input has OS specific font-family*/
-    color: #3F51B5;
-  }
-
 .pagination {
+    position: absolute;
+    left: 50%;
+    padding-top: 10px;
+    transform: translate(-50%);
+}
+
+/* To not show when there is no results or only one page */
+.paginationHidden {
+    visibility: hidden;
+}
+
+
+.mainBox {
+    display: flex;
+    margin-bottom: 0.7%;
+}
+
+.boxIcon {
     position: relative;
-    left: 40%;
-    padding-top: 20px;
+    background-color: rgb(11, 82, 86);
+    box-shadow: 3px 7px 1px 0px rgba(0, 0, 0, 0.55);
+    width: 55px;
+    height: 50px;
+}
+
+.listIcon {
+    position: relative;
+    top: 22%;
+    left: 25%;
+}
+
+.contentBox {
+    position: relative;
+    border-width: 0px;
+    border-color: rgb(11, 82, 86);
+    border-style: solid;
+    box-shadow: 3px 7px 1px 0px rgba(0, 0, 0, 0.55);
+    width: 100%;
+    /* margin: 0; */
+    padding-top: 13px;
+    padding-left: 2%;
+}
+
+.boxInfo {
+    position: relative;
+    font-family: "Rubik", sans-serif;
+    color: white;
+    line-height: 1.2;
+}
+
+.wrapBox {
+    margin-bottom: 3%;
+}
+
+.boxOptions {
+    margin-bottom: 3%;
+}
+
+.buttonOptions {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: "Rubik", sans-serif;
+    color: white;
+    font-size: 12px;
+    position: relative;
+    float: right;
+    padding-top: 0.4%;
+    padding-left: 1%;
+}
+
+.buttonOptions:focus {
+    outline: none;
+}
+
+.buttonOptions:hover {
+    color: whitesmoke;
+}
+
+.buttonOptions:active {
+    position: relative;
+    top: 3px;
 }

@@ -13,8 +13,10 @@ body {
     position: relative;
 }
 
+/* Import Rubik font, used all over the app */
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap');
 
+/* This defines the default label used before a text field */
 .label {
     font-size: 18px;
     font-family: 'Rubik', sans-serif;
@@ -23,6 +25,7 @@ body {
     text-align: left;
 }
 
+/* Defines the default text box used all over the app */
 .defaultTextBox {
     background-color: rgb(255, 255, 255);
     box-shadow: inset 0px 4px 5.76px 0.24px rgba(37, 35, 35, 0.004);
@@ -31,6 +34,7 @@ body {
     padding-left: 10px;
 }
 
+/* Sets an error border in the text boxes used in the app */
 .defaultTextBoxError {
     background-color: rgb(255, 255, 255);
     box-shadow: inset 0px 4px 5.76px 0.24px rgba(37, 35, 35, 0.004);
@@ -41,6 +45,7 @@ body {
     border: 2px solid #f75c64;
 }
 
+/* Creates the default style for all "save" buttons used in the app */
 .saveButton {
     background-color: rgb(11, 82, 86);
     box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
@@ -71,13 +76,12 @@ body {
     box-shadow: none;
 }
 
+/* Hide the label error while the user doesn't try to save without filling in some info */
 .labelError {
-    color: #f75c64;
-    font-family: 'Rubik', sans-serif;
-    font-size: 14px;
     visibility: hidden;
 }
 
+/* Show the label in red and the error message */
 .showLabelError {
     color: #f75c64;
     font-family: 'Rubik', sans-serif;
@@ -85,4 +89,47 @@ body {
     font-size: 14px;
     visibility: visible;
     margin-top: 0.5%;
+}
+
+/* Creates the style for all buttons the "back" used in the app */
+.backButton {
+    background-color: #f05152;
+    box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
+    position: relative;
+    width: 45%;
+    height: 35px;
+    padding: 2px;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    color: white;
+    font-family: 'Rubik', sans-serif;
+    font-weight: bold;
+    margin-left: 5%;
+}
+
+.backButton:focus {
+    outline: none;
+}
+
+.backButton:hover {
+    background-color: #f92a2b;
+    box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
+}
+
+.backButton:active {
+    position: relative;
+    top: 5px;
+    box-shadow: none;
+}
+
+/* Defines the size and position of the buttons "save and back" used in the forms */
+.buttons {
+    position: relative;
+    width: 20%;
+    height: auto;
+    margin-top: 1%;
+    left: 50%;
+    transform: translate(-50%);
+    min-width: 100px;
 }

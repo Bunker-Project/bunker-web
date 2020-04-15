@@ -8,11 +8,7 @@ import './global.css';
 
 function App() {
   return (
-    // <div>
-      <Router>
-        <NavBar hiddenReturnButton={true}></NavBar>
-        <Routes />
-      </Router>
+        <Routes />      
   );
 }
 

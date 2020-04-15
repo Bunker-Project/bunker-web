@@ -3,15 +3,16 @@ import './Secret.css';
 import Api from '../Api';
 import { v4 as uuidv4 } from 'uuid'
 import '../global.css';
-
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { useHistory } from 'react-router-dom';
 
 // class Secret extends React.Component {
 function Secret(props) {
 
     const defaultIdHelperMessage = '* This field is required, otherwise we can not find the key for you afterwards :)';
     const api = new Api({ isDev: true });
+    const history = useHistory();
     const [showPassword, setShowPassword] = useState(false);
     const [txtId, setTxtId] = useState('');
     const [txtPassword, setTxtPassword] = useState('');
@@ -99,6 +100,18 @@ function Secret(props) {
         }
     }
 
+    function returnToHome() {
+        history.push('/');
+    }
+
+    function showInfoMessage(){
+        if(isErrorId)
+            return idErrorMessage;
+        else
+            return defaultIdHelperMessage;
+    }
+    
+
     return (
         <div className="container">
             <label
@@ -113,8 +126,8 @@ function Secret(props) {
                 onChange={e => setTxtId(e.target.value)}
                 value={txtId}></input>
             <label
-                className={isErrorId ? "showLabelError" : "labelError"}>
-                {idErrorMessage}
+                className={isErrorId ? "showLabelError" : "labelInfoId"}>
+                {showInfoMessage()}
             </label>
 
             <label
@@ -127,24 +140,29 @@ function Secret(props) {
                 className={isErrorPassword ? "defaultTextBoxError" : "defaultTextBox"}
                 placeholder="Type the password you want"
                 onChange={e => setTxtPassword(e.target.value)}
+                onKeyDown={enterWasPressed}
                 value={txtPassword}></input>
-            <label
-                className={isErrorPassword ? "showLabelError" : "labelError"}>
-                {passwordErrorMessage}
-            </label>
-            <div
-                className="viewPassword">
+            <div className="viewPassword">
+                <label
+                    className={isErrorPassword ? "showLabelError" : "labelError"}>
+                    {passwordErrorMessage}
+                </label>
+
                 <button
                     className="buttonPassword"
                     onClick={() => handleClickShowPassword()}>View password</button>
             </div>
 
-            <div className="save">
+            <div className="buttons">
                 <button
                     className="saveButton"
                     onClick={() => save()}>
                     Save
                 </button>
+                <button
+                    className="backButton"
+                    onClick={() => returnToHome()}>BACK
+                    </button>
             </div>
 
             <SnackBar

@@ -40,45 +40,7 @@
     border: 2px solid #f05152;
 }
 
-.buttons {
-    position: relative;
-    width: 20%;
-    height: auto;
-    margin-top: 1%;
-    left: 50%;
-    transform: translate(-50%);
-    min-width: 100px;
-}
 
-.backButton {
-    background-color: #f05152;
-    box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
-    position: relative;
-    width: 45%;
-    height: 35px;
-    padding: 2px;
-    border: none;
-    cursor: pointer;
-    display: inline-block;
-    color: white;
-    font-family: 'Rubik', sans-serif;
-    font-weight: bold;
-    margin-left: 5%;
-}
 
-.backButton:focus {
-    outline: none;
-}
-
-.backButton:hover {
-    background-color: #f92a2b;
-    box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
-}
-
-.backButton:active {
-    position: relative;
-    top: 5px;
-    box-shadow: none;
-}
 
 

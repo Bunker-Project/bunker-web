@@ -92,3 +92,7 @@ a:hover, a:visited, a:link, a:active {
     position: relative;
     top: 3px;
 }
+
+.textPrimary{
+    color: pink;
+}

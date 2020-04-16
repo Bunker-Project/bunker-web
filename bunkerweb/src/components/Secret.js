@@ -95,8 +95,8 @@ function Secret(props) {
     //Check if enter was pressed and then fires up the save method
     function enterWasPressed(e) {
         if (e.key === 'Enter') {
-            e.preventDefault();
             save();
+            e.preventDefault();
         }
     }
 
@@ -124,6 +124,7 @@ function Secret(props) {
                 placeholder="Type an ID to identify your key in the future"
                 autoFocus
                 onChange={e => setTxtId(e.target.value)}
+                onKeyDown={enterWasPressed}
                 value={txtId}></input>
             <label
                 className={isErrorId ? "showLabelError" : "labelInfoId"}>

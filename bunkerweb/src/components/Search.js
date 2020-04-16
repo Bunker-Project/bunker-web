@@ -3,8 +3,6 @@ import { useState } from 'react';
 import './Search.css';
 import List from '@material-ui/core/List';
 import Api from '../Api';
-import SnackBar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Pagination from '@material-ui/lab/Pagination';
@@ -37,14 +35,15 @@ function Search(props) {
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [hasNext, setHasNext] = useState(false);
+    const [hasPrevious, setHasPrevious] = useState(false);
     const [deleteItem, setDeleteItem] = useState(false);
     const [deleteSecret, setDeleteSecret] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(-1);
 
     function handleKeyDown(event) {
         if (event.key === 'Enter') {
-            event.preventDefault();
             validateText();
+            event.preventDefault();
         }
     }
 
@@ -53,6 +52,8 @@ function Search(props) {
         var hasValue = txtSearch !== ''
         if (!hasValue)
             setSearchWarning(true);
+        else
+            search(txtSearch, 1);
     }
 
     //Calls the api and returns the values
@@ -60,7 +61,7 @@ function Search(props) {
         setSearchWarning(false);
         clearCurrentData();
         let response = await api.searchAllByString(value, page);
-        setPagination(response);
+        setFinalResults(response);
         
     }
 
@@ -71,22 +72,25 @@ function Search(props) {
     }
 
     //Show all the results from the database
-    async function showAllClick(page) {
+    async function searchAll(page) {
+        setSearchWarning(false);
+
         clearCurrentData();
 
         let response = await api.searchAllTogether(page);
 
-        setResults(response);
+        setFinalResults(response);
     }
 
     //Set the results and states to update pagination component
-    function setPagination(response) {
+    function setFinalResults(response) {
         let paginationHeader = JSON.parse(response.headers['x-pagination']);
 
         setResults(response.data);
         setTotalPages(paginationHeader.TotalPages);
         setCurrentPage(paginationHeader.CurrentPage)
         setHasNext(paginationHeader.HasNext);
+        setHasPrevious(paginationHeader.HasPrevious);
     }
 
     function handleItemClick(index) {
@@ -201,7 +205,7 @@ function Search(props) {
     function handleChange(event, value) {
         if (value !== currentPage) {
             if (txtSearch.length === 0)
-                showAllClick(value);
+                searchAll(value);
             else
                 search(txtSearch, 1);
         }
@@ -235,9 +239,10 @@ function Search(props) {
                             )
                         })}
 
-                        <div className={hasNext ? "pagination" : "paginationHidden"}>
+                        <div className={(hasNext || hasPrevious) ? "pagination" : "paginationHidden"}>
                             <Pagination
                                 count={totalPages}
+                                color="primary"
                                 defaultPage={currentPage}
                                 onChange={handleChange} />
                         </div>
@@ -262,7 +267,7 @@ function Search(props) {
                     <Button onClick={() => setSearchWarning(false)} color="primary" autoFocus>
                         No
                     </Button>
-                    <Button onClick={() => search('')} color="primary">
+                    <Button onClick={() => searchAll(1)} color="primary">
                         Yes
                     </Button>
                 </DialogActions>

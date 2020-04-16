@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Navbar.css'
-import IconButton from '@material-ui/core/IconButton';
 import { useHistory } from 'react-router-dom';
 import logo from '../icons/logo.png';
 import '../global.css';
@@ -9,7 +8,7 @@ import '../global.css';
 function NavBar(props) {
 
     const history = useHistory();
-    const [hiddenReturnButton, setButton] = useState(props.hiddenReturnButton);
+    // const [hiddenReturnButton, setButton] = useState(props.hiddenReturnButton);
 
     function handleClick() {
         history.push('/');

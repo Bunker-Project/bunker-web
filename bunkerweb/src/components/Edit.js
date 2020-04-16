@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Chip from '@material-ui/core/Chip';
+import Chip from './Chip';
 import Button from '@material-ui/core/Button';
-import CheckIcon from '@material-ui/icons/Check';
 import Api from '../Api';
-import DeleteIcon from '@material-ui/icons/Delete';
 import './Edit.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,9 +9,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useHistory } from 'react-router-dom';
+import SnackBar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 // class Edit extends React.Component {
-function Edit(props) {
+function Edit({ location }) {
 
     const history = useHistory();
 
@@ -22,11 +21,15 @@ function Edit(props) {
     const [isErrorDescription, setErrorDescription] = useState(false);
     const [errorTitleText, setErrorTitleText] = useState('');
     const [errorDescText, setErrorDescText] = useState('');
-    const [item, setItem] = useState(props.location.state);
-    const [chips, setChips] = useState(props.location.state.keyWords);
+    const [item, setItem] = useState(location.state);
+    const [chips, setChips] = useState(location.state.keyWords);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [open, setOpen] = useState(false);
+    const [keyword, setKeyword] = useState('');
+    const [updateHasError, setUpdateHasError] = useState(false);
+    const [updateErrorMessage, setUpdateErrorMessage] = useState('');
+
 
     //If you pass something to the array it will execute every time something change otherwise just once
 
@@ -39,32 +42,35 @@ function Edit(props) {
         var _api;
         if (validate()) {
             _api = new Api({ isDev: true });
-            //First tries to insert the items, if successful then inserts the keywords
+
+            var keys = [];
+            for (var key of item.keyWords) {
+                keys.push({
+                    id: key.id,
+                    description: key.description,
+                    itemId: item.id
+                });
+            }
+
             let response = await _api.update({
                 api: "items",
                 data: {
                     id: item.id,
                     title: title,
-                    description: description
+                    description: description,
+                    keyWords: keys
                 }
             });
 
-            if (response.status === 201) {
-                var keys = [];
-                console.log(this);
-                for (var key of item.keyWords) {
-                    keys.push({
-                        id: key.id,
-                        description: key.description,
-                        itemId: item.id
-                    });
-                }
+            console.log(response);
+            if (response == null || response.status !== 200) {
+                setUpdateHasError(true);
+                setUpdateErrorMessage("It wasn't possible to update. Check the internet connection");
 
-                _api.update({
-                    api: 'keywords',
-                    data: keys
-                });
+            } else {
+                history.goBack();
             }
+
         }
     }
 
@@ -95,14 +101,6 @@ function Edit(props) {
         return validated;
     }
 
-    function updateTitle(event) {
-        setTitle(event.target.value);
-    }
-
-    function updateDescription(event) {
-        setDescription(event.target.value);
-    }
-
     function handleKeyDown(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -120,24 +118,15 @@ function Edit(props) {
         setDescription(item.description);
     }
 
-    function openDialog() {
-        setOpen(true);
-    }
-
-    function closeDialog() {
+    function returnToSearch() {
         setOpen(false);
-    }
-
-    function redirectToMain() {
-        closeDialog();
-        history.push('/');
+        history.goBack();
     }
 
     //Returns the chips in case of the aren't null
     function getChips() {
-        console.log(item.keyWords);
+
         if (item.keyWords !== null || item.keyWords !== undefined) {
-            console.log("It's inside");
             return (
                 item.keyWords.map(data => {
                     return (
@@ -145,9 +134,6 @@ function Edit(props) {
                             key={data.id}
                             label={data.description}
                             onDelete={() => handleDelete(data)}
-                            variant="outlined"
-                            color="primary"
-                            className="chipItem"
                         />
                     );
                 })
@@ -155,73 +141,82 @@ function Edit(props) {
         }
     }
 
+    function enterWasPressed(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            save();
+        }
+    }
+
     return (
         <div className="container">
-            <TextField
+            <label
+                htmlFor="txtTitle"
+                className="label"> Title:</label>
+            <input
+                type="text"
                 id="txtTitle"
-                label="Title"
-                style={{ margin: 8 }}
+                className={isErrorTitle ? "defaultTextBoxError" : "defaultTextBox"}
                 placeholder="Type the title"
-                helperText={errorTitleText}
-                fullWidth
-                margin="normal"
-                error={isErrorTitle}
-                onChange={updateTitle}
-                value={title}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-            />
+                autoFocus
+                onChange={e => setTitle(e.target.value)}
+                value={title}></input>
+            <label
+                className={isErrorTitle ? "showLabelError" : "labelError"}>
+                {errorTitleText}
+            </label>
 
-            <TextField
+            <label
+                id="labelKeyword"
+                htmlFor="txtKeyword"
+                className="label"> Keywords:</label>
+            <input
+                type="text"
                 id="txtKeyword"
-                label="Keywords"
-                style={{ margin: 8 }}
+                className="defaultTextBox"
                 placeholder="Type and press enter to create a keyword"
-                fullWidth
-                margin="normal"
                 onKeyDown={handleKeyDown}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-            />
-            <div className="chips">
+                value={keyword}
+                onChange={e => setKeyword(e.target.value)}
+
+            ></input>
+
+            <div className="chips" tabIndex="-1">
                 {getChips()}
             </div>
-            <TextField
-                id="txtDescription"
-                label="What do you want to keep here?"
-                placeholder="Type something, feel free :). I'll keep the secret"
-                multiline
-                rows="4"
-                value={description}
-                variant="outlined"
-                onChange={updateDescription}
-                helperText={errorDescText}
-                error={isErrorDescription}
-            />
-            <div className="save">
-                <Button
-                    key="saveButton"
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => save()}
-                    startIcon={<CheckIcon></CheckIcon>}>
-                    update
-                    </Button>
-                <Button
-                    key="cancelButton"
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => openDialog()}
-                    startIcon={<DeleteIcon />}>
-                    cancel
-                    </Button>
-            </div>
 
+            <label
+                id="labelContent"
+                htmlFor="txtDescription"
+                className="label">Content: </label>
+            <textarea
+                id="txtDescription"
+                rows="5"
+                cols="30"
+                className={isErrorDescription ? "textboxMultilineError" : "textboxMultiline"}
+                placeholder="What do you want to keep here?"
+                onKeyDown={enterWasPressed}
+                value={description}
+                onChange={e => setDescription(e.target.value)}>
+            </textarea>
+            <label
+                className={isErrorDescription ? "showLabelError" : "labelError"}>
+                {errorDescText}
+            </label>
+
+            <div className="buttons">
+                <button
+                    className="saveButton"
+                    onClick={() => save()}>SAVE
+                    </button>
+                <button
+                    className="backButton"
+                    onClick={() => setOpen(true)}>CANCEL
+                    </button>
+            </div>
             <Dialog
                 open={open}
-                onClose={closeDialog}
+                onClose={() => setOpen(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -232,14 +227,23 @@ function Edit(props) {
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={closeDialog} color="primary" autoFocus>
+                    <Button onClick={() => setOpen(false)} color="primary" autoFocus>
                         No
                     </Button>
-                    <Button onClick={redirectToMain} color="primary">
+                    <Button onClick={() => returnToSearch()} color="primary">
                         Yes
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            <SnackBar
+                open={updateHasError}
+                onClose={() => setUpdateHasError(false)}
+                autoHideDuration={6000}>
+                <MuiAlert elevation={6} variant="filled" severity="error">
+                    {updateErrorMessage}
+                </MuiAlert>
+            </SnackBar>
         </div>
     );
 }

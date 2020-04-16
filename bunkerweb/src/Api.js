@@ -68,22 +68,38 @@ class Api {
 
     //Returns all the data of an object
     async getAll({ api }) {
-        if (!this.validateToken())
-            await this.handleToken();
+        try {
+            if (!this.validateToken())
+                await this.handleToken();
 
-        return axios.get(this.concatUrl(api), await this.getHeaders());
+            return axios.get(this.concatUrl(api), await this.getHeaders());
+        } catch{
+            return null;
+        }
     }
 
     async getById({ api, id }) {
-        return axios.get(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
+        try {
+            return axios.get(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
+        } catch {
+            return null;
+        }
     }
 
     async insert({ api, data }) {
-        return axios.post(this.concatUrl(api), data, await this.getHeaders());
+        try {
+            return axios.post(this.concatUrl(api), data, await this.getHeaders());
+        } catch {
+            return null;
+        }
     }
 
     async searchByEntity({ api, searchString }) {
-        return axios.get(`${this.concatUrl(api)}/search/${searchString}`, await this.getHeaders());
+        try {
+            return axios.get(`${this.concatUrl(api)}/search/${searchString}`, await this.getHeaders());
+        } catch {
+            return null;
+        }
     }
 
     setMessageText(value) {
@@ -97,19 +113,35 @@ class Api {
     }
 
     async update({ api, data }) {
-        return axios.put(`${this.concatUrl(api)}/${data.id}`, data, await this.getHeaders());
+        try {
+            return axios.put(`${this.concatUrl(api)}/${data.id}`, data, await this.getHeaders());
+        } catch{
+            return null;
+        }
     }
 
     async searchAllTogether(pageNumber) {
-        return axios.get(`${this.state.url}/search?pageNumber=${pageNumber}`, await this.getHeaders());
+        try {
+            return axios.get(`${this.state.url}/search?pageNumber=${pageNumber}`, await this.getHeaders());
+        } catch{
+            return null;
+        }
     }
 
     async searchAllByString(searchString) {
-        return axios.get(`${this.state.url}/search/${searchString}`, await this.getHeaders());
+        try {
+            return axios.get(`${this.state.url}/search/${searchString}`, await this.getHeaders());
+        } catch {
+            return null;
+        }
     }
 
-    async delete({api, id}){
-        return axios.delete(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
+    async delete({ api, id }) {
+        try {
+            return axios.delete(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
+        } catch{
+            return null;
+        }
     }
 }
 

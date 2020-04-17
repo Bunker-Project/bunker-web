@@ -37,6 +37,10 @@ export default function Main() {
         history.push('/search');
     }
 
+    function goToUser(){
+        history.push('/login');
+    }
+
     return (
         <div className="row">
             <div className="inner">
@@ -91,7 +95,8 @@ export default function Main() {
                             <div className="paper">
                                 <Tooltip TransitionComponent={Zoom} title="User's configuration">
                                     <button
-                                        className="mainButton">
+                                        className="mainButton"
+                                        onClick={goToUser}>
                                         <i>
                                             <PersonIcon
                                                 color="primary"

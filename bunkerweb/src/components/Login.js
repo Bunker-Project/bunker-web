@@ -1,53 +1,60 @@
 import React from 'react';
 import '../global.css';
 import './Login.css';
+import { Form } from '@unform/web';
+import Input from './Input';
+import { connect } from 'react-redux';
 
-function Login() {
+function Login({dispatch}) {
+
+    function submitLogin(data) {
+        console.log(data);
+        dispatch({
+            type: 'CREDENTIALS',
+            data
+        });
+    }
+
     return (
         <div className="container">
-            <div className="loginContainer">
-                <label
-                    htmlFor="txtUsername"
-                    className="label"> Username:</label>
-                <input
-                    type="text"
-                    id="txtUsername"
-                    // className={isErrorTitle ? "defaultTextBoxError" : "defaultTextBox"}
-                    className="defaultTextBox"
-                    placeholder="Type your username or email"
-                    autoFocus
-                // onChange={e => setTitle(e.target.value)}
-                // value={title}
-                ></input>
+            <Form onSubmit={submitLogin}>
+                <div className="loginContainer">
+                    <label
+                        htmlFor="txtUsername"
+                        className="label"> Username:</label>
+                    <Input
+                        id="txtUsername"
+                        name="username"
+                        type="email"
+                        placeholder="Your email"></Input>
 
-                <label
-                    htmlFor="txtPassword"
-                    className="label"> Password:</label>
-                <input
-                    type="password"
-                    id="txtPassword"
-                    // className={isErrorTitle ? "defaultTextBoxError" : "defaultTextBox"}
-                    className="defaultTextBox"
-                    placeholder="Type your password"
-                    autoFocus
-                // onChange={e => setTitle(e.target.value)}
-                // value={title}
-                ></input>
+                    <label
+                        htmlFor="txtPassword"
+                        className="label"> Password:</label>
+                    <Input
+                        id="txtPassword"
+                        name="password"
+                        type="password"
+                        placeholder="Your password"
+                        className="defaultTextBox"></Input>
 
-                <div className="showPassword">
+                    <div className="showPassword">
+                        <button
+                            className="buttonPassword">View password</button>
+                    </div>
                     <button
-                        className="buttonPassword">View password</button>
+                        type="submit"
+                        className="loginButton">LOGIN
+                    </button>
+                    <label className="or">OR</label>
+                    <button
+                        className="loginButton">SIGN UP
+                    </button>
                 </div>
-                <button
-                    className="loginButton">LOGIN
-                </button>
-                <label className="or">OR</label>
-                <button
-                    className="loginButton">SIGN UP
-                </button>
-            </div>
+            </Form>
         </div>
     )
 }
 
-export default Login;
+// export default Login;
+export default connect()(Login);

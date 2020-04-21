@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import './Search.css';
 import List from '@material-ui/core/List';
-import Api from '../Api';
+import Api from '../../Api';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Pagination from '@material-ui/lab/Pagination';

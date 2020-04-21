@@ -1,8 +1,8 @@
 import React from 'react';
 import './Navbar.css'
 import { useHistory } from 'react-router-dom';
-import logo from '../icons/logo.png';
-import '../global.css';
+import logo from '../../icons/logo.png';
+import '../../global.css';
 
 
 function NavBar(props) {

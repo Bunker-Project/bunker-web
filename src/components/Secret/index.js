@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './Secret.css';
-import Api from '../Api';
+import Api from '../../Api';
 import { v4 as uuidv4 } from 'uuid'
-import '../global.css';
+import '../../global.css';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useHistory } from 'react-router-dom';

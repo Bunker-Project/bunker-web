@@ -1,8 +1,8 @@
 import React from 'react';
-import '../global.css';
+import '../../global.css';
 import './Login.css';
 import { Form } from '@unform/web';
-import Input from './Input';
+import Input from '../Input';
 import { connect } from 'react-redux';
 
 function Login({dispatch}) {

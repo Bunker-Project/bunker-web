@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
 import './Register.css';
-import Api from '../Api';
+import Api from '../../Api';
 import { v4 as uuidv4 } from 'uuid';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import '../global.css';
-import Chip from './Chip';
+import '../../global.css';
+import Chip from '../Chip';
 import { useHistory } from 'react-router-dom';
 
 

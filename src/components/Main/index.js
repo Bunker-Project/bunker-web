@@ -1,6 +1,6 @@
 import React from 'react';
 import './Main.css';
-import '../global.css';
+import '../../global.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Grid from '@material-ui/core/Grid';
 import SearchIcon from '@material-ui/icons/Search';

@@ -41,16 +41,19 @@ class Api {
     }
 
     async handleToken() {
-        let response = await this.getToken();
+        let response = await this.login();
         localStorage.setItem("token", response.data);
     }
 
-    async getToken() {
-        return await axios.post(`${this.state.url}/login`, {
-            username: 'doug',
-            password: 'apiapi'
-        });
+    async login(auth) {
+        return await axios.post(`${this.state.url}/login`, auth);
+        // {
+        //     username: 'doug',
+        //     password: 'apiapi'
+        // });
     }
+
+    
 
     async getHeaders() {
         await this.handleToken();

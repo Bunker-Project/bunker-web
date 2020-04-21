@@ -5,12 +5,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Routes from './Routes';
 import './global.css';
 import { Provider } from 'react-redux';
-import store from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './store';
 
 function App() {
   return (
     <Provider store={store}>
-      <Routes />
+      <PersistGate persistor={persistor}>
+        <Routes />
+      </PersistGate>
     </Provider>
   );
 }

@@ -4,15 +4,15 @@ import './Login.css';
 import { Form } from '@unform/web';
 import Input from '../Input';
 import { connect } from 'react-redux';
+import { signInRequest } from '../../store/modules/auth/actions';
+import { useHistory } from 'react-router-dom';
 
-function Login({dispatch}) {
+function Login({ dispatch }) {
 
-    function submitLogin(data) {
-        console.log(data);
-        dispatch({
-            type: 'CREDENTIALS',
-            data
-        });
+    const history = useHistory();
+
+    function submitLogin(user) {
+        dispatch(signInRequest(user, history));
     }
 
     return (

@@ -19,6 +19,8 @@ class Api {
             return Promise.reject(error);
         });
 
+        this.login = this.login.bind(this);
+
     }
 
     validateToken() {
@@ -45,8 +47,8 @@ class Api {
         localStorage.setItem("token", response.data);
     }
 
-    async login(auth) {
-        return await axios.post(`${this.state.url}/login`, auth);
+    async login(data) {
+        return await axios.post(`${this.state.url}/login`, data);
         // {
         //     username: 'doug',
         //     password: 'apiapi'

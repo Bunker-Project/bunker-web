@@ -108,7 +108,7 @@ function Search(props) {
     }
 
     function handleSecretClick(index) {
-        console.log("The index is: " + index);
+        // console.log("The index is: " + index);
     }
 
     //To open the confirmation dialog

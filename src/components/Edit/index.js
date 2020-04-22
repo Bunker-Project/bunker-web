@@ -62,7 +62,6 @@ function Edit({ location }) {
                 }
             });
 
-            console.log(response);
             if (response == null || response.status !== 200) {
                 setUpdateHasError(true);
                 setUpdateErrorMessage("It wasn't possible to update. Check the internet connection");

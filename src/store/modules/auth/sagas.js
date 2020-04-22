@@ -1,21 +1,25 @@
-import { all, call, takeLatest } from 'redux-saga/effects';
+import { all, call, takeLatest, takeEvery } from 'redux-saga/effects';
 import Api from '../../../Api';
 
-export function* auth({ payload }) {
+export function* signIn({ payload }) {
     // const {username, password} = payload;
     try {
-        console.tron.log("Starting saga.js");
         const api = new Api({ isDev: true });
-        console.tron.log("the payload is: " + payload);
-        console.tron.log("Calling login");
-        const response = yield call(api.login, payload);
+
+        const history = payload.history;
+
+        const response = yield call(api.login, payload.user);
 
         const token = response.data;
+
+        if (response.status === 200)
+            history.push('/home');
+
     }
     catch (err) {
-            console.tron.log("The error is: " + err);
-        }
-
+        console.tron.log("The error is: " + err);
     }
 
-export default (all([takeLatest('CREDENTIALS', auth)]));
+}
+
+export default all([takeLatest('@auth/LOGIN_REQUEST', signIn)]);

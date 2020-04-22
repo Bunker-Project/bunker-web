@@ -6,7 +6,7 @@ export default reducers => {
       {
         key: 'bunker',
         storage,
-        whitelist: ['auth', 'user'],
+        whitelist: ['auth'],
       },
       reducers
     );

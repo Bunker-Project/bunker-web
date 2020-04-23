@@ -1,8 +1,8 @@
-import { all, call, takeLatest, takeEvery } from 'redux-saga/effects';
+import { all, call, takeLatest, put } from 'redux-saga/effects';
 import Api from '../../../Api';
+import { signInSuccess, setToken } from './actions';
 
 export function* signIn({ payload }) {
-    // const {username, password} = payload;
     try {
         const api = new Api({ isDev: true });
 
@@ -12,14 +12,24 @@ export function* signIn({ payload }) {
 
         const token = response.data;
 
-        if (response.status === 200)
+        if (token !== null) {
+            yield put(signInSuccess(token));
             history.push('/home');
+        }
 
     }
     catch (err) {
-        console.tron.log("The error is: " + err);
+        // console.tron.log("The error is: " + err);
     }
-
 }
 
-export default all([takeLatest('@auth/LOGIN_REQUEST', signIn)]);
+export function* rehydrate({ payload }) {
+    if (!payload)
+        return;
+
+    yield put(setToken(payload.auth.token));
+}
+
+export default all([
+    takeLatest('@auth/LOGIN_REQUEST', signIn),
+    takeLatest('persist/REHYDRATE', rehydrate)]);

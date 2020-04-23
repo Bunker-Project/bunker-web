@@ -14,7 +14,6 @@ export default function Routes() {
     return (
         <BrowserRouter>
             <NavBar />
-
             <Switch>
                 <Route path="/" exact component={Login} />
                 <Route path="/home" component={Main} isPrivate />

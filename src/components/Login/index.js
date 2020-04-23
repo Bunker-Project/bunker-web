@@ -3,13 +3,15 @@ import '../../global.css';
 import './Login.css';
 import { Form } from '@unform/web';
 import Input from '../Input';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { signInRequest } from '../../store/modules/auth/actions';
 import { useHistory } from 'react-router-dom';
 
-function Login({ dispatch }) {
+function Login() {
 
     const history = useHistory();
+    const dispatch = useDispatch();
+    const loading = useSelector(state => state.auth.loading);
 
     function submitLogin(user) {
         dispatch(signInRequest(user, history));
@@ -44,7 +46,8 @@ function Login({ dispatch }) {
                     </div>
                     <button
                         type="submit"
-                        className="loginButton">LOGIN
+                        className="loginButton">
+                        {loading ? "WAIT..." : "LOGIN"}
                     </button>
                     <label className="or">OR</label>
                     <button

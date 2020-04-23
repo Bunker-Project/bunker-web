@@ -11,3 +11,11 @@ export function signInSuccess(token) {
         payload: { token }
     }
 }
+
+//This is because after refreshing the page the value of the state is not set
+export function setToken(token){
+    return {
+        type: "@auth/LOGIN_SUCCESS",
+        payload: { token }
+    }
+}

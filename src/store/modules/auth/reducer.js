@@ -10,13 +10,12 @@ export default function auth(state = INITIAL_STATE, action) {
     return produce(state, draft => {
         switch (action.type) {
             case '@auth/LOGIN_REQUEST':
-                console.tron.log("Is requesting login");
-                console.log(action);
-                console.log(state);
-                console.log(draft);
+                draft.loading = true;
                 break;
-            case "SIGNINGIN":
-                console.tron.log("Is signing in, wait for it");
+            case "@auth/LOGIN_SUCCESS":
+                draft.loading = false;
+                draft.token = action.payload.token;
+                draft.signed = true;
                 break;
             default:
                 return { ...state };

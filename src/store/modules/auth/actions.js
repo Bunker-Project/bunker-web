@@ -4,3 +4,10 @@ export function signInRequest(user, history) {
         payload: { user, history },
     };
 }
+
+export function signInSuccess(token) {
+    return {
+        type: "@auth/LOGIN_SUCCESS",
+        payload: { token }
+    }
+}

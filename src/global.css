@@ -88,7 +88,7 @@ body {
     font-weight: 500;
     font-size: 14px;
     visibility: visible;
-    margin-top: 0.5%;
+    /* margin-top: 0.5%; */
 }
 
 /* Creates the style for all buttons the "back" used in the app */
@@ -144,7 +144,7 @@ body {
     line-height: 1.2;
     position: relative;
     float: right;
-    padding-top: 0.7%;
+    padding-top: 2%;
     padding-right: 0.5%;
 }
 

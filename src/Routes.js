@@ -16,7 +16,7 @@ export default function Routes() {
             <NavBar />
             <Switch>
                 <Route path="/" exact component={Login} />
-                <Route path="/home" component={Main} isPrivate />
+                <Route path="/home" component={Main} />
                 <Route path="/search" component={Search} />
                 <Route path="/register" component={Register} />
                 <Route path="/secret" component={Secret} />

@@ -49,12 +49,14 @@ function Login() {
                         className="loginButton">
                         {loading ? "WAIT..." : "LOGIN"}
                     </button>
-                    <label className="or">OR</label>
-                    <button
-                        className="loginButton">SIGN UP
-                    </button>
                 </div>
             </Form>
+            <div className="signUpContainer"> 
+                <label className="or">OR</label>
+                <button
+                    className="loginButton">SIGN UP
+                </button>
+            </div>
         </div>
     )
 }

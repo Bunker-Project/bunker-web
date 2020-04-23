@@ -9,6 +9,15 @@
     margin-top: 8%;
 }
 
+.signUpContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 35%;
+    right: 35%;
+    width: 30%;
+}
+
 #txtUsername {
     margin-bottom: 10px;
 }

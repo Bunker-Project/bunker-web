@@ -19,17 +19,7 @@ export default function Input({ name, isPassword, ...rest }) {
   }, [fieldName, registerField, setPasswordText, password]);
 
   function configureViewPassword() {
-    console.log(password);
-
     setPassword(!password);
-
-    // console.log(password);
-    // if (password) {
-    //   setPasswordText('View password');
-    // } else {
-    //   setPasswordText('Hide passoword');
-    // }
-
   }
 
   function configurePasswordAndErrors() {

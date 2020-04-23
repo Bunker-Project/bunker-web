@@ -12,6 +12,12 @@ export function signInSuccess(token) {
     }
 }
 
+export function signInFail(){
+    return {
+        type: "@auth/LOGIN_FAIL",
+    }
+}
+
 //This is because after refreshing the page the value of the state is not set
 export function setToken(token){
     return {

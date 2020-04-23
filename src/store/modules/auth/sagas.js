@@ -1,6 +1,7 @@
 import { all, call, takeLatest, put } from 'redux-saga/effects';
 import Api from '../../../Api';
-import { signInSuccess, setToken } from './actions';
+import { signInSuccess, setToken, signInFail } from './actions';
+import { toast } from 'react-toastify';
 
 export function* signIn({ payload }) {
     try {
@@ -10,16 +11,26 @@ export function* signIn({ payload }) {
 
         const response = yield call(api.login, payload.user);
 
-        const token = response.data;
-
-        if (token !== null) {
-            yield put(signInSuccess(token));
-            history.push('/home');
+        if (response.status === 200) {
+            const token = response.data;
+            console.log(response);
+            if (token !== null) {
+                yield put(signInSuccess(token));
+                history.push('/home');
+            }
+        } else {
+            toast.error("😱 " + response.data);
+            yield put(signInFail());
         }
 
     }
     catch (err) {
-        // console.tron.log("The error is: " + err);
+        console.log(err);
+        if (err.toString().toLowerCase().includes("network error")) {
+            toast.error("😔 Unable to connect with the server");
+        }
+
+        yield put(signInFail());
     }
 }
 

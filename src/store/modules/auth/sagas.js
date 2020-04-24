@@ -11,15 +11,20 @@ export function* signIn({ payload }) {
 
         const response = yield call(api.login, payload.user);
 
-        if (response.status === 200) {
+        if (!response.hasOwnProperty('hasError') && response.status === 200) {
             const token = response.data;
-            console.log(response);
+
             if (token !== null) {
                 yield put(signInSuccess(token));
+                toast.success("😀 Welcome!!");
                 history.push('/home');
             }
         } else {
-            toast.error("😱 " + response.data);
+            if (response.data.toString().toLowerCase().includes("network error")) {
+                toast.error("😔 Unable to connect with the server");
+            } else {
+                toast.error("😱 " + response.data);
+            }
             yield put(signInFail());
         }
 

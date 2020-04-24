@@ -10,13 +10,17 @@ class Api {
         };
 
         axios.interceptors.response.use(function (response) {
-            // Any status code that lie within the range of 2xx cause this function to trigger
-            // Do something with response data
+
             return response;
         }, function (error) {
-            // Any status codes that falls outside the range of 2xx cause this function to trigger
-            // Do something with response error
-            return error.response;
+
+            var response =
+            {
+                data: error,
+                hasError: true
+            }
+
+            return response;
         });
 
         this.login = this.login.bind(this);
@@ -49,13 +53,9 @@ class Api {
 
     async login(data) {
         return await axios.post(`${this.state.url}/login`, data);
-        // {
-        //     username: 'doug',
-        //     password: 'apiapi'
-        // });
     }
 
-    
+
 
     async getHeaders() {
         await this.handleToken();

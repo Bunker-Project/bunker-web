@@ -68,6 +68,7 @@ function Login() {
 
                     <button
                         type="submit"
+                        disabled={loading}
                         className="loginButton">
                         {loading ? "WAIT..." : "LOGIN"}
                     </button>

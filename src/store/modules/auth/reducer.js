@@ -11,6 +11,7 @@ export default function auth(state = INITIAL_STATE, action) {
         switch (action.type) {
             case '@auth/LOGIN_REQUEST':
                 draft.loading = true;
+                draft.signed = false;
                 break;
             case "@auth/LOGIN_SUCCESS":
                 draft.loading = false;
@@ -19,6 +20,8 @@ export default function auth(state = INITIAL_STATE, action) {
                 break;
             case "@auth/LOGIN_FAIL":
                 draft.loading = false;
+                draft.signed = false;
+                draft.token = null;
                 break;
             default:
                 return { ...state };

@@ -8,7 +8,7 @@ import Secret from './components/Secret';
 import NavBar from './components/Navbar';
 import Login from './components/Login';
 import Route from './components/Route';
-
+import SignUp from './components/SignUp';
 
 export default function Routes() {
     return (
@@ -16,11 +16,12 @@ export default function Routes() {
             <NavBar />
             <Switch>
                 <Route path="/" exact component={Login} />
-                <Route path="/home" component={Main} />
-                <Route path="/search" component={Search} />
-                <Route path="/register" component={Register} />
-                <Route path="/secret" component={Secret} />
+                <Route path="/home" component={Main} isPrivate />
+                <Route path="/search" component={Search} isPrivate />
+                <Route path="/register" component={Register} isPrivate/>
+                <Route path="/secret" component={Secret} isPrivate />
                 <Route path="/edit" component={Edit} isPrivate />
+                <Route path="/signUp" component={SignUp}/>
             </Switch>
 
             {/* <Route 

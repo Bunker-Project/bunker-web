@@ -40,10 +40,12 @@ export function* signIn({ payload }) {
 }
 
 export function* rehydrate({ payload }) {
-    if (!payload)
-        return;
+    const token = payload.auth.token;
 
-    yield put(setToken(payload.auth.token));
+    if (token !== null)
+        yield put(setToken(token));
+    else
+        yield put(signInFail());
 }
 
 export default all([

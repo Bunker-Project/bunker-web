@@ -15,8 +15,6 @@ function Login() {
     const loading = useSelector(state => state.auth.loading);
     const formRef = useRef(null);
 
-
-
     async function submitLogin(user) {
         try {
             formRef.current.setErrors({});
@@ -41,6 +39,10 @@ function Login() {
                 formRef.current.setErrors(validationErrors);
             }
         }
+    }
+
+    function signUpClick(){
+        history.push('/signUp');
     }
 
     return (
@@ -77,7 +79,8 @@ function Login() {
             <div className="signUpContainer">
                 <label className="or">OR</label>
                 <button
-                    className="loginButton">SIGN UP
+                    className="loginButton"
+                    onClick={() => signUpClick()}>SIGN UP
                 </button>
             </div>
         </div>

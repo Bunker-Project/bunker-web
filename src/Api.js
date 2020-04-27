@@ -6,7 +6,11 @@ class Api {
     constructor({ isDev }) {
         this.state = {
             url: isDev ? 'http://localhost:44305/api' : '',
-            errorMessage: ''
+            errorMessage: '',
+            defaultUser: {
+                username: 'doug',
+                password: 'apiapi'
+            }
         };
 
         axios.interceptors.response.use(function (response) {
@@ -24,6 +28,7 @@ class Api {
         });
 
         this.login = this.login.bind(this);
+        this.insert = this.insert.bind(this);
 
     }
 
@@ -52,10 +57,11 @@ class Api {
     }
 
     async login(data) {
+        if (data == null)
+            data = this.state.defaultUser;
+
         return await axios.post(`${this.state.url}/login`, data);
     }
-
-
 
     async getHeaders() {
         await this.handleToken();
@@ -92,11 +98,9 @@ class Api {
     }
 
     async insert({ api, data }) {
-        try {
-            return axios.post(this.concatUrl(api), data, await this.getHeaders());
-        } catch {
-            return null;
-        }
+        console.log(api);
+        console.log(data);
+        return axios.post(this.concatUrl(api), data, await this.getHeaders());
     }
 
     async searchByEntity({ api, searchString }) {
@@ -141,9 +145,19 @@ class Api {
         }
     }
 
+    //Generic delete method for all entities
     async delete({ api, id }) {
         try {
             return axios.delete(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
+        } catch{
+            return null;
+        }
+    }
+
+    //Check if a username is available
+    async checkUsername(username) {
+        try {
+            return axios.get(`${this.concatUrl("users")}/username/${username}`);
         } catch{
             return null;
         }

@@ -1,20 +1,69 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import '../../global.css';
 import { Form } from '@unform/web';
 import Input from '../Input';
 import './styles.css';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import * as Yup from 'yup';
+import Api from '../../Api';
+import { signUp } from '../../store/modules/user/actions';
 
 function SignUp() {
+
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const loading = useSelector(state => state.user.loading);
+    const formRef = useRef(null);
+    const [username, setUsername] = useState('');
+    const api = new Api({ isDev: true });
+
+    const schema = Yup.object().shape({
+        firstName: Yup.string().required('Name is required').max(50),
+        lastname: Yup.string().required('Last name is required').max(50),
+        email: Yup.string().email().required('Email is required'),
+        passwordAsString: Yup.string().required('Password is required'),
+        passwordConfirmation: Yup.string().oneOf([Yup.ref('passwordAsString'), null], 'Passwords do not match'),
+        username: Yup.string().required('Username is required')
+    })
+
+    async function submitData(data) {
+        try {
+            formRef.current.setErrors({});
+
+            await schema.validate(data, {
+                abortEarly: false
+            });
+
+            dispatch(signUp(data, history));
+        } catch (err) {
+            const validationErrors = {};
+
+            if(err instanceof Yup.ValidationError){
+                err.inner.forEach(error => {
+                    validationErrors[error.path] = error.message
+                });
+
+                formRef.current.setErrors(validationErrors);
+            }
+        }
+    }
+
+    async function checkUserName() {
+        let response = await api.checkUsername(username);
+        console.log(response.data);
+    }
+
     return (
         <div className="container">
-            <Form>
+            <Form ref={formRef} onSubmit={submitData}>
                 <div className="signUpMain">
                     <label
                         htmlFor="txtName"
                         className="label"> First name:</label>
                     <Input
                         id="txtName"
-                        name="name"
+                        name="firstName"
                         placeholder="Your name"></Input>
                     <label
                         htmlFor="txtLastName"
@@ -39,6 +88,9 @@ function SignUp() {
                     <Input
                         id="txtUsername"
                         name="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        onBlur={() => checkUserName()}
                         placeholder="How do you want to be called?"></Input>
 
                     <label
@@ -46,10 +98,10 @@ function SignUp() {
                         className="label"> Password:</label>
                     <Input
                         id="txtPassword"
-                        name="password"
+                        name="passwordAsString"
                         isPassword={true}
                         placeholder="Your password"></Input>
-                        
+
                     <label
                         htmlFor="txtPasswordConfirmation"
                         className="label"> Confirm your Password:</label>
@@ -58,7 +110,12 @@ function SignUp() {
                         name="passwordConfirmation"
                         isPassword={true}
                         placeholder="Confirm your password"></Input>
-
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="loginButton">
+                        {loading ? "WAIT..." : "SIGN UP"}
+                    </button>
                 </div>
             </Form>
         </div>

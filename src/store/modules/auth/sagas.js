@@ -30,7 +30,7 @@ export function* signIn({ payload }) {
 
     }
     catch (err) {
-        console.log(err);
+        
         if (err.toString().toLowerCase().includes("network error")) {
             toast.error("😔 Unable to connect with the server");
         }

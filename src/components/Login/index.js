@@ -18,7 +18,7 @@ function Login() {
     async function submitLogin(user) {
         try {
             formRef.current.setErrors({});
-
+            
             const schema = Yup.object().shape({
                 username: Yup.string().required('The email or username is required'),
                 password: Yup.string().required('The password is required'),

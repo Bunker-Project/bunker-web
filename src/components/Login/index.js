@@ -79,7 +79,7 @@ function Login() {
             <div className="signUpContainer">
                 <label className="or">OR</label>
                 <button
-                    className="loginButton"
+                    className="signUpButton"
                     onClick={() => signUpClick()}>SIGN UP
                 </button>
             </div>

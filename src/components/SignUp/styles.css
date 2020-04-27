@@ -1,0 +1,14 @@
+.signUpMain {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 35%;
+    right: 35%;
+    width: 30%;
+    margin-top: 3%;
+}
+
+#labelPasswordConfirmation {
+    margin: 0;
+    padding: 0;
+}

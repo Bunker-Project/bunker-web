@@ -18,11 +18,12 @@ body {
 
 /* This defines the default label used before a text field */
 .label {
-    font-size: 18px;
+    font-size: 16px;
     font-family: 'Rubik', sans-serif;
     color: rgb(255, 255, 255);
     line-height: 1.2;
     text-align: left;
+    margin-bottom: 2px;
 }
 
 /* Defines the default text box used all over the app */

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Secret.css';
 import Api from '../../Api';
 import { v4 as uuidv4 } from 'uuid'
@@ -10,10 +10,14 @@ import { useHistory } from 'react-router-dom';
 // class Secret extends React.Component {
 function Secret(props) {
 
+
     const defaultIdHelperMessage = '* This field is required, otherwise we can not find the key for you afterwards :)';
     const api = new Api({ isDev: true });
     const history = useHistory();
+    const isEditing = props.location.state.isEditing;
+
     const [showPassword, setShowPassword] = useState(false);
+    const [id, setId] = useState('');
     const [txtId, setTxtId] = useState('');
     const [txtPassword, setTxtPassword] = useState('');
     const [open, setOpen] = useState(false);
@@ -28,25 +32,61 @@ function Secret(props) {
         setShowPassword(!showPassword);
     }
 
+    useEffect(() => {
+        if (isEditing) {
+            let secret = props.location.state.secret;
+            setTxtId(secret.secretId);
+            setTxtPassword(secret.password);
+            setId(secret.id);
+        }
+
+    }, [isEditing, props.location.state.secret])
+
     async function save() {
         if (validate()) {
-            let response = await api.insert({
-                api: "secrets",
-                data: {
-                    id: uuidv4(),
-                    secretId: txtId,
-                    passwordAsString: txtPassword
-                }
-            });
-            if (response.status === 201) {
-                clearAllData();
-                openMessage('Secret created successfully', 'success');
-            } else {
-                openMessage(response.statusText, 'error');
-            }
-
-            document.getElementById("txtId").focus();
+            if (isEditing)
+                callUpdate();
+            else
+                callInsert();
         }
+    }
+
+    async function callUpdate() {
+        let response = await api.update({
+            api: "secrets",
+            data: {
+                id: id,
+                secretId: txtId,
+                passwordAsString: txtPassword
+            }
+        });
+        if (response.status === 201) {
+            clearAllData();
+            openMessage('Secret updated successfully', 'success');
+        } else {
+            openMessage(response.statusText, 'error');
+        }
+
+        history.push('/search');
+    }
+
+    async function callInsert() {
+        let response = await api.insert({
+            api: "secrets",
+            data: {
+                id: uuidv4(),
+                secretId: txtId,
+                passwordAsString: txtPassword
+            }
+        });
+        if (response.status === 201) {
+            clearAllData();
+            openMessage('Secret created successfully', 'success');
+        } else {
+            openMessage(response.statusText, 'error');
+        }
+
+        document.getElementById("txtId").focus();
     }
 
     function clearAllData() {
@@ -104,13 +144,13 @@ function Secret(props) {
         history.push('/');
     }
 
-    function showInfoMessage(){
-        if(isErrorId)
+    function showInfoMessage() {
+        if (isErrorId)
             return idErrorMessage;
         else
             return defaultIdHelperMessage;
     }
-    
+
 
     return (
         <div className="container">

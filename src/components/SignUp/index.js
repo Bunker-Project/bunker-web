@@ -3,7 +3,7 @@ import '../../global.css';
 import { Form } from '@unform/web';
 import Input from '../Input';
 import './styles.css';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import Api from '../../Api';

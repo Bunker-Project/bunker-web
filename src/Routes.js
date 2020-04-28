@@ -22,6 +22,7 @@ export default function Routes() {
                 <Route path="/secret" component={Secret} isPrivate />
                 <Route path="/edit" component={Edit} isPrivate />
                 <Route path="/signUp" component={SignUp}/>
+                <Route path="/editSecret" component={Secret} isPrivate/>
             </Switch>
 
             {/* <Route 

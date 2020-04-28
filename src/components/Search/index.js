@@ -108,7 +108,19 @@ function Search(props) {
     }
 
     function handleSecretClick(index) {
-        // console.log("The index is: " + index);
+        let secret = results[index];
+        
+        history.push({
+            pathname: '/editSecret',
+            state : {
+                isEditing: true,
+                secret: {
+                    id: secret.value.id,
+                    secretId: secret.value.secretId,
+                    password: secret.value.passwordAsString
+                }
+            }
+        });
     }
 
     //To open the confirmation dialog

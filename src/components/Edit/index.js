@@ -16,12 +16,13 @@ import MuiAlert from '@material-ui/lab/Alert';
 function Edit({ location }) {
 
     const history = useHistory();
+    const item = location.state;
 
     const [isErrorTitle, setErrorTitle] = useState(false);
     const [isErrorDescription, setErrorDescription] = useState(false);
     const [errorTitleText, setErrorTitleText] = useState('');
     const [errorDescText, setErrorDescText] = useState('');
-    const [item, setItem] = useState(location.state);
+    
     const [chips, setChips] = useState(location.state.keyWords);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');

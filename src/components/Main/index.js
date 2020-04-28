@@ -30,7 +30,12 @@ export default function Main() {
     }
 
     function goToRegisterSecret() {
-        history.push('/secret');
+        history.push({
+            pathname: '/secret',
+            state : {
+                isEditing: false,
+            }
+        });
     }
 
     function goToSearch() {

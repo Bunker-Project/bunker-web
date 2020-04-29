@@ -8,7 +8,6 @@ import '../../global.css';
 function NavBar(props) {
 
     const history = useHistory();
-    // const [hiddenReturnButton, setButton] = useState(props.hiddenReturnButton);
 
     function handleClick() {
         history.push('/');
@@ -16,20 +15,12 @@ function NavBar(props) {
 
     return (
         <div className="title">
-            {/* <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                className="logoButton"
-                onClick={() => handleClick()}> */}
             <button
-                aria-label="logo menu"
+                aria-label="This is the logo, it's just simple image where is written Bunker, nothing else and also it is used to return to main page if you want"
                 className="logoButton"
                 onClick={() => handleClick()}>
                 <img src={logo} alt="Bunker logo" className="icon" />
             </button>
-            {/* </IconButton> */}
-
         </div>
 
     )

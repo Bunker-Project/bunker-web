@@ -56,6 +56,7 @@ export default function Main() {
                                 <Tooltip TransitionComponent={Zoom} title="Search" placement="top">
                                     <button
                                         className="mainButton"
+                                        aria-label="Go to search page and find your things"
                                         onClick={goToSearch}>
                                         <i>
                                             <SearchIcon
@@ -71,6 +72,7 @@ export default function Main() {
                                 <Tooltip TransitionComponent={Zoom} title="Register an item" placement="top" >
                                     <button
                                         className="mainButton"
+                                        aria-label="Go to item's registration"
                                         onClick={goToRegisterItem}>
                                         <i>
                                             <MessageIcon
@@ -86,6 +88,7 @@ export default function Main() {
                                 <Tooltip TransitionComponent={Zoom} title="Register a secret">
                                     <button
                                         className="mainButton"
+                                        aria-label="Go to secret's registration"
                                         onClick={goToRegisterSecret}>
                                         <i>
                                             <VpnKeyIcon
@@ -101,6 +104,7 @@ export default function Main() {
                                 <Tooltip TransitionComponent={Zoom} title="User's configuration">
                                     <button
                                         className="mainButton"
+                                        aria-label="Go to user's profile"
                                         onClick={goToUser}>
                                         <i>
                                             <PersonIcon

@@ -18,7 +18,7 @@ function Login() {
     async function submitLogin(user) {
         try {
             formRef.current.setErrors({});
-            
+
             const schema = Yup.object().shape({
                 username: Yup.string().required('The email or username is required'),
                 password: Yup.string().required('The password is required'),
@@ -41,7 +41,7 @@ function Login() {
         }
     }
 
-    function signUpClick(){
+    function signUpClick() {
         history.push('/signUp');
     }
 
@@ -60,11 +60,14 @@ function Login() {
                     <label
                         id="labelPassword"
                         htmlFor="txtPassword"
-                        className="label"> Password:</label>
+                        aria-label=""
+                        className="label"> Password:
+                        </label>
                     <Input
                         id="txtPassword"
                         name="password"
                         isPassword={true}
+                        aria-placeholder="To insert a keyword, type what you want and press enter. Keywords are used to find and identify easily your item"
                         placeholder="Your password"
                         className="defaultTextBox"></Input>
 

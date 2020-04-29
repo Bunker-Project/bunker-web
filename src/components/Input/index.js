@@ -31,7 +31,6 @@ export default function Input({ name, isPassword, ...rest }) {
             type="button"
             className="buttonPassword"
             onClick={() => configureViewPassword()}
-            tabIndex="-1"
           >{passwordText}</button>
           <label
             className={error ? "showLabelError" : "labelError"}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Secret.css';
 import Api from '../../Api';
 import { v4 as uuidv4 } from 'uuid'
@@ -6,30 +6,51 @@ import '../../global.css';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useHistory } from 'react-router-dom';
+import Input from '../Input';
+import { Form } from '@unform/web';
+import * as Yup from 'yup';
 
 // class Secret extends React.Component {
 function Secret(props) {
 
 
-    const defaultIdHelperMessage = '* This field is required, otherwise we can not find the key for you afterwards :)';
     const api = new Api({ isDev: true });
     const history = useHistory();
     const isEditing = props.location.state.isEditing;
+    const formRef = useRef(null);
 
-    const [showPassword, setShowPassword] = useState(false);
     const [id, setId] = useState('');
     const [txtId, setTxtId] = useState('');
     const [txtPassword, setTxtPassword] = useState('');
     const [open, setOpen] = useState(false);
     const [messageType, setMessageType] = useState('');
     const [message, setMessage] = useState('');
-    const [isErrorId, setIdError] = useState(false);
-    const [isErrorPassword, setPasswordError] = useState(false);
-    const [idErrorMessage, setIdErrorMessage] = useState(defaultIdHelperMessage);
-    const [passwordErrorMessage, setPasswordMessage] = useState('');
 
-    function handleClickShowPassword() {
-        setShowPassword(!showPassword);
+    const schema = Yup.object().shape({
+        secretId: Yup.string().required('The ID is required'),
+        passwordAsString: Yup.string().required('The password is required')
+    });
+
+    async function submitSecret(secret) {
+        try {
+            formRef.current.setErrors({});
+
+            await schema.validate(secret, {
+                abortEarly: false
+            })
+
+            save();
+
+        } catch (err) {
+            const validationErrors = {};
+            console.log(err);
+            if (err instanceof Yup.ValidationError) {
+                err.inner.forEach(error => {
+                    validationErrors[error.path] = error.message;
+                });
+                formRef.current.setErrors(validationErrors);
+            }
+        }
     }
 
     useEffect(() => {
@@ -43,12 +64,10 @@ function Secret(props) {
     }, [isEditing, props.location.state.secret])
 
     async function save() {
-        if (validate()) {
-            if (isEditing)
-                callUpdate();
-            else
-                callInsert();
-        }
+        if (isEditing)
+            callUpdate();
+        else
+            callInsert();
     }
 
     async function callUpdate() {
@@ -104,34 +123,6 @@ function Secret(props) {
         setOpen(true);
     }
 
-    //Clean the validation before make a new one
-    function clearPreviousValidation() {
-        setIdError(false);
-        setIdErrorMessage(defaultIdHelperMessage);
-        setPasswordError(false);
-        setPasswordMessage('');
-    }
-
-    //Validates the form
-    function validate() {
-        clearPreviousValidation();
-        let validated = true;
-
-        if (txtId.length === 0) {
-            setIdError(true);
-            setIdErrorMessage('An ID must have a value');
-            validated = false;
-        }
-
-        if (txtPassword.length === 0) {
-            setPasswordError(true);
-            setPasswordMessage('The password must have a value');
-            validated = false;
-        }
-
-        return validated;
-    }
-
     //Check if enter was pressed and then fires up the save method
     function enterWasPressed(e) {
         if (e.key === 'Enter') {
@@ -141,71 +132,52 @@ function Secret(props) {
     }
 
     function returnToHome() {
-        history.push('/');
-    }
-
-    function showInfoMessage() {
-        if (isErrorId)
-            return idErrorMessage;
+        if (isEditing)
+            history.push('/search');
         else
-            return defaultIdHelperMessage;
+            history.push('/');
     }
-
 
     return (
         <div className="container">
-            <label
-                htmlFor="txtId"
-                className="label"> Your ID:</label>
-            <input
-                type="text"
-                id="txtId"
-                className={isErrorId ? "defaultTextBoxError" : "defaultTextBox"}
-                placeholder="Type an ID to identify your key in the future"
-                autoFocus
-                onChange={e => setTxtId(e.target.value)}
-                onKeyDown={enterWasPressed}
-                value={txtId}></input>
-            <label
-                className={isErrorId ? "showLabelError" : "labelInfoId"}>
-                {showInfoMessage()}
-            </label>
+            <Form ref={formRef} onSubmit={submitSecret}>
+                <div className="secretContainer">
+                    <label
+                        htmlFor="txtId"
+                        className="label"> Your ID:</label>
+                    <Input
+                        id="txtId"
+                        name="secretId"
+                        value={txtId}
+                        onChange={e => setTxtId(e.target.value)}
+                        placeholder="Type an ID to identify your key in the future"></Input>
 
-            <label
-                id="labelPassword"
-                htmlFor="txtPassword"
-                className="label"> Your password:</label>
-            <input
-                type={showPassword ? 'text' : 'password'}
-                id="txtPassword"
-                className={isErrorPassword ? "defaultTextBoxError" : "defaultTextBox"}
-                placeholder="Type the password you want"
-                onChange={e => setTxtPassword(e.target.value)}
-                onKeyDown={enterWasPressed}
-                value={txtPassword}></input>
-            <div className="viewPassword">
-                <label
-                    className={isErrorPassword ? "showLabelError" : "labelError"}>
-                    {passwordErrorMessage}
-                </label>
+                    <label
+                        id="labelPassword"
+                        htmlFor="txtPassword"
+                        className="label"> Your password:</label>
+                    <Input
+                        id="txtPassword"
+                        name="passwordAsString"
+                        isPassword={true}
+                        value={txtPassword}
+                        onChange={e => setTxtPassword(e.target.value)}
+                        placeholder="Type the password you want"></Input>
 
-                <button
-                    className="buttonPassword"
-                    onClick={() => handleClickShowPassword()}>View password</button>
-            </div>
-
-            <div className="buttons">
-                <button
-                    className="saveButton"
-                    onClick={() => save()}>
-                    Save
-                </button>
-                <button
-                    className="backButton"
-                    onClick={() => returnToHome()}>BACK
-                    </button>
-            </div>
-
+                    <div className="buttons">
+                        <button
+                            className="saveButton"
+                            type="submit">
+                            SAVE
+                        </button>
+                        <button
+                            className="backButton"
+                            type="button"
+                            onClick={() => returnToHome()}>BACK
+                        </button>
+                    </div>
+                </div>
+            </Form>
             <SnackBar
                 open={open}
                 onClose={() => closeMessage()}

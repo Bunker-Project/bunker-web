@@ -13,7 +13,6 @@ import * as Yup from 'yup';
 // class Secret extends React.Component {
 function Secret(props) {
 
-
     const api = new Api({ isDev: true });
     const history = useHistory();
     const isEditing = props.location.state.isEditing;
@@ -121,14 +120,6 @@ function Secret(props) {
         setMessage(message);
         setMessageType(messageType);
         setOpen(true);
-    }
-
-    //Check if enter was pressed and then fires up the save method
-    function enterWasPressed(e) {
-        if (e.key === 'Enter') {
-            save();
-            e.preventDefault();
-        }
     }
 
     function returnToHome() {

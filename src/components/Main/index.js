@@ -43,7 +43,7 @@ export default function Main() {
     }
 
     function goToUser(){
-        history.push('/login');
+        // history.push('/login');
     }
 
     return (

@@ -40,6 +40,15 @@
     border: 2px solid #f05152;
 }
 
+.registerContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 30%;
+    right: 30%;
+    width: 40%;
+}
+
 
 
 

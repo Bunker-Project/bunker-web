@@ -80,9 +80,10 @@ a:hover, a:visited, a:link, a:active {
     padding-left: 1%;
 }
 
-.buttonOptions:focus {
+/* This should be visible because some screen readers can lose focus if there is no border */
+/* .buttonOptions:focus {
     outline: none;
-}
+} */
 
 .buttonOptions:hover {
     color: whitesmoke;

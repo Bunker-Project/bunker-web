@@ -63,9 +63,10 @@ body {
     font-size: medium;
 }
 
-.saveButton:focus {
+/* This should be visible because some screen readers can lose focus if there is no border */
+/* .saveButton:focus {
     outline: none;
-}
+} */
 
 .saveButton:hover {
     background-color: #06494c;
@@ -95,7 +96,7 @@ body {
 
 /* Creates the style for all buttons the "back" used in the app */
 .backButton {
-    background-color: #f05152;
+    background-color: #B10C0D;
     box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
     position: relative;
     width: 45%;
@@ -110,12 +111,13 @@ body {
     margin-left: 5%;
 }
 
-.backButton:focus {
+/* This should be visible because some screen readers can lose focus if there is no border */
+/* .backButton:focus {
     outline: none;
-}
+} */
 
 .backButton:hover {
-    background-color: #f92a2b;
+    background-color: #CA0C0D;
     box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.55);
 }
 
@@ -151,9 +153,10 @@ body {
     padding-right: 0.5%;
 }
 
-.buttonPassword:focus {
+/* This should be visible because some screen readers can lose focus if there is no border */
+/* .buttonPassword:focus {
     outline: none;
-}
+} */
 
 .buttonPassword:hover {
     color: whitesmoke;

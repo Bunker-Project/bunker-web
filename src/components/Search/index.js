@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import { Helmet } from 'react-helmet';
 
 // class Search extends React.Component {
 function Search(props) {
@@ -62,7 +63,7 @@ function Search(props) {
         clearCurrentData();
         let response = await api.searchAllByString(value, page);
         setFinalResults(response);
-        
+
     }
 
     //Clear all the list to not duplicate the results
@@ -109,10 +110,10 @@ function Search(props) {
 
     function handleSecretClick(index) {
         let secret = results[index];
-        
+
         history.push({
             pathname: '/editSecret',
-            state : {
+            state: {
                 isEditing: true,
                 secret: {
                     id: secret.value.id,
@@ -225,6 +226,9 @@ function Search(props) {
 
     return (
         <div className="container">
+        <Helmet>
+            <title>Search / Bunker</title>
+        </Helmet>
             <ThemeProvider theme={theme}>
                 <label
                     htmlFor="txtSearch"

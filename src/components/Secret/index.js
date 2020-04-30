@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import Input from '../Input';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
+import { Helmet } from 'react-helmet';
 
 // class Secret extends React.Component {
 function Secret(props) {
@@ -131,6 +132,9 @@ function Secret(props) {
 
     return (
         <div className="container">
+        <Helmet>
+            <title>Secrets / Bunker</title>
+        </Helmet>
             <Form ref={formRef} onSubmit={submitSecret}>
                 <div className="secretContainer">
                     <label

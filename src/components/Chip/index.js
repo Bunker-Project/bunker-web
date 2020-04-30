@@ -17,18 +17,19 @@ function Chip({ label, onDelete }) {
     const theme = createMuiTheme({ palette });
 
     return (
-        <div className="rectangle" tabIndex="-1">
+        <div className="rectangle" tabIndex="0" role="complementary" aria-label="Tab again to use the remove button and delete this keyword">
             <ThemeProvider theme={theme}>
-                <p className="content">{label}</p>
-                <IconButton
-                    size="small"
+                <p className="content" >{label}</p>
+                <button
                     className="close"
-                    tabIndex="-1"
                     onClick={onDelete}>
-                        <CloseIcon 
-                            color="primary" 
-                            fontSize="inherit" />
-                </IconButton>
+                    {/* <i> */}
+                        <CloseIcon
+                            color="primary"
+                            // className="closeIcon"
+                            fontSize="small"/>
+                    {/* </i> */}
+                </button>
             </ThemeProvider>
         </div>
     )

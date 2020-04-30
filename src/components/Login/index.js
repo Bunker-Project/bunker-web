@@ -48,7 +48,7 @@ function Login() {
     return (
         <div className="container">
             <Form ref={formRef} onSubmit={submitLogin}>
-                <div className="loginContainer">
+                <div className="loginContainer" role="form">
                     <label
                         htmlFor="txtUsername"
                         className="label"> Username:</label>
@@ -67,7 +67,6 @@ function Login() {
                         id="txtPassword"
                         name="password"
                         isPassword={true}
-                        aria-placeholder="To insert a keyword, type what you want and press enter. Keywords are used to find and identify easily your item"
                         placeholder="Your password"
                         className="defaultTextBox"></Input>
 

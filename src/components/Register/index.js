@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import Input from '../Input';
 import { Form } from '@unform/web';
-
+import { Helmet } from 'react-helmet';
 
 // class Register extends React.Component {
 function Register(props) {
@@ -64,7 +64,7 @@ function Register(props) {
     async function validate(item) {
         let validated = true;
         try {
-            
+
             formRef.current.setErrors({});
 
             if (description.length === 0) {
@@ -140,6 +140,9 @@ function Register(props) {
 
     return (
         <div className="container">
+        <Helmet>
+            <title>Items / Bunker</title>
+        </Helmet>
             <Form ref={formRef} onSubmit={submitItem}>
                 <div className="registerContainer">
                     <label
@@ -149,6 +152,7 @@ function Register(props) {
                         id="txtTitle"
                         name="title"
                         placeholder="Type the title"
+                        aria-required="true"
                         onChange={e => setTitle(e.target.value)}
                         value={title}>
                     </Input>
@@ -160,12 +164,13 @@ function Register(props) {
                     <input
                         id="txtKeyword"
                         placeholder="Type and press enter to create a keyword"
+                        aria-placeholder="To insert a keyword, type what you want and press enter. Keywords are used to find and identify easily your item"
                         onKeyDown={handleKeyDown}
                         className="defaultTextBox"
                         value={keyword}
                         onChange={e => setKeyword(e.target.value)}></input>
 
-                    <div className="chips" tabIndex="-1">
+                    <div className="chips">
                         {chips.map(data => {
                             return (
                                 <Chip
@@ -186,6 +191,7 @@ function Register(props) {
                         rows="5"
                         cols="30"
                         name="description"
+                        aria-multiline="true"
                         className={isErrorDescription ? "textboxMultilineError" : "textboxMultiline"}
                         placeholder="What do you want to keep here?"
                         // onKeyDown={enterWasPressed}
@@ -210,6 +216,7 @@ function Register(props) {
                     </div>
                 </div>
             </Form>
+
             <SnackBar
                 open={open}
                 onClose={() => setOpen(false)}

@@ -34,9 +34,10 @@
     margin-top: 5%;
 }
 
-.loginButton:focus {
+/* This should be visible because some screen readers can lose focus if there is no border */
+/* .loginButton:focus {
     outline: none;
-}
+} */
 
 .loginButton:hover {
     background-color: #06494c;
@@ -65,9 +66,10 @@
     font-weight: bold;
 }
 
-.signUpButton:focus {
+/* This should be visible because some screen readers can lose focus if there is no border */
+/* .signUpButton:focus {
     outline: none;
-}
+} */
 
 .signUpButton:hover {
     background-color: #06494c;

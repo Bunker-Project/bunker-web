@@ -33,9 +33,9 @@
   box-shadow:none;
 }
 
-.mainButton:focus{
+/* .mainButton:focus{
   outline: none;
-}
+} */
 
 .inner {
   width: auto;

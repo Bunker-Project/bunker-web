@@ -14,7 +14,7 @@ function NavBar(props) {
     }
 
     return (
-        <div className="title">
+        <div className="title" role="heading" aria-level="1">
             <button
                 aria-label="This is the logo, it's just simple image where is written Bunker, nothing else and also it is used to return to main page if you want"
                 className="logoButton"

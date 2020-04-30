@@ -12,6 +12,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { useHistory } from 'react-router-dom';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import { Helmet } from 'react-helmet';
 
 export default function Main() {
 
@@ -32,7 +33,7 @@ export default function Main() {
     function goToRegisterSecret() {
         history.push({
             pathname: '/secret',
-            state : {
+            state: {
                 isEditing: false,
             }
         });
@@ -42,12 +43,15 @@ export default function Main() {
         history.push('/search');
     }
 
-    function goToUser(){
+    function goToUser() {
         // history.push('/login');
     }
 
     return (
         <div className="row">
+            <Helmet>
+                <title>Home / Bunker</title>
+            </Helmet>
             <div className="inner">
                 <ThemeProvider theme={theme}>
                     <Grid container spacing={3}>

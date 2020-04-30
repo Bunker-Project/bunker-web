@@ -181,7 +181,7 @@ function Edit({ location }) {
 
             ></input>
 
-            <div className="chips" tabIndex="-1">
+            <div className="chips">
                 {getChips()}
             </div>
 

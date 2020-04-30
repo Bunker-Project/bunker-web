@@ -19,10 +19,11 @@
     border: none;
 }
 
-.logoButton:focus {
+/* This should be visible because some screen readers can lose focus if there is no border */
+/* .logoButton:focus {
     outline: none;
     border: none;
-}
+} */
 
 .logoButton:hover {
     background-color: transparent;

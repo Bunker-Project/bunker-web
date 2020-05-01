@@ -149,7 +149,7 @@ function Edit({ location }) {
     }
 
     return (
-        <div className="container">
+        <>
             <label
                 htmlFor="txtTitle"
                 className="label"> Title:</label>
@@ -244,7 +244,7 @@ function Edit({ location }) {
                     {updateErrorMessage}
                 </MuiAlert>
             </SnackBar>
-        </div>
+        </>
     );
 }
 

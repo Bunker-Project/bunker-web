@@ -139,7 +139,7 @@ function Register(props) {
     }
 
     return (
-        <div className="container">
+        <>
             <Helmet>
                 <title>Items / Bunker</title>
             </Helmet>
@@ -230,7 +230,7 @@ function Register(props) {
                 </MuiAlert>
             </SnackBar>
 
-        </div>
+        </>
     );
 }
 

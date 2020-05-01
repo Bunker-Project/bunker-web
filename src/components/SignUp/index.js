@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 // import Api from '../../Api';
 import { signUp } from '../../store/modules/user/actions';
+import { Helmet } from 'react-helmet';
 
 function SignUp() {
 
@@ -39,7 +40,7 @@ function SignUp() {
         } catch (err) {
             const validationErrors = {};
 
-            if(err instanceof Yup.ValidationError){
+            if (err instanceof Yup.ValidationError) {
                 err.inner.forEach(error => {
                     validationErrors[error.path] = error.message
                 });
@@ -54,7 +55,10 @@ function SignUp() {
     }
 
     return (
-        <div className="container">
+        <>
+            <Helmet>
+                <title>SignUp / Bunker</title>
+            </Helmet>
             <Form ref={formRef} onSubmit={submitData}>
                 <div className="signUpMain">
                     <label
@@ -117,7 +121,7 @@ function SignUp() {
                     </button>
                 </div>
             </Form>
-        </div>
+        </>
     )
 }
 

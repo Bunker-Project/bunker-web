@@ -7,6 +7,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { signInRequest } from '../../store/modules/auth/actions';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
+import { Helmet } from 'react-helmet';
 
 function Login() {
 
@@ -46,7 +47,10 @@ function Login() {
     }
 
     return (
-        <div className="container">
+        <>
+            <Helmet>
+                <title>Login / Bunker</title>
+            </Helmet>
             <Form ref={formRef} onSubmit={submitLogin}>
                 <div className="loginContainer" role="form">
                     <label
@@ -85,7 +89,7 @@ function Login() {
                     onClick={() => signUpClick()}>SIGN UP
                 </button>
             </div>
-        </div>
+        </>
     )
 }
 

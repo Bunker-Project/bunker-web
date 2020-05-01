@@ -4,6 +4,14 @@
     margin-left: 0;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 15%;
+    left: 8%;
+}
+
 a:hover, a:visited, a:link, a:active {
     text-decoration: none;
 }

@@ -133,7 +133,7 @@ function Secret(props) {
     }
 
     return (
-        <div className="container">
+        <>
         <Helmet>
             <title>Secrets / Bunker</title>
         </Helmet>
@@ -184,7 +184,7 @@ function Secret(props) {
                 </MuiAlert>
             </SnackBar>
             
-        </div>
+        </>
     );
 }
 

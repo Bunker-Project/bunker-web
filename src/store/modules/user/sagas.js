@@ -21,7 +21,7 @@ export function* setUserInfo({ payload }) {
                 password: response.data.passwordAsString
             }, payload.history));
         }else{
-            console.log(response);
+            
             if (response.data.toString().toLowerCase().includes("network error")) {
                 toast.error("😔 Unable to connect with the server");
             } else {
@@ -31,7 +31,7 @@ export function* setUserInfo({ payload }) {
         }
 
     } catch (err) {
-        console.log(err);
+        
         if (err.toString().toLowerCase().includes("network error")) {
             toast.error("😔 Unable to connect with the server");
         }

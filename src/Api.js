@@ -98,8 +98,6 @@ class Api {
     }
 
     async insert({ api, data }) {
-        console.log(api);
-        console.log(data);
         return axios.post(this.concatUrl(api), data, await this.getHeaders());
     }
 

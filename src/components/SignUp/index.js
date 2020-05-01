@@ -6,7 +6,7 @@ import './styles.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
-import Api from '../../Api';
+// import Api from '../../Api';
 import { signUp } from '../../store/modules/user/actions';
 
 function SignUp() {
@@ -16,7 +16,7 @@ function SignUp() {
     const loading = useSelector(state => state.user.loading);
     const formRef = useRef(null);
     const [username, setUsername] = useState('');
-    const api = new Api({ isDev: true });
+    // const api = new Api({ isDev: true });
 
     const schema = Yup.object().shape({
         firstName: Yup.string().required('Name is required').max(50),
@@ -50,8 +50,7 @@ function SignUp() {
     }
 
     async function checkUserName() {
-        let response = await api.checkUsername(username);
-        console.log(response.data);
+        // let response = await api.checkUsername(username);
     }
 
     return (

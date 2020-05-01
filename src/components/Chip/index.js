@@ -1,7 +1,6 @@
 import React from 'react';
 import './Chip.css';
 import CloseIcon from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import PropTypes from 'prop-types';

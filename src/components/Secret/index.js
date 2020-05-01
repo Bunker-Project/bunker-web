@@ -11,6 +11,7 @@ import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { Helmet } from 'react-helmet';
 
+
 // class Secret extends React.Component {
 function Secret(props) {
 
@@ -43,11 +44,12 @@ function Secret(props) {
 
         } catch (err) {
             const validationErrors = {};
-            console.log(err);
+            
             if (err instanceof Yup.ValidationError) {
                 err.inner.forEach(error => {
                     validationErrors[error.path] = error.message;
                 });
+                
                 formRef.current.setErrors(validationErrors);
             }
         }
@@ -181,6 +183,7 @@ function Secret(props) {
                     {message}
                 </MuiAlert>
             </SnackBar>
+            
         </div>
     );
 }

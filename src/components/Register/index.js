@@ -140,9 +140,9 @@ function Register(props) {
 
     return (
         <div className="container">
-        <Helmet>
-            <title>Items / Bunker</title>
-        </Helmet>
+            <Helmet>
+                <title>Items / Bunker</title>
+            </Helmet>
             <Form ref={formRef} onSubmit={submitItem}>
                 <div className="registerContainer">
                     <label
@@ -202,6 +202,10 @@ function Register(props) {
                         className={isErrorDescription ? "showLabelError" : "labelError"}>
                         {errorDescText}
                     </label>
+                    <div
+                        aria-live="polite"
+                        aria-label={errorDescText}>
+                    </div>
 
                     <div className="buttons">
                         <button

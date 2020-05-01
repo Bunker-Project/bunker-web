@@ -5,6 +5,7 @@ import './style.css';
 
 export default function Input({ name, isPassword, ...rest }) {
   const inputRef = useRef(null);
+
   const { fieldName, defaultValue, registerField, error } = useField(name);
   const [password, setPassword] = useState(isPassword);
   const [passwordText, setPasswordText] = useState('View password');
@@ -24,6 +25,7 @@ export default function Input({ name, isPassword, ...rest }) {
 
   function configurePasswordAndErrors() {
     if (isPassword) {
+      
       return (
 
         <div className="showPassword">
@@ -36,14 +38,26 @@ export default function Input({ name, isPassword, ...rest }) {
             className={error ? "showLabelError" : "labelError"}>
             {error}
           </label>
+          {/* This is to show to screen readers the message errors */}
+          <div
+            aria-live="polite"
+            aria-label={error}>
+          </div>
         </div>
       );
     } else {
       return (
-        <label
-          className={error ? "showLabelError" : "labelError"}>
-          {error}
-        </label>
+        <>
+          <label
+            className={error ? "showLabelError" : "labelError"}>
+            {error}
+          </label>
+          {/* This is to show to screen readers the message errors */}
+          <div
+            aria-live="polite"
+            aria-label={error}>
+          </div>
+        </>
       );
     }
   }

@@ -1,7 +1,7 @@
-/* .showPassword {
-    margin-bottom: 20px;
-} */
-
 #labelError {
     margin-top: 4px;
+}
+
+.screenReaderError {
+    visibility: hidden;
 }

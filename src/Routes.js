@@ -9,6 +9,7 @@ import NavBar from './components/Navbar';
 import Login from './components/Login';
 import Route from './components/Route';
 import SignUp from './components/SignUp';
+import Profile from './components/Profile';
 
 export default function Routes() {
     return (
@@ -23,6 +24,7 @@ export default function Routes() {
                 <Route path="/edit" component={Edit} isPrivate />
                 <Route path="/signUp" component={SignUp}/>
                 <Route path="/editSecret" component={Secret} isPrivate/>
+                <Route path="/profile" component={Profile} isPrivate />
             </Switch>
 
             {/* <Route 

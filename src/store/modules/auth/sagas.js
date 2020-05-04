@@ -30,7 +30,7 @@ export function* signIn({ payload }) {
 
     }
     catch (err) {
-        
+
         if (err.toString().toLowerCase().includes("network error")) {
             toast.error("😔 Unable to connect with the server");
         }
@@ -48,6 +48,12 @@ export function* rehydrate({ payload }) {
         yield put(signInFail());
 }
 
+export function* logout({ payload }) {
+    payload.history.push('/');
+    toast.info("Bye! See you soon 😉!!!");
+}
+
 export default all([
     takeLatest('@auth/LOGIN_REQUEST', signIn),
-    takeLatest('persist/REHYDRATE', rehydrate)]);
+    takeLatest('persist/REHYDRATE', rehydrate),
+    takeLatest('@auth/LOGOUT', logout)]);

@@ -18,6 +18,7 @@ function Login() {
 
     async function submitLogin(user) {
         try {
+            console.log("Fired this shit");
             formRef.current.setErrors({});
 
             const schema = Yup.object().shape({
@@ -47,12 +48,14 @@ function Login() {
     }
 
     return (
-        <>
+        // <div className="loginContainer">
+        <div className="loginContainer" role="form">
             <Helmet>
                 <title>Login / Bunker</title>
             </Helmet>
-            <Form ref={formRef} onSubmit={submitLogin}>
-                <div className="loginContainer" role="form">
+            <Form ref={formRef} onSubmit={submitLogin} data-testid="loginForm">
+                {/* <div className="loginContainer" role="form"> */}
+                <div className="loginContainer">
                     <label
                         htmlFor="txtUsername"
                         className="label"> Username:</label>
@@ -80,16 +83,19 @@ function Login() {
                         className="loginButton">
                         {loading ? "WAIT..." : "LOGIN"}
                     </button>
+                    <label className="or">OR</label>
+                    <button
+                        className="signUpButton"
+                        type="button"
+                        onClick={() => signUpClick()}>SIGN UP
+                </button>
                 </div>
             </Form>
-            <div className="signUpContainer">
-                <label className="or">OR</label>
-                <button
-                    className="signUpButton"
-                    onClick={() => signUpClick()}>SIGN UP
-                </button>
-            </div>
-        </>
+            {/* <div>
+                
+            </div> */}
+        </div>
+
     )
 }
 

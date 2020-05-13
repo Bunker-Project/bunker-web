@@ -16,7 +16,6 @@
 .textboxMultiline {
     background-color: rgb(255, 255, 255);
     box-shadow: inset 0px 4px 5.76px 0.24px rgba(37, 35, 35, 0.004);
-    font-family: 'Rubik', sans-serif;
     color: black;
     padding-top: 10px;
     padding-left: 10px;
@@ -25,7 +24,6 @@
 .textboxMultilineError {
     background-color: rgb(255, 255, 255);
     box-shadow: inset 0px 4px 5.76px 0.24px rgba(37, 35, 35, 0.004);
-    font-family: 'Rubik', sans-serif;
     color: black;
     padding-top: 10px;
     padding-left: 10px;

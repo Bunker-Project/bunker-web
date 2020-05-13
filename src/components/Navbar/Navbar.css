@@ -1,11 +1,9 @@
 .title {
     width: auto;
     height: auto;
-    position: absolute;
-    left: 49%;
-    top: 3%;
-    transform: translate(-50%);
-    
+    display: flex;
+    justify-content: center;
+    padding: 4%;
 }
 
 .icon

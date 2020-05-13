@@ -62,7 +62,6 @@ a:hover, a:visited, a:link, a:active {
 
 .boxInfo {
     position: relative;
-    font-family: "Rubik", sans-serif;
     color: white;
     line-height: 1.2;
 }
@@ -79,9 +78,7 @@ a:hover, a:visited, a:link, a:active {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    font-family: "Rubik", sans-serif;
     color: white;
-    font-size: 12px;
     position: relative;
     float: right;
     padding-top: 0.4%;

@@ -18,7 +18,6 @@ function Login() {
 
     async function submitLogin(user) {
         try {
-            console.log("Fired this shit");
             formRef.current.setErrors({});
 
             const schema = Yup.object().shape({
@@ -53,25 +52,29 @@ function Login() {
             <Helmet>
                 <title>Login / Bunker</title>
             </Helmet>
-            <Form ref={formRef} onSubmit={submitLogin} data-testid="loginForm">
+            <Form ref={formRef} onSubmit={submitLogin} data-testid="form_login">
                 {/* <div className="loginContainer" role="form"> */}
                 <div className="loginContainer">
                     <label
                         htmlFor="txtUsername"
+                        data-testid="email_label_input"
                         className="label"> Username:</label>
                     <Input
                         id="txtUsername"
+                        data-testid="email_input"
                         name="username"
                         placeholder="Your email"></Input>
 
                     <label
                         id="labelPassword"
+                        data-testid="password_label_input"
                         htmlFor="txtPassword"
                         aria-label=""
                         className="label"> Password:
                         </label>
                     <Input
                         id="txtPassword"
+                        data-testid="password_input"
                         name="password"
                         isPassword={true}
                         placeholder="Your password"

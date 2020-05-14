@@ -40,12 +40,14 @@ export function* signIn({ payload }) {
 }
 
 export function* rehydrate({ payload }) {
-    const token = payload.auth.token;
+    if (payload !== undefined) {//This is necessary because jest enters here and throws an exception
+        const token = payload.auth.token;
 
-    if (token !== null)
-        yield put(setToken(token));
-    else
-        yield put(signInFail());
+        if (token !== null)
+            yield put(setToken(token));
+        else
+            yield put(signInFail());
+    }
 }
 
 export function* logout({ payload }) {

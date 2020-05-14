@@ -55,12 +55,12 @@ function SignUp() {
     }
 
     return (
-        <>
+        <div className="signUpContainer">
             <Helmet>
                 <title>SignUp / Bunker</title>
             </Helmet>
             <Form ref={formRef} onSubmit={submitData}>
-                <div className="signUpMain">
+                <div className="signUpContainer">
                     <label
                         htmlFor="txtName"
                         className="label"> First name:</label>
@@ -121,7 +121,7 @@ function SignUp() {
                     </button>
                 </div>
             </Form>
-        </>
+        </div>
     )
 }
 

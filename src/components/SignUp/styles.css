@@ -1,11 +1,19 @@
-.signUpMain {
+.signUpContainer {
     display: flex;
     flex-direction: column;
     position: relative;
-    left: 30%;
-    right: 30%;
-    width: 40%;
-    margin-top: 8%;
+    align-self: center;
+    margin-top: 5px;
+}
+
+@media(min-width: 768px){
+    .signUpContainer {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        width: 400px;
+    }
 }
 
 #labelPasswordConfirmation {

@@ -1,10 +1,7 @@
 import React from 'react';
 import Login from './index';
-import { getByRole } from '@testing-library/react';
 import { render, fireEvent } from '../../test-utils';
-import { Router, useHistory } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
-import { screen } from '@testing-library/dom';
 import { axe } from 'jest-axe';
 import 'jest-axe/extend-expect';
 

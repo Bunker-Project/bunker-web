@@ -25,7 +25,7 @@ export default function Input({ name, isPassword, ...rest }) {
 
   function configurePasswordAndErrors() {
     if (isPassword) {
-      
+
       return (
 
         <div className="showPassword">
@@ -35,6 +35,7 @@ export default function Input({ name, isPassword, ...rest }) {
             onClick={() => configureViewPassword()}
           >{passwordText}</button>
           <label
+            data-testid={error ? "input_pwd_error_label" : "undefined"}
             className={error ? "showLabelError" : "labelError"}>
             {error}
           </label>
@@ -49,6 +50,7 @@ export default function Input({ name, isPassword, ...rest }) {
       return (
         <>
           <label
+            data-testid={error ? "input_error_label_no_pwd" : "undefined"}
             className={error ? "showLabelError" : "labelError"}>
             {error}
           </label>

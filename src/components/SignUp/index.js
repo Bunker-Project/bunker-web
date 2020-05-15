@@ -66,6 +66,7 @@ function SignUp() {
                         className="label"> First name:</label>
                     <Input
                         id="txtName"
+                        data-testid="sign_name_input"
                         name="firstName"
                         placeholder="Your name"></Input>
                     <label
@@ -73,6 +74,7 @@ function SignUp() {
                         className="label"> Last name:</label>
                     <Input
                         id="txtLastName"
+                        data-testid="sign_lastName_input"
                         name="lastname"
                         placeholder="Your last name"></Input>
 
@@ -81,6 +83,7 @@ function SignUp() {
                         className="label"> Email:</label>
                     <Input
                         id="txtEmail"
+                        data-testid="sign_email_input"
                         name="email"
                         type="email"
                         placeholder="Tell us you e-mail"></Input>
@@ -90,6 +93,7 @@ function SignUp() {
                         className="label"> Username:</label>
                     <Input
                         id="txtUsername"
+                        data-testid="sign_username_input"
                         name="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -101,6 +105,7 @@ function SignUp() {
                         className="label"> Password:</label>
                     <Input
                         id="txtPassword"
+                        data-testid="sign_password_input"
                         name="passwordAsString"
                         isPassword={true}
                         placeholder="Your password"></Input>
@@ -110,11 +115,13 @@ function SignUp() {
                         className="label"> Confirm your Password:</label>
                     <Input
                         id="txtPasswordConfirmation"
+                        data-testid="sign_password_confirmation_input"
                         name="passwordConfirmation"
                         isPassword={true}
                         placeholder="Confirm your password"></Input>
                     <button
                         type="submit"
+                        data-testid="sign_submit_button"
                         disabled={loading}
                         className="loginButton">
                         {loading ? "WAIT..." : "SIGN UP"}

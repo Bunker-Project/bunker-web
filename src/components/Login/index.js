@@ -17,6 +17,7 @@ function Login() {
     const formRef = useRef(null);
 
     async function submitLogin(user) {
+        
         try {
             formRef.current.setErrors({});
 
@@ -57,24 +58,22 @@ function Login() {
                 <div className="loginContainer">
                     <label
                         htmlFor="txtUsername"
-                        data-testid="email_label_input"
                         className="label"> Username:</label>
                     <Input
                         id="txtUsername"
-                        data-testid="email_input"
+                        data-testid="login_email_input"
                         name="username"
                         placeholder="Your email"></Input>
 
                     <label
                         id="labelPassword"
-                        data-testid="password_label_input"
                         htmlFor="txtPassword"
                         aria-label=""
                         className="label"> Password:
                         </label>
                     <Input
                         id="txtPassword"
-                        data-testid="password_input"
+                        data-testid="login_password_input"
                         name="password"
                         isPassword={true}
                         placeholder="Your password"
@@ -82,6 +81,7 @@ function Login() {
 
                     <button
                         type="submit"
+                        data-testid="login_submit_button"
                         disabled={loading}
                         className="loginButton">
                         {loading ? "WAIT..." : "LOGIN"}

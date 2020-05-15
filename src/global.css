@@ -24,6 +24,12 @@ body {
 /* Import Rubik font, used all over the app */
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap');
 
+/* Defines a font in a smaller size globally */
+.smallFont {
+    font-family: 'Rubik', sans-serif;
+    font-size: 14px;
+}
+
 /* This defines the default label used before a text field */
 .label {
     color: rgb(255, 255, 255);
@@ -135,7 +141,6 @@ body {
     left: 50%;
     transform: translate(-50%);
     min-width: 150px;
-    
 }
 
 .buttonPassword {
@@ -146,7 +151,7 @@ body {
     line-height: 1.2;
     position: relative;
     float: right;
-    padding-top: 2%;
+    padding-top: 1%;
     padding-right: 0.5%;
 }
 

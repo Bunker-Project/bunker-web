@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import './Search.css';
+import '../../global.css';
 import List from '@material-ui/core/List';
 import Api from '../../Api';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
@@ -176,11 +177,11 @@ function Search(props) {
                     </div>
                     <div className="boxOptions" key={`boxOptions${index}`}>
                         <button
-                            className="buttonOptions"
+                            className="buttonOptions smallFont"
                             key={`buttonDelete${index}`}
                             onClick={() => openDeleteSecretDialog(index)}>Delete</button>
                         <button
-                            className="buttonOptions"
+                            className="buttonOptions smallFont"
                             key={`buttonEdit${index}`}
                             onClick={() => handleSecretClick(index)}>Edit</button>
                     </div>
@@ -201,11 +202,11 @@ function Search(props) {
                     </div>
                     <div className="boxOptions" key={`boxOptions${index}`}>
                         <button
-                            className="buttonOptions"
+                            className="buttonOptions smallFont"
                             key={`buttonDelete${index}`}
                             onClick={() => openDeleteItemDialog(index)}>Delete</button>
                         <button
-                            className="buttonOptions"
+                            className="buttonOptions smallFont"
                             key={`buttonEdit${index}`}
                             onClick={() => handleItemClick(index)}>Edit</button>
                     </div>
@@ -225,10 +226,10 @@ function Search(props) {
     }
 
     return (
-        <div className="container">
-        <Helmet>
-            <title>Search / Bunker</title>
-        </Helmet>
+        <div className="searchContainer">
+            <Helmet>
+                <title>Search / Bunker</title>
+            </Helmet>
             <ThemeProvider theme={theme}>
                 <label
                     htmlFor="txtSearch"

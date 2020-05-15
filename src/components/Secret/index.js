@@ -44,12 +44,12 @@ function Secret(props) {
 
         } catch (err) {
             const validationErrors = {};
-            
+
             if (err instanceof Yup.ValidationError) {
                 err.inner.forEach(error => {
                     validationErrors[error.path] = error.message;
                 });
-                
+
                 formRef.current.setErrors(validationErrors);
             }
         }
@@ -133,10 +133,10 @@ function Secret(props) {
     }
 
     return (
-        <>
-        <Helmet>
-            <title>Secrets / Bunker</title>
-        </Helmet>
+        <div className="secretContainer">
+            <Helmet>
+                <title>Secrets / Bunker</title>
+            </Helmet>
             <Form ref={formRef} onSubmit={submitSecret}>
                 <div className="secretContainer">
                     <label
@@ -183,8 +183,7 @@ function Secret(props) {
                     {message}
                 </MuiAlert>
             </SnackBar>
-            
-        </>
+        </div>
     );
 }
 

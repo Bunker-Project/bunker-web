@@ -139,7 +139,7 @@ function Register(props) {
     }
 
     return (
-        <>
+        <div className="registerContainer">
             <Helmet>
                 <title>Items / Bunker</title>
             </Helmet>
@@ -170,7 +170,7 @@ function Register(props) {
                         value={keyword}
                         onChange={e => setKeyword(e.target.value)}></input>
 
-                    <div className="chips">
+                    <div className="chips smallFont">
                         {chips.map(data => {
                             return (
                                 <Chip
@@ -230,7 +230,7 @@ function Register(props) {
                 </MuiAlert>
             </SnackBar>
 
-        </>
+        </div>
     );
 }
 

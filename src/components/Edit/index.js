@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Chip from '../Chip';
 import Button from '@material-ui/core/Button';
 import Api from '../../Api';
-import './Edit.css';
+import '../Register/Register.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -11,6 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { useHistory } from 'react-router-dom';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { Helmet } from 'react-helmet';
 
 // class Edit extends React.Component {
 function Edit({ location }) {
@@ -149,7 +150,10 @@ function Edit({ location }) {
     }
 
     return (
-        <>
+        <div className="registerContainer">
+            <Helmet>
+                <title>Items / Bunker</title>
+            </Helmet>
             <label
                 htmlFor="txtTitle"
                 className="label"> Title:</label>
@@ -244,7 +248,7 @@ function Edit({ location }) {
                     {updateErrorMessage}
                 </MuiAlert>
             </SnackBar>
-        </>
+        </div>
     );
 }
 

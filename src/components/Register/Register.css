@@ -1,3 +1,16 @@
+.registerContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+}
+
+@media(min-width: 768px){
+    .registerContainer {
+        width: 500px;
+    }
+}
+
 .chips {
     display: flex;
     justify-content: center;
@@ -30,15 +43,7 @@
     border: 2px solid #f05152;
 }
 
-.registerContainer {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    left: 30%;
-    right: 30%;
-    width: 40%;
-    margin-top: 10%;
-}
+
 
 
 

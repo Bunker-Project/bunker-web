@@ -8,10 +8,6 @@
 
 @media(min-width: 768px){
     .signUpContainer {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-self: center;
         width: 400px;
     }
 }

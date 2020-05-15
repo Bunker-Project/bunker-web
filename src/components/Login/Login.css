@@ -16,10 +16,6 @@
 
 @media(min-width: 800px){
     .loginContainer {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-self: center;
         top: 5%;
         width: 350px;
     }

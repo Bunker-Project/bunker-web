@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { logout } from '../../store/modules/auth/actions';
 
+
 function Profile() {
 
     const palette = {
@@ -28,11 +29,10 @@ function Profile() {
     }
 
     return (
-        <>
+        <div className="profileContainer">
             <Helmet>
-                <title>Profile / Bunker</title>
+                <title>Editing Profile / Bunker</title>
             </Helmet>
-            <div className="profileContainer">
                 <ThemeProvider theme={theme}>
                     <Tooltip TransitionComponent={Zoom} title="Logout" placement="top">
                         <button
@@ -47,8 +47,7 @@ function Profile() {
                         </button>
                     </Tooltip>
                 </ThemeProvider>
-            </div>
-        </>
+        </div>
     )
 }
 

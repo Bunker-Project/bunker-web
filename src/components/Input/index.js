@@ -31,7 +31,7 @@ export default function Input({ name, isPassword, ...rest }) {
         <div className="showPassword">
           <button
             type="button"
-            className="buttonPassword"
+            className="buttonPassword smallFont"
             onClick={() => configureViewPassword()}
           >{passwordText}</button>
           <label

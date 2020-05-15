@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Chip from '../Chip';
 import Button from '@material-ui/core/Button';
 import Api from '../../Api';
@@ -12,18 +12,22 @@ import { useHistory } from 'react-router-dom';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { Helmet } from 'react-helmet';
+import { Form } from '@unform/web';
+import * as Yup from 'yup';
+import Input from '../Input';
 
 // class Edit extends React.Component {
 function Edit({ location }) {
 
     const history = useHistory();
     const item = location.state;
+    const formRef = useRef(null);
 
     const [isErrorTitle, setErrorTitle] = useState(false);
     const [isErrorDescription, setErrorDescription] = useState(false);
     const [errorTitleText, setErrorTitleText] = useState('');
     const [errorDescText, setErrorDescText] = useState('');
-    
+
     const [chips, setChips] = useState(location.state.keyWords);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -32,6 +36,9 @@ function Edit({ location }) {
     const [updateHasError, setUpdateHasError] = useState(false);
     const [updateErrorMessage, setUpdateErrorMessage] = useState('');
 
+    const schema = Yup.object().shape({
+        title: Yup.string().required('Title is required')
+    });
 
     //If you pass something to the array it will execute every time something change otherwise just once
 
@@ -40,9 +47,9 @@ function Edit({ location }) {
     }, []);
 
 
-    async function save() {
+    async function save(data) {
         var _api;
-        if (validate()) {
+        if (await validate(data)) {
             _api = new Api({ isDev: true });
 
             var keys = [];
@@ -75,28 +82,39 @@ function Edit({ location }) {
         }
     }
 
-
-    function validate() {
+    async function validate(item) {
         let validated = true;
+        try {
+            console.log("validando");
+            console.log(item);
 
+            formRef.current.setErrors({});
 
-        if (title.length === 0) {
-            setErrorTitle(true);
-            setErrorTitleText('The title must have a value');
+            if (description.length === 0) {
+                setErrorDescription(true);
+                setErrorDescText('The description must have a value')
+                validated = false;
+            } else {
+                setErrorDescription(false);
+                setErrorDescText('');
+            }
 
+            await schema.validate(item, {
+                abortEarly: false
+            });
+
+        } catch (err) {
+            const validationErrors = {};
+
+            if (err instanceof Yup.ValidationError) {
+                err.inner.forEach(error => {
+                    validationErrors[error.path] = error.message;
+                });
+                console.log(validationErrors);
+                console.log("setou os erros");
+                formRef.current.setErrors(validationErrors);
+            }
             validated = false;
-        } else {
-            setErrorTitle(false);
-            setErrorTitleText('');
-        }
-
-        if (description.length === 0) {
-            setErrorDescription(true);
-            setErrorDescText('The description must have a value');
-            validated = false;
-        } else {
-            setErrorDescription(false);
-            setErrorDescText('');
         }
 
         return validated;
@@ -142,11 +160,8 @@ function Edit({ location }) {
         }
     }
 
-    function enterWasPressed(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            save();
-        }
+    async function submitItem(data) {
+        await save(data);
     }
 
     return (
@@ -154,70 +169,74 @@ function Edit({ location }) {
             <Helmet>
                 <title>Items / Bunker</title>
             </Helmet>
-            <label
-                htmlFor="txtTitle"
-                className="label"> Title:</label>
-            <input
-                type="text"
-                id="txtTitle"
-                className={isErrorTitle ? "defaultTextBoxError" : "defaultTextBox"}
-                placeholder="Type the title"
-                autoFocus
-                onChange={e => setTitle(e.target.value)}
-                value={title}></input>
-            <label
-                className={isErrorTitle ? "showLabelError" : "labelError"}>
-                {errorTitleText}
-            </label>
+            <Form ref={formRef} onSubmit={submitItem}>
+                <div className="registerContainer">
+                    <label
+                        htmlFor="txtTitle"
+                        className="label"> Title:</label>
+                    <Input
+                        id="txtTitle"
+                        name="title"
+                        placeholder="Type the title"
+                        aria-required="true"
+                        onChange={e => setTitle(e.target.value)}
+                        value={title}>
+                    </Input>
+                    <label
+                        className={isErrorTitle ? "showLabelError" : "labelError"}>
+                        {errorTitleText}
+                    </label>
 
-            <label
-                id="labelKeyword"
-                htmlFor="txtKeyword"
-                className="label"> Keywords:</label>
-            <input
-                type="text"
-                id="txtKeyword"
-                className="defaultTextBox"
-                placeholder="Type and press enter to create a keyword"
-                onKeyDown={handleKeyDown}
-                value={keyword}
-                onChange={e => setKeyword(e.target.value)}
+                    <label
+                        id="labelKeyword"
+                        htmlFor="txtKeyword"
+                        className="label"> Keywords:</label>
+                    <input
+                        type="text"
+                        id="txtKeyword"
+                        className="defaultTextBox"
+                        placeholder="Type and press enter to create a keyword"
+                        onKeyDown={handleKeyDown}
+                        value={keyword}
+                        onChange={e => setKeyword(e.target.value)}
 
-            ></input>
+                    ></input>
 
-            <div className="chips">
-                {getChips()}
-            </div>
+                    <div className="chips">
+                        {getChips()}
+                    </div>
 
-            <label
-                id="labelContent"
-                htmlFor="txtDescription"
-                className="label">Content: </label>
-            <textarea
-                id="txtDescription"
-                rows="5"
-                cols="30"
-                className={isErrorDescription ? "textboxMultilineError" : "textboxMultiline"}
-                placeholder="What do you want to keep here?"
-                onKeyDown={enterWasPressed}
-                value={description}
-                onChange={e => setDescription(e.target.value)}>
-            </textarea>
-            <label
-                className={isErrorDescription ? "showLabelError" : "labelError"}>
-                {errorDescText}
-            </label>
+                    <label
+                        id="labelContent"
+                        htmlFor="txtDescription"
+                        className="label">Content: </label>
+                    <textarea
+                        id="txtDescription"
+                        rows="5"
+                        cols="30"
+                        className={isErrorDescription ? "textboxMultilineError" : "textboxMultiline"}
+                        placeholder="What do you want to keep here?"
+                        // onKeyDown={enterWasPressed}
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}>
+                    </textarea>
+                    <label
+                        className={isErrorDescription ? "showLabelError" : "labelError"}>
+                        {errorDescText}
+                    </label>
 
-            <div className="buttons">
-                <button
-                    className="saveButton"
-                    onClick={() => save()}>SAVE
+                    <div className="buttons">
+                        <button
+                            className="saveButton"
+                            type="submit">SAVE
                     </button>
-                <button
-                    className="backButton"
-                    onClick={() => setOpen(true)}>CANCEL
+                        <button
+                            className="backButton"
+                            onClick={() => setOpen(true)}>CANCEL
                     </button>
-            </div>
+                    </div>
+                </div>
+            </Form>
             <Dialog
                 open={open}
                 onClose={() => setOpen(false)}

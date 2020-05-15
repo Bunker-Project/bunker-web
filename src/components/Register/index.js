@@ -170,7 +170,7 @@ function Register(props) {
                         value={keyword}
                         onChange={e => setKeyword(e.target.value)}></input>
 
-                    <div className="chips smallFont">
+                    <div className="chips">
                         {chips.map(data => {
                             return (
                                 <Chip

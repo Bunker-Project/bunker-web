@@ -53,14 +53,15 @@ class Api {
 
     async handleToken() {
         let response = await this.login();
-        localStorage.setItem("token", response.data);
+
+        if (response !== undefined)
+            localStorage.setItem("token", response.data);
     }
 
     async login(data) {
-        
-        if (data == null)
-            data = this.state.defaultUser;
 
+        // if (data == null)
+        //     data = this.state.defaultUser;
         return await axios.post(`${this.state.url}/login`, data);
     }
 

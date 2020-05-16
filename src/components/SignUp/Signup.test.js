@@ -5,12 +5,6 @@ import { render, fireEvent, waitFor, act } from '../../test-utils';
 import { axe } from 'jest-axe';
 import 'jest-axe/extend-expect';
 
-jest.mock('react-router-dom', () => ({
-    useHistory: () => ({
-        push: jest.fn(),
-    }),
-}));
-
 test('checking accessibility', async () => {
     const { container } = render(<SignUp />);
 

@@ -6,13 +6,6 @@ import { axe } from 'jest-axe';
 import 'jest-axe/extend-expect';
 import axiosMock from 'axios';
 
-jest.mock('react-router-dom', () => ({
-    useHistory: () => ({
-        push: jest.fn(),
-    }),
-}));
-
-jest.mock('axios');
 
 test('should have correct values', () => {
     const username = "bunker@unitteste.com";

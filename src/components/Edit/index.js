@@ -85,8 +85,6 @@ function Edit({ location }) {
     async function validate(item) {
         let validated = true;
         try {
-            console.log("validando");
-            console.log(item);
 
             formRef.current.setErrors({});
 
@@ -110,8 +108,7 @@ function Edit({ location }) {
                 err.inner.forEach(error => {
                     validationErrors[error.path] = error.message;
                 });
-                console.log(validationErrors);
-                console.log("setou os erros");
+                
                 formRef.current.setErrors(validationErrors);
             }
             validated = false;

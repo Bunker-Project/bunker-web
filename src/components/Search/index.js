@@ -2,7 +2,6 @@ import React from 'react';
 import { useState } from 'react';
 import './Search.css';
 import '../../global.css';
-import List from '@material-ui/core/List';
 import Api from '../../Api';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
@@ -42,20 +41,21 @@ function Search(props) {
     const [deleteSecret, setDeleteSecret] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(-1);
 
-    function handleKeyDown(event) {
+    async function handleKeyDown(event) {
         if (event.key === 'Enter') {
-            validateText();
-            event.preventDefault();
+            await validateText();
+            // event.preventDefault();
         }
     }
 
     //Validate if the textfield has a value for searching
-    function validateText() {
+    async function validateText() {
         var hasValue = txtSearch !== ''
+
         if (!hasValue)
             setSearchWarning(true);
         else
-            search(txtSearch, 1);
+            await search(txtSearch, 1);
     }
 
     //Calls the api and returns the values
@@ -86,13 +86,17 @@ function Search(props) {
 
     //Set the results and states to update pagination component
     function setFinalResults(response) {
-        let paginationHeader = JSON.parse(response.headers['x-pagination']);
 
-        setResults(response.data);
-        setTotalPages(paginationHeader.TotalPages);
-        setCurrentPage(paginationHeader.CurrentPage)
-        setHasNext(paginationHeader.HasNext);
-        setHasPrevious(paginationHeader.HasPrevious);
+        if (response.headers !== null && response.headers !== undefined) {
+
+            let paginationHeader = JSON.parse(response.headers['x-pagination']);
+
+            setResults(response.data);
+            setTotalPages(paginationHeader.TotalPages);
+            setCurrentPage(paginationHeader.CurrentPage)
+            setHasNext(paginationHeader.HasNext);
+            setHasPrevious(paginationHeader.HasPrevious);
+        }
     }
 
     function handleItemClick(index) {
@@ -236,6 +240,7 @@ function Search(props) {
                     className="label"> Search:</label>
                 <input
                     type="text"
+                    data-testid="search_text_input"
                     id="txtSearch"
                     className="defaultTextBox"
                     placeholder="Type what you want and press enter"
@@ -247,7 +252,7 @@ function Search(props) {
                 <div key="search" className="results">
 
                     {/* Build the items results */}
-                    <List>
+                    <div>
                         {results.map((data, index) => {
                             return (
                                 <div key={"divWrap" + index}>
@@ -263,7 +268,7 @@ function Search(props) {
                                 defaultPage={currentPage}
                                 onChange={handleChange} />
                         </div>
-                    </List>
+                    </div>
                 </div>
             </ThemeProvider>
 

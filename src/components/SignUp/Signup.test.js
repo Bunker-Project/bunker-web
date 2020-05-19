@@ -191,20 +191,22 @@ test('test validation without password', async () => {
     const sign_username_input = getByTestId('sign_username_input');
     const sign_password_confirmation_input = getByTestId('sign_password_confirmation_input');
 
+    //Sets to all the inputs the defaults values
     fireEvent.change(sign_name_input, { target: { value: first_name } });
     fireEvent.change(sign_lastName_input, { target: { value: last_name } });
     fireEvent.change(sign_email_input, { target: { value: email } });
     fireEvent.change(sign_username_input, { target: { value: username } });
     fireEvent.change(sign_password_confirmation_input, { target: { value: password } });
 
+    //Executes the click on the submit button
     act(() => {
         fireEvent.click(sign_submit_button);
     });
 
-    // await waitFor(() => expect(getByTestId("input_pwd_error_label")).toHaveTextContent('Password is required'));
+    //Get the labels with errors that should have shown
     const pwd_input_errors = await findAllByTestId("input_pwd_error_label");
-
     
+    //Makes the checks
     expect(pwd_input_errors).toHaveLength(2);
 
     expect(pwd_input_errors[0]).toHaveTextContent('Password is required');

@@ -135,7 +135,9 @@ function Secret(props) {
     return (
         <div className="secretContainer">
             <Helmet>
-                <title>Secrets / Bunker</title>
+                <title
+                    data-testid="secrets_title">
+                    Secrets / Bunker</title>
             </Helmet>
             <Form ref={formRef} onSubmit={submitSecret}>
                 <div className="secretContainer">

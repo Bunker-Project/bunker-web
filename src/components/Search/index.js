@@ -90,13 +90,13 @@ function Search(props) {
         if (response.headers !== null && response.headers !== undefined) {
 
             let paginationHeader = JSON.parse(response.headers['x-pagination']);
-
-            setResults(response.data);
             setTotalPages(paginationHeader.TotalPages);
             setCurrentPage(paginationHeader.CurrentPage)
             setHasNext(paginationHeader.HasNext);
             setHasPrevious(paginationHeader.HasPrevious);
         }
+
+        setResults(response.data);
     }
 
     function handleItemClick(index) {
@@ -168,6 +168,7 @@ function Search(props) {
     }
 
     function createObjectByType(item, index) {
+        
         if (item.type === 'secret') {
             return (
                 <div className="wrapBox" key={`wrapBox${index}`}>
@@ -176,16 +177,22 @@ function Search(props) {
                             <VpnKeyIcon key={`iconKey${0}`} color="primary" className="listIcon" />
                         </div>
                         <div className="contentBox" key={`contentBox${index}`}>
-                            <span className="boxInfo" key={`boxInfo${index}`}>{item.value.secretId}</span>
+                            <span
+                                className="boxInfo"
+                                data-testid="search_secret_box"
+                                key={`boxInfo${index}`}>{item.value.secretId}
+                            </span>
                         </div>
                     </div>
                     <div className="boxOptions" key={`boxOptions${index}`}>
                         <button
                             className="buttonOptions smallFont"
+                            data-testid="search_delete_secret_button"
                             key={`buttonDelete${index}`}
                             onClick={() => openDeleteSecretDialog(index)}>Delete</button>
                         <button
                             className="buttonOptions smallFont"
+                            data-testid="search_edit_secret_button"
                             key={`buttonEdit${index}`}
                             onClick={() => handleSecretClick(index)}>Edit</button>
                     </div>
@@ -201,16 +208,22 @@ function Search(props) {
                             <DescriptionOutlinedIcon key={`iconKey${0}`} color="primary" className="listIcon" />
                         </div>
                         <div className="contentBox" key={`contentBox${index}`}>
-                            <span className="boxInfo" key={`boxInfo${index}`}>{item.value.title}</span>
+                            <span
+                                className="boxInfo"
+                                data-testid="search_item_box"
+                                key={`boxInfo${index}`}>{item.value.title}
+                            </span>
                         </div>
                     </div>
                     <div className="boxOptions" key={`boxOptions${index}`}>
                         <button
                             className="buttonOptions smallFont"
+                            data-testid="search_delete_item_button"
                             key={`buttonDelete${index}`}
                             onClick={() => openDeleteItemDialog(index)}>Delete</button>
                         <button
                             className="buttonOptions smallFont"
+                            data-testid="search_edit_item_button"
                             key={`buttonEdit${index}`}
                             onClick={() => handleItemClick(index)}>Edit</button>
                     </div>
@@ -254,6 +267,7 @@ function Search(props) {
                     {/* Build the items results */}
                     <div>
                         {results.map((data, index) => {
+
                             return (
                                 <div key={"divWrap" + index}>
                                     {createObjectByType(data, index)}
@@ -302,18 +316,27 @@ function Search(props) {
                 onClose={() => setDeleteItem(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-            >
+                data-testid="search_item_dialog">
                 <DialogTitle id="alert-dialog-title">{"Delete an item?"}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                    <DialogContentText 
+                        id="alert-dialog-description"
+                        data-testid="search_delete_item_alert">
                         Are you sure that you want to delete this item?
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setDeleteItem(false)} color="primary" autoFocus>
+                    <Button 
+                        onClick={() => setDeleteItem(false)} 
+                        color="primary" 
+                        autoFocus
+                        data-testid="search_dialog_no_button">
                         No
                     </Button>
-                    <Button onClick={handleDeleteItem} color="primary">
+                    <Button 
+                        onClick={handleDeleteItem} 
+                        color="primary"
+                        data-testid="search_dialog_yes_button">
                         Yes
                     </Button>
                 </DialogActions>
@@ -328,7 +351,9 @@ function Search(props) {
             >
                 <DialogTitle id="alert-dialog-title">{"Delete a secret?"}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                    <DialogContentText 
+                        id="alert-dialog-description"
+                        data-testid="search_delete_secret_alert">
                         Are you sure that you want to delete this secret?
                 </DialogContentText>
                 </DialogContent>
@@ -336,7 +361,10 @@ function Search(props) {
                     <Button onClick={() => setDeleteSecret(false)} color="primary" autoFocus>
                         No
                     </Button>
-                    <Button onClick={handleDeleteSecret} color="primary">
+                    <Button 
+                        onClick={handleDeleteSecret} 
+                        color="primary"
+                        data-testid="search_dialog_yes_secret_button">
                         Yes
                     </Button>
                 </DialogActions>

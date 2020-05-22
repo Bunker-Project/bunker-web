@@ -60,8 +60,8 @@ class Api {
 
     async login(data) {
 
-        // if (data == null)
-        //     data = this.state.defaultUser;
+        if (data == null)
+            data = this.state.defaultUser;
         return await axios.post(`${this.state.url}/login`, data);
     }
 

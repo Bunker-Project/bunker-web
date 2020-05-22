@@ -53,7 +53,7 @@ function Login() {
             <Helmet>
                 <title>Login / Bunker</title>
             </Helmet>
-            <Form ref={formRef} onSubmit={submitLogin} data-testid="form_login">
+            <Form ref={formRef} onSubmit={submitLogin} >
                 {/* <div className="loginContainer" role="form"> */}
                 <div className="loginContainer">
                     <label
@@ -61,7 +61,6 @@ function Login() {
                         className="label"> Username:</label>
                     <Input
                         id="txtUsername"
-                        data-testid="login_email_input"
                         name="username"
                         placeholder="Your email"></Input>
 
@@ -73,7 +72,6 @@ function Login() {
                         </label>
                     <Input
                         id="txtPassword"
-                        data-testid="login_password_input"
                         name="password"
                         isPassword={true}
                         placeholder="Your password"
@@ -81,7 +79,6 @@ function Login() {
 
                     <button
                         type="submit"
-                        data-testid="login_submit_button"
                         disabled={loading}
                         className="loginButton">
                         {loading ? "WAIT..." : "LOGIN"}

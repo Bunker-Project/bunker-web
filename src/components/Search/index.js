@@ -86,7 +86,7 @@ function Search(props) {
 
     //Set the results and states to update pagination component
     function setFinalResults(response) {
-
+        
         if (response.headers !== null && response.headers !== undefined) {
 
             let paginationHeader = JSON.parse(response.headers['x-pagination']);
@@ -179,7 +179,6 @@ function Search(props) {
                         <div className="contentBox" key={`contentBox${index}`}>
                             <span
                                 className="boxInfo"
-                                data-testid="search_secret_box"
                                 key={`boxInfo${index}`}>{item.value.secretId}
                             </span>
                         </div>
@@ -187,12 +186,10 @@ function Search(props) {
                     <div className="boxOptions" key={`boxOptions${index}`}>
                         <button
                             className="buttonOptions smallFont"
-                            data-testid="search_delete_secret_button"
                             key={`buttonDelete${index}`}
                             onClick={() => openDeleteSecretDialog(index)}>Delete</button>
                         <button
                             className="buttonOptions smallFont"
-                            data-testid="search_edit_secret_button"
                             key={`buttonEdit${index}`}
                             onClick={() => handleSecretClick(index)}>Edit</button>
                     </div>
@@ -210,7 +207,6 @@ function Search(props) {
                         <div className="contentBox" key={`contentBox${index}`}>
                             <span
                                 className="boxInfo"
-                                data-testid="search_item_box"
                                 key={`boxInfo${index}`}>{item.value.title}
                             </span>
                         </div>
@@ -218,12 +214,10 @@ function Search(props) {
                     <div className="boxOptions" key={`boxOptions${index}`}>
                         <button
                             className="buttonOptions smallFont"
-                            data-testid="search_delete_item_button"
                             key={`buttonDelete${index}`}
                             onClick={() => openDeleteItemDialog(index)}>Delete</button>
                         <button
                             className="buttonOptions smallFont"
-                            data-testid="search_edit_item_button"
                             key={`buttonEdit${index}`}
                             onClick={() => handleItemClick(index)}>Edit</button>
                     </div>
@@ -253,7 +247,6 @@ function Search(props) {
                     className="label"> Search:</label>
                 <input
                     type="text"
-                    data-testid="search_text_input"
                     id="txtSearch"
                     className="defaultTextBox"
                     placeholder="Type what you want and press enter"
@@ -315,30 +308,26 @@ function Search(props) {
                 open={deleteItem}
                 onClose={() => setDeleteItem(false)}
                 aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                data-testid="search_item_dialog">
+                aria-describedby="alert-dialog-description">
                 <DialogTitle id="alert-dialog-title">{"Delete an item?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText 
-                        id="alert-dialog-description"
-                        data-testid="search_delete_item_alert">
+                        id="alert-dialog-description">
                         Are you sure that you want to delete this item?
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button 
+                    <button 
                         onClick={() => setDeleteItem(false)} 
                         color="primary" 
-                        autoFocus
-                        data-testid="search_dialog_no_button">
+                        autoFocus>
                         No
-                    </Button>
-                    <Button 
+                    </button>
+                    <button 
                         onClick={handleDeleteItem} 
-                        color="primary"
-                        data-testid="search_dialog_yes_button">
+                        color="primary">
                         Yes
-                    </Button>
+                    </button>
                 </DialogActions>
             </Dialog>
 
@@ -352,21 +341,19 @@ function Search(props) {
                 <DialogTitle id="alert-dialog-title">{"Delete a secret?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText 
-                        id="alert-dialog-description"
-                        data-testid="search_delete_secret_alert">
+                        id="alert-dialog-description">
                         Are you sure that you want to delete this secret?
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setDeleteSecret(false)} color="primary" autoFocus>
+                    <button onClick={() => setDeleteSecret(false)} color="primary" autoFocus>
                         No
-                    </Button>
-                    <Button 
+                    </button>
+                    <button 
                         onClick={handleDeleteSecret} 
-                        color="primary"
-                        data-testid="search_dialog_yes_secret_button">
+                        color="primary">
                         Yes
-                    </Button>
+                    </button>
                 </DialogActions>
             </Dialog>
 

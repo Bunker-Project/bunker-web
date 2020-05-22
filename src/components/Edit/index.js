@@ -218,7 +218,8 @@ function Edit({ location }) {
                         onChange={e => setDescription(e.target.value)}>
                     </textarea>
                     <label
-                        className={isErrorDescription ? "showLabelError" : "labelError"}>
+                        className={isErrorDescription ? "showLabelError" : "labelError"}
+                        data-testid="edit_item_error_description_label">
                         {errorDescText}
                     </label>
 

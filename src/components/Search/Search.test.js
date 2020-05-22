@@ -1,11 +1,12 @@
 import React from 'react';
 import Search from './index';
 import '@testing-library/jest-dom/extend-expect';
-import { render, fireEvent, waitFor, act } from '../../test-utils';
+import { render, fireEvent, waitFor, act, screen } from '../../test-utils';
 import { axe } from 'jest-axe';
 import 'jest-axe/extend-expect';
 import axiosMock from 'axios';
 import { MemoryRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 
 //Necessary because the global value isn't cleaned after each test and this generates inconsistency in tests
 //executed after the first one
@@ -21,15 +22,13 @@ test('checking accessibility', async () => {
     expect(results).toHaveNoViolations();
 });
 
-test('test filling text search input', () => {
+test('test filling text search input', async () => {
     const searchValue = 'test';
-    const { getByTestId } = render(
-        <Search />
-    );
+    render(<Search />);
 
-    const search_text_input = getByTestId('search_text_input');
+    const search_text_input = screen.getByRole('textbox', /Search:/);
 
-    fireEvent.change(search_text_input, { target: { value: searchValue } });
+    await userEvent.type(search_text_input, searchValue);
 
     expect(search_text_input.value).toEqual(searchValue);
 });
@@ -37,9 +36,7 @@ test('test filling text search input', () => {
 test('get results for a string value typed', async () => {
     const searchValue = 'test';
 
-    const { getByTestId } = render(
-        <Search />
-    );
+    render(<Search />);
 
     const values = [{
         "type": "secret",
@@ -63,10 +60,10 @@ test('get results for a string value typed', async () => {
         }
     }];
 
-    // let value = JSON.stringify(values);
+    const search_text_input = screen.getByRole('textbox', /Search:/);
 
-    const search_text_input = getByTestId('search_text_input');
-
+    //Support to fire the key code is not ready yet https://github.com/testing-library/user-event/pull/235
+    // await userEvent.type(search_text_input, searchValue);
     fireEvent.change(search_text_input, { target: { value: searchValue } });
 
     axiosMock.get.mockResolvedValueOnce({
@@ -76,14 +73,14 @@ test('get results for a string value typed', async () => {
     fireEvent.keyDown(search_text_input, { key: 'Enter', code: 'Enter' });
 
     //Check if the workflow was done correctly and the api was called
-    await waitFor(() => expect(axiosMock.get).toHaveBeenCalledTimes(1));
     // expect(axiosMock.get).toHaveBeenCalledTimes(1)
+    await waitFor(() => expect(axiosMock.get).toHaveBeenCalledTimes(1));
 });
 
 test('checking boxes values', async () => {
     const searchValue = 'test';
 
-    const { getByTestId } = render(
+    render(
         <MemoryRouter>
             <Search />
         </MemoryRouter>,
@@ -123,9 +120,9 @@ test('checking boxes values', async () => {
         }
     }];
 
-    const search_text_input = getByTestId('search_text_input');
+    const search_text_input = screen.getByRole('textbox', /Search:/);
 
-    fireEvent.change(search_text_input, { target: { value: searchValue } });
+    await userEvent.type(search_text_input, searchValue);
 
     axiosMock.get.mockResolvedValueOnce({
         data: values
@@ -135,20 +132,16 @@ test('checking boxes values', async () => {
         fireEvent.keyDown(search_text_input, { key: 'Enter', code: 'Enter' });
     });
 
-    //Get the divs that should appear after searching and cheking if they have the correct values
-    const search_secret_box = await waitFor(() => getByTestId('search_secret_box'));
-    const search_item_box = await waitFor(() => getByTestId('search_item_box'));
+    //Check if the text was shown in the document using the library recommended
+    await waitFor(() => expect(screen.getByText('diauihdahd')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('new ui test')).toBeInTheDocument());
 
-    expect(search_secret_box).toHaveTextContent('diauihdahd');
-    expect(search_item_box).toHaveTextContent('new ui test');
 });
 
 test('test edit secret routing after searching', async () => {
     const searchValue = 'test';
 
-    const { getByTestId } = render(
-        <Search />
-    );
+    render(<Search />);
 
     const values = [{
         "type": "secret",
@@ -162,9 +155,9 @@ test('test edit secret routing after searching', async () => {
         }
     }];
 
-    const search_text_input = getByTestId('search_text_input');
+    const search_text_input = screen.getByRole('textbox', /Search:/);
 
-    fireEvent.change(search_text_input, { target: { value: searchValue } });
+    await userEvent.type(search_text_input, searchValue);
 
     axiosMock.get.mockResolvedValueOnce({
         data: values
@@ -174,11 +167,9 @@ test('test edit secret routing after searching', async () => {
         fireEvent.keyDown(search_text_input, { key: 'Enter', code: 'Enter' });
     });
 
-    const search_edit_secret_button = await waitFor(() => getByTestId('search_edit_secret_button'));
+    const search_edit_secret_button = await waitFor(() => screen.getByRole('button', { name: /Edit/ }));
 
-    act(() => {
-        fireEvent.click(search_edit_secret_button);
-    });
+    userEvent.click(search_edit_secret_button);
 
     const expected_route_value = {
         "pathname": "/editSecret",
@@ -199,9 +190,7 @@ test('test edit item routing after searching', async () => {
     //Default configuration for search tests
     const searchValue = 'test';
 
-    const { getByTestId } = render(
-        <Search />
-    );
+    render(<Search />);
 
     //Item used as returning value for the search event
     const values = [{
@@ -229,9 +218,9 @@ test('test edit item routing after searching', async () => {
     }];
 
     //Get the search input and sets a value to it 
-    const search_text_input = getByTestId('search_text_input');
+    const search_text_input = screen.getByRole('textbox', /Search:/);
 
-    fireEvent.change(search_text_input, { target: { value: searchValue } });
+    await userEvent.type(search_text_input, searchValue);
 
     //Mocking of the api, telling which value is returned when the GET method is called
     axiosMock.get.mockResolvedValueOnce({
@@ -244,12 +233,9 @@ test('test edit item routing after searching', async () => {
     });
 
     //Gets the edit button of the value returned
-    const search_edit_item_button = await waitFor(() => getByTestId('search_edit_item_button'));
+    const search_edit_item_button = await waitFor(() => screen.getByRole('button', { name: /Edit/ }));
 
-
-    act(() => {
-        fireEvent.click(search_edit_item_button);
-    });
+    userEvent.click(search_edit_item_button);
 
     //This is the value that, after clicked, should return from the history (Routes are configured on setupTests.js file on /src page)
     const expected_route_value = {
@@ -277,12 +263,9 @@ test('test edit item routing after searching', async () => {
 });
 
 test('test delete an item after searching it', async () => {
-    //configuration initial
     const searchValue = 'test';
 
-    const { getByTestId } = render(
-        <Search />
-    );
+    render(<Search />);
 
     //Values simulating an item
     const values = [{
@@ -309,10 +292,10 @@ test('test delete an item after searching it', async () => {
         }
     }];
 
-    const search_text_input = getByTestId('search_text_input');
+    const search_text_input = screen.getByRole('textbox', /Search:/);
 
     //set the value for searching
-    fireEvent.change(search_text_input, { target: { value: searchValue } });
+    await userEvent.type(search_text_input, searchValue);
 
     axiosMock.get.mockResolvedValueOnce({
         data: values
@@ -324,20 +307,17 @@ test('test delete an item after searching it', async () => {
     });
 
     //Get the delete button from the HTML generated
-    const search_delete_item_button = await waitFor(() => getByTestId('search_delete_item_button'));
+    const search_delete_item_button = await waitFor(() => screen.getByRole('button', { name: /Delete/ }));
 
     //Fire the click on this button
-    act(() => {
-        fireEvent.click(search_delete_item_button);
-    });
+    userEvent.click(search_delete_item_button);
 
     //Get the alert and verify if the text shown is correct
-    const search_delete_item_alert = getByTestId('search_delete_item_alert');
-
-    expect(search_delete_item_alert).toHaveTextContent('Are you sure that you want to delete this item?');
+    expect(screen.getByRole('dialog', { name: /Delete an item?/ })).toBeInTheDocument();
+    expect(screen.getByText('Are you sure that you want to delete this item?')).toBeInTheDocument();
 
     //Get the yes button, after clicked, it should call the delete method in the API
-    const search_dialog_yes_button = getByTestId('search_dialog_yes_button');
+    const search_dialog_yes_button = screen.getByRole('button', { name: /Yes/ });
 
     //Configures the return from the api when the delete method is called
     axiosMock.delete.mockResolvedValueOnce({
@@ -345,21 +325,15 @@ test('test delete an item after searching it', async () => {
         message: "Item deleted successfully"
     });
 
-    act(() => {
-        //Fires the click event and then it is verified if the workflow called the delete method from the api
-        fireEvent.click(search_dialog_yes_button);
-    });
+    userEvent.click(search_dialog_yes_button)
 
     await waitFor(() => expect(axiosMock.delete).toHaveBeenCalledTimes(1));
 });
 
 test('test delete a secret after searching it', async () => {
-    //configuration initial
     const searchValue = 'test';
 
-    const { getByTestId } = render(
-        <Search />
-    );
+    render(<Search />);
 
     //Values simulating an item
     const values = [{
@@ -374,10 +348,10 @@ test('test delete a secret after searching it', async () => {
         }
     }];
 
-    const search_text_input = getByTestId('search_text_input');
+    const search_text_input = screen.getByRole('textbox', /Search:/);
 
     //set the value for searching
-    fireEvent.change(search_text_input, { target: { value: searchValue } });
+    await userEvent.type(search_text_input, searchValue);
 
     axiosMock.get.mockResolvedValueOnce({
         data: values
@@ -389,20 +363,17 @@ test('test delete a secret after searching it', async () => {
     });
 
     //Get the delete button from the HTML generated
-    const search_delete_secret_button = await waitFor(() => getByTestId('search_delete_secret_button'));
+    const search_delete_secret_button = await waitFor(() => screen.getByRole('button', { name: /Delete/ }));
 
     //Fire the click on this button
-    act(() => {
-        fireEvent.click(search_delete_secret_button);
-    });
+    userEvent.click(search_delete_secret_button);
 
     //Get the alert and verify if the text shown is correct
-    const search_delete_secret_alert = getByTestId('search_delete_secret_alert');
-
-    expect(search_delete_secret_alert).toHaveTextContent('Are you sure that you want to delete this secret?');
+    expect(screen.getByRole('dialog', { name: /Delete a secret?/ })).toBeInTheDocument();
+    expect(screen.getByText('Are you sure that you want to delete this secret?')).toBeInTheDocument();
 
     //Get the yes button, after clicked, it should call the delete method in the API
-    const search_dialog_yes_secret_button = getByTestId('search_dialog_yes_secret_button');
+    const search_dialog_yes_secret_button = screen.getByRole('button', { name: /Yes/ });
 
     //Configures the return from the api when the delete method is called
     axiosMock.delete.mockResolvedValueOnce({
@@ -410,10 +381,7 @@ test('test delete a secret after searching it', async () => {
         message: "Item deleted successfully"
     });
 
-    act(() => {
-        //Fires the click event and then it is verified if the workflow called the delete method from the api
-        fireEvent.click(search_dialog_yes_secret_button);
-    });
+    userEvent.click(search_dialog_yes_secret_button);
 
     await waitFor(() => expect(axiosMock.delete).toHaveBeenCalledTimes(1));
 });

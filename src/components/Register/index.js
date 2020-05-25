@@ -64,7 +64,6 @@ function Register(props) {
     async function validate(item) {
         let validated = true;
         try {
-
             formRef.current.setErrors({});
 
             if (description.length === 0) {
@@ -118,6 +117,7 @@ function Register(props) {
 
 
     function configureAfterSave(response) {
+        
         if (response.status === 201)
             openSnackBar("Created successfully", "success");
         else

@@ -10,6 +10,11 @@ import userEvent from '@testing-library/user-event';
 
 //Necessary because the global value isn't cleaned after each test and this generates inconsistency in tests
 //executed after the first one
+
+beforeAll(() => {
+    jest.clearAllMocks();
+});
+
 afterEach(() => {
     jest.clearAllMocks();
 });
@@ -159,6 +164,9 @@ test('test edit secret routing after searching', async () => {
 
     await userEvent.type(search_text_input, searchValue);
 
+    //this is the mock to call the login, so for test purposes always returns true
+    axiosMock.post.mockResolvedValueOnce(true);
+
     axiosMock.get.mockResolvedValueOnce({
         data: values
     });
@@ -167,6 +175,7 @@ test('test edit secret routing after searching', async () => {
         fireEvent.keyDown(search_text_input, { key: 'Enter', code: 'Enter' });
     });
 
+    // screen.getByRole('button', { name: /Edit/ });
     const search_edit_secret_button = await waitFor(() => screen.getByRole('button', { name: /Edit/ }));
 
     userEvent.click(search_edit_secret_button);
@@ -221,6 +230,9 @@ test('test edit item routing after searching', async () => {
     const search_text_input = screen.getByRole('textbox', /Search:/);
 
     await userEvent.type(search_text_input, searchValue);
+
+    //this is the mock to call the login, so for test purposes always returns true
+    axiosMock.post.mockResolvedValueOnce(true);
 
     //Mocking of the api, telling which value is returned when the GET method is called
     axiosMock.get.mockResolvedValueOnce({
@@ -297,17 +309,21 @@ test('test delete an item after searching it', async () => {
     //set the value for searching
     await userEvent.type(search_text_input, searchValue);
 
+    //this is the mock to call the login, so for test purposes always returns true
+    axiosMock.post.mockResolvedValueOnce(true);
+
     axiosMock.get.mockResolvedValueOnce({
         data: values
     });
 
     //Fire the event that search calling the api
-    act(() => {
+    await act( async () => {
         fireEvent.keyDown(search_text_input, { key: 'Enter', code: 'Enter' });
     });
 
     //Get the delete button from the HTML generated
-    const search_delete_item_button = await waitFor(() => screen.getByRole('button', { name: /Delete/ }));
+    // const search_delete_item_button = await waitFor(() => screen.getByRole('button', { name: /Delete/ }));
+    const search_delete_item_button = screen.getByRole('button', { name: /Delete/ });
 
     //Fire the click on this button
     userEvent.click(search_delete_item_button);
@@ -352,6 +368,9 @@ test('test delete a secret after searching it', async () => {
 
     //set the value for searching
     await userEvent.type(search_text_input, searchValue);
+
+    //this is the mock to call the login, so for test purposes always returns true
+    axiosMock.post.mockResolvedValueOnce(true);
 
     axiosMock.get.mockResolvedValueOnce({
         data: values

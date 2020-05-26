@@ -11,13 +11,12 @@ import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { Helmet } from 'react-helmet';
 
-
 // class Secret extends React.Component {
-function Secret(props) {
+function Secret({location}) {
 
     const api = new Api({ isDev: true });
     const history = useHistory();
-    const isEditing = props.location.state.isEditing;
+    const isEditing = location.state.isEditing;
     const formRef = useRef(null);
 
     const [id, setId] = useState('');
@@ -40,7 +39,7 @@ function Secret(props) {
                 abortEarly: false
             })
 
-            save();
+            await save();
 
         } catch (err) {
             const validationErrors = {};
@@ -57,19 +56,20 @@ function Secret(props) {
 
     useEffect(() => {
         if (isEditing) {
-            let secret = props.location.state.secret;
+            
+            let secret = location.state.secret;
             setTxtId(secret.secretId);
             setTxtPassword(secret.password);
             setId(secret.id);
         }
 
-    }, [isEditing, props.location.state.secret])
+    }, [isEditing, location.state.secret])
 
     async function save() {
         if (isEditing)
-            callUpdate();
+            await callUpdate();
         else
-            callInsert();
+            await callInsert();
     }
 
     async function callUpdate() {
@@ -92,6 +92,7 @@ function Secret(props) {
     }
 
     async function callInsert() {
+        
         let response = await api.insert({
             api: "secrets",
             data: {
@@ -100,6 +101,7 @@ function Secret(props) {
                 passwordAsString: txtPassword
             }
         });
+
         if (response.status === 201) {
             clearAllData();
             openMessage('Secret created successfully', 'success');

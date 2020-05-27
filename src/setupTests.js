@@ -9,6 +9,7 @@ const mockHistoryGoBack = jest.fn();
 
 //This enables to get the value to check if a route was correctly called
 global.mockHistoryPush = mockHistoryPush;
+global.mockHistoryGoBack = mockHistoryGoBack;
 
 //Creates a default mock for routes to be used for all tests
 jest.mock('react-router-dom', () => ({

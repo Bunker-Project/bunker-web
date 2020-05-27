@@ -76,18 +76,90 @@ test('test validations', async () => {
     fireEvent.change(edit_item_title_input, { target: { value: '' } });
     fireEvent.change(edit_item_description_input, { target: { value: '' } });
 
-    // await userEvent.type(edit_item_title_input, "");
-    // await userEvent.type(edit_item_description_input, "");
-
     //Set the mock to return status code 200 if called
     axiosMock.put.mockResolvedValueOnce({ status: 200 });
 
     await act(async () => { fireEvent.click(edit_item_save_button) });
-    // await act(async () => { userEvent.click(edit_item_save_button) });
-    // await waitFor(() => userEvent.click(edit_item_save_button));
 
     expect(screen.getByTestId('edit_item_error_description_label')).toHaveTextContent('The description must have a value');
     expect(axiosMock.put).not.toHaveBeenCalled();
     expect(screen.getByTestId('input_error_label_no_pwd')).toHaveTextContent('Title is required');
 
+});
+
+test('test dialog when cancel is clicked and yes inside the dialog is clicked', async () => {
+    render(<Edit location={stateParam} />);
+
+    const edit_item_cancel_button = screen.getByRole('button', { name: /CANCEL/ });
+
+    userEvent.click(edit_item_cancel_button);
+
+    //Check if the dialog to confirm the cancelling is opened
+    expect(screen.getByRole('dialog', { name: /Are you sure?/ })).toBeInTheDocument();
+
+    //Gets the button inside the dialog that is opened
+    const edit_dialog_yes_button = screen.getByRole('button', { name: /Yes/ });
+
+    //Click that button
+    userEvent.click(edit_dialog_yes_button);
+
+    expect(global.mockHistoryGoBack).toHaveBeenCalled();
+});
+
+test('test dialog when cancel is clicked and no inside the dialog is clicked', async () => {
+
+    //To clear the global mocks used by the react-router-dom mock
+    jest.clearAllMocks();
+
+    render(<Edit location={stateParam} />);
+
+    const edit_item_cancel_button = screen.getByRole('button', { name: /CANCEL/ });
+
+    userEvent.click(edit_item_cancel_button);
+
+    //Check if the dialog to confirm the cancelling is opened
+    expect(screen.getByRole('dialog', { name: /Are you sure?/ })).toBeInTheDocument();
+
+    //Gets the button inside the dialog that is opened
+    const edit_dialog_no_button = screen.getByRole('button', { name: /No/ });
+
+    userEvent.click(edit_dialog_no_button);
+
+    //Check if the dialog has desapeared
+    await waitFor(() => expect(screen.queryByRole('dialog', { name: /Are you sure?/ })).not.toBeInTheDocument());
+    //Check also if the goBack wasn't called accidentally
+    expect(global.mockHistoryGoBack).not.toHaveBeenCalled();
+});
+
+test('checking error during update', async () => {
+    render(<Edit location={stateParam} />);
+
+    const edit_item_save_button = screen.getByRole('button', { name: /SAVE/ });
+
+    //Set the mock to return status code 500 if called and show error message
+    axiosMock.put.mockResolvedValueOnce({ status: 500 });
+
+    userEvent.click(edit_item_save_button);
+
+    await waitFor(() => expect(axiosMock.put).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(screen.getByText("It wasn't possible to update. Check the internet connection")).toBeInTheDocument());
+});
+
+test('test closing dialog when cancel is clicked', async () => {
+
+    //To clear the global mocks used by the react-router-dom mock
+    jest.clearAllMocks();
+
+    render(<Edit location={stateParam} />);
+
+    const edit_item_cancel_button = screen.getByRole('button', { name: /CANCEL/ });
+
+    userEvent.click(edit_item_cancel_button);
+
+    //Check if the dialog to confirm the cancelling is opened
+    const edit_confirm_dialog = await waitFor(() => screen.getByRole('dialog', { name: /Are you sure?/ }));
+
+    fireEvent.keyDown(edit_confirm_dialog, { key: 'Escape', code: 'Escape' });
+
+    await waitFor(() => expect(screen.queryByRole('dialog', { name: /Are you sure?/ })));
 });

@@ -43,19 +43,23 @@ function Search(props) {
 
     async function handleKeyDown(event) {
         if (event.key === 'Enter') {
-            await validateText();
-            // event.preventDefault();
+            event.preventDefault();
+            
+            if (validateText())
+                await search(txtSearch, 1);
         }
     }
 
     //Validate if the textfield has a value for searching
-    async function validateText() {
+    function validateText() {
         var hasValue = txtSearch !== ''
-
-        if (!hasValue)
+        
+        if (!hasValue) {
             setSearchWarning(true);
-        else
-            await search(txtSearch, 1);
+            return false;
+        }
+
+        return true;
     }
 
     //Calls the api and returns the values
@@ -80,13 +84,13 @@ function Search(props) {
         clearCurrentData();
 
         let response = await api.searchAllTogether(page);
-
+        
         setFinalResults(response);
     }
 
     //Set the results and states to update pagination component
     function setFinalResults(response) {
-        
+
         if (response.headers !== null && response.headers !== undefined) {
 
             let paginationHeader = JSON.parse(response.headers['x-pagination']);
@@ -168,7 +172,7 @@ function Search(props) {
     }
 
     function createObjectByType(item, index) {
-        
+
         if (item.type === 'secret') {
             return (
                 <div className="wrapBox" key={`wrapBox${index}`}>
@@ -228,7 +232,9 @@ function Search(props) {
     }
 
     function handleChange(event, value) {
+        
         if (value !== currentPage) {
+            
             if (txtSearch.length === 0)
                 searchAll(value);
             else
@@ -286,7 +292,7 @@ function Search(props) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Search all?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Search all?</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         You are asking to search all the items that you have, it can take a few minutes, are you sure about that?
@@ -309,22 +315,22 @@ function Search(props) {
                 onClose={() => setDeleteItem(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description">
-                <DialogTitle id="alert-dialog-title">{"Delete an item?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Delete an item?</DialogTitle>
                 <DialogContent>
-                    <DialogContentText 
+                    <DialogContentText
                         id="alert-dialog-description">
                         Are you sure that you want to delete this item?
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <button 
-                        onClick={() => setDeleteItem(false)} 
-                        color="primary" 
+                    <button
+                        onClick={() => setDeleteItem(false)}
+                        color="primary"
                         autoFocus>
                         No
                     </button>
-                    <button 
-                        onClick={handleDeleteItem} 
+                    <button
+                        onClick={handleDeleteItem}
                         color="primary">
                         Yes
                     </button>
@@ -338,9 +344,9 @@ function Search(props) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Delete a secret?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Delete a secret?</DialogTitle>
                 <DialogContent>
-                    <DialogContentText 
+                    <DialogContentText
                         id="alert-dialog-description">
                         Are you sure that you want to delete this secret?
                 </DialogContentText>
@@ -349,8 +355,8 @@ function Search(props) {
                     <button onClick={() => setDeleteSecret(false)} color="primary" autoFocus>
                         No
                     </button>
-                    <button 
-                        onClick={handleDeleteSecret} 
+                    <button
+                        onClick={handleDeleteSecret}
                         color="primary">
                         Yes
                     </button>

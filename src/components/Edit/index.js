@@ -241,7 +241,7 @@ function Edit({ location }) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Are you sure?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Are you sure?</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         The changes made will not be saved, are you sure that you want to cancel?

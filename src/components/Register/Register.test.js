@@ -29,15 +29,48 @@ test('test calling the api', async () => {
     userEvent.type(register_title_input, _title);
     userEvent.type(register_content_input, _description);
 
+    //Add a chip
+    const register_keywords_input = screen.getByLabelText('Keywords:');
+    userEvent.type(register_keywords_input, _keyDescription);
+    fireEvent.keyDown(register_keywords_input, { key: 'Enter', code: 'Enter' });
+
     //Set the mock. First call for login call and the second for the insert command call
     axiosMock.post
         .mockResolvedValueOnce(true)
-        .mockResolvedValueOnce({ status: 200 });
+        .mockResolvedValueOnce({ status: 201 });
 
     userEvent.click(create_item_save_button);
 
     //It's gonna be called twice because the first time is to do the login, the second is the insert call
     await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(2));
+});
+
+test('test calling the api and returning error', async () => {
+    render(<Register />);
+
+    const error_message = 'An error occurred. Check your internet';
+    const create_item_save_button = screen.getByRole('button', { name: /SAVE/ });
+    const register_title_input = screen.getByLabelText('Title:');
+    const register_content_input = screen.getByLabelText('Content:');
+
+    userEvent.type(register_title_input, _title);
+    userEvent.type(register_content_input, _description);
+
+    //Add a chip
+    const register_keywords_input = screen.getByLabelText('Keywords:');
+    userEvent.type(register_keywords_input, _keyDescription);
+    fireEvent.keyDown(register_keywords_input, { key: 'Enter', code: 'Enter' });
+
+    //Set the mock. First call for login call and the second for the insert command call
+    axiosMock.post
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce({ status: 500, statusText: error_message });
+
+    userEvent.click(create_item_save_button);
+
+    //It's gonna be called twice because the first time is to do the login, the second is the insert call
+    await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(screen.getByText(error_message)).toBeInTheDocument());
 });
 
 test('test validations', async () => {
@@ -61,21 +94,37 @@ test('test validations', async () => {
 
 test('test chips', () => {
     render(<Register />);
-   
+
     const register_keywords_input = screen.getByLabelText('Keywords:');
 
     userEvent.type(register_keywords_input, _keyDescription);
     fireEvent.keyDown(register_keywords_input, { key: 'Enter', code: 'Enter' });
-    
+
     expect(screen.getByText(_keyDescription)).toBeInTheDocument();
 });
 
 test('test when cancel is clicked', () => {
     render(<Register />);
 
-    const register_go_back_button = screen.getByRole('button', {name: /BACK/});
+    const register_go_back_button = screen.getByRole('button', { name: /BACK/ });
 
     userEvent.click(register_go_back_button);
 
     expect(global.mockHistoryPush).toHaveBeenCalledWith('/');
+});
+
+test('test removing chips', async () => {
+    render(<Register />);
+
+    const register_keywords_input = screen.getByLabelText('Keywords:');
+
+    userEvent.type(register_keywords_input, _keyDescription);
+
+    fireEvent.keyDown(register_keywords_input, { key: 'Enter', code: 'Enter' });
+
+    const chip_close_button = screen.getByRole('button', { name: /Close button/ });
+
+    userEvent.click(chip_close_button);
+
+    await waitFor(() => expect(screen.queryByRole(_keyDescription)).not.toBeInTheDocument());
 });

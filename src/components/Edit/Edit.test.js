@@ -163,3 +163,30 @@ test('test closing dialog when cancel is clicked', async () => {
 
     await waitFor(() => expect(screen.queryByRole('dialog', { name: /Are you sure?/ })));
 });
+
+test('teste deleting a chip', async () => {
+    render(<Edit location={stateParam} />);
+
+    const chip_close_button = screen.getByRole('button', { name : /Close button/ });
+   
+    userEvent.click(chip_close_button);
+
+    await waitFor(() => expect(screen.queryByTestId('chip_text_label')).not.toBeInTheDocument());
+});
+
+test('test adding new chip', async () => {
+    const keyWord = 'keytest';
+
+    render(<Edit location={stateParam} />);
+
+    const edit_keywords_input = screen.getByLabelText(/Keywords:/);
+
+    fireEvent.change(edit_keywords_input, { target: { value: keyWord } });
+
+    fireEvent.keyDown(edit_keywords_input, { key: 'Enter', code: 'Enter' });
+
+    await waitFor(() => expect(screen.getByText(keyWord)).toBeInTheDocument());
+
+    expect(edit_keywords_input.value).toBe('');
+
+});

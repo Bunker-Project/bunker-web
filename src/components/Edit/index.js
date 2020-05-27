@@ -15,6 +15,7 @@ import { Helmet } from 'react-helmet';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import Input from '../Input';
+import { v4 as uuidv4 } from 'uuid';
 
 // class Edit extends React.Component {
 function Edit({ location }) {
@@ -29,6 +30,7 @@ function Edit({ location }) {
     const [errorDescText, setErrorDescText] = useState('');
 
     const [chips, setChips] = useState(location.state.keyWords);
+    // const [chips, setChips] = useState([]);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [open, setOpen] = useState(false);
@@ -41,9 +43,9 @@ function Edit({ location }) {
     });
 
     //If you pass something to the array it will execute every time something change otherwise just once
-
     useEffect(() => {
         initialize();
+        
     }, []);
 
 
@@ -118,15 +120,22 @@ function Edit({ location }) {
     }
 
     function handleKeyDown(e) {
+        
         if (e.key === 'Enter') {
             e.preventDefault();
-            setChips(...chips, e.target.value);
-            e.target.value = "";
+            
+            setChips([...chips, {
+                id: uuidv4(),
+                description: e.target.value
+            }]);
+            
+            setKeyword('');
         }
     }
 
     function handleDelete(data) {
         setChips(chips.filter(chip => chip.id !== data.id));
+        item.keyWords = item.keyWords.filter(chip => chip.id !== data.id);
     }
 
     function initialize() {
@@ -142,9 +151,9 @@ function Edit({ location }) {
     //Returns the chips in case of the aren't null
     function getChips() {
 
-        if (item.keyWords !== null || item.keyWords !== undefined) {
+        if (chips !== null || chips !== undefined) {
             return (
-                item.keyWords.map(data => {
+                chips.map(data => {
                     return (
                         <Chip
                             key={data.id}
@@ -260,6 +269,7 @@ function Edit({ location }) {
             <SnackBar
                 open={updateHasError}
                 onClose={() => setUpdateHasError(false)}
+                // autoHideDuration={null}>
                 autoHideDuration={6000}>
                 <MuiAlert elevation={6} variant="filled" severity="error">
                     {updateErrorMessage}

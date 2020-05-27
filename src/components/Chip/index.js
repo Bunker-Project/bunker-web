@@ -25,6 +25,7 @@ function Chip({ label, onDelete }) {
                 <button
                     className="close"
                     aria-label="Close button"
+                    type="button"
                     onClick={onDelete}>
                     {/* <i> */}
                         <CloseIcon

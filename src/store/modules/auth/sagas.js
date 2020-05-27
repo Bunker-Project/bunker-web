@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 export function* signIn({ payload }) {
     try {
-        const api = new Api({ isDev: true });
+        const api = new Api();
 
         const history = payload.history;
 

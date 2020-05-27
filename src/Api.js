@@ -3,9 +3,9 @@ const axios = require('axios');
 
 
 class Api {
-    constructor({ isDev }) {
+    constructor() {
         this.state = {
-            url: isDev ? 'http://localhost:44305/api' : '',
+            url: process.env.REACT_APP_API_URL,
             errorMessage: '',
             defaultUser: {
                 username: 'doug',

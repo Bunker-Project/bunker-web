@@ -14,7 +14,7 @@ import { Helmet } from 'react-helmet';
 // class Secret extends React.Component {
 function Secret({location}) {
 
-    const api = new Api({ isDev: true });
+    const api = new Api();
     const history = useHistory();
     const isEditing = location.state.isEditing;
     const formRef = useRef(null);

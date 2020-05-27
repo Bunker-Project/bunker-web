@@ -20,7 +20,7 @@ import { Helmet } from 'react-helmet';
 // class Search extends React.Component {
 function Search(props) {
 
-    const api = new Api({ isDev: true });
+    const api = new Api();
     const history = useHistory();
     const palette = {
         primary: {

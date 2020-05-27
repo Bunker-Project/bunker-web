@@ -17,7 +17,7 @@ import { Helmet } from 'react-helmet';
 function Register(props) {
 
     const history = useHistory();
-    const _api = new Api({ isDev: true });
+    const _api = new Api();
     const formRef = useRef(null);
 
     const [chips, setChips] = useState([]);

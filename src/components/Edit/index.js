@@ -52,7 +52,7 @@ function Edit({ location }) {
     async function save(data) {
         var _api;
         if (await validate(data)) {
-            _api = new Api({ isDev: true });
+            _api = new Api();
 
             var keys = [];
             for (var key of item.keyWords) {
@@ -269,7 +269,6 @@ function Edit({ location }) {
             <SnackBar
                 open={updateHasError}
                 onClose={() => setUpdateHasError(false)}
-                // autoHideDuration={null}>
                 autoHideDuration={6000}>
                 <MuiAlert elevation={6} variant="filled" severity="error">
                     {updateErrorMessage}

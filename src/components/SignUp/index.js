@@ -17,7 +17,6 @@ function SignUp() {
     const loading = useSelector(state => state.user.loading);
     const formRef = useRef(null);
     const [username, setUsername] = useState('');
-    // const api = new Api({ isDev: true });
 
     const schema = Yup.object().shape({
         firstName: Yup.string().required('Name is required').max(50),

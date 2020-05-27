@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 
 export function* setUserInfo({ payload }) {
-    const api = new Api({ isDev: true });
+    const api = new Api();
     
     try {
         let response = yield call(api.insert, { api: "users", data: payload.user });

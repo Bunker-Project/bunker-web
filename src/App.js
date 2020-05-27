@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Flip } from 'react-toastify';
 
 function App() {
+  console.log(process.env.REACT_APP_API_URL);
   return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>

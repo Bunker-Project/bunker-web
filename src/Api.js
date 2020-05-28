@@ -29,7 +29,14 @@ class Api {
 
         this.login = this.login.bind(this);
         this.insert = this.insert.bind(this);
+        this.setDefaultUser = this.setDefaultUser.bind(this);
 
+    }
+
+    setDefaultUser(data){
+        this.setState({
+            defaultUser: data
+        });
     }
 
     validateToken() {

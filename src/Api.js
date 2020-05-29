@@ -42,10 +42,11 @@ class Api {
 
         jwt.verify(token, 'anVzdGF0ZXN0Zm9ydGhlYXBp', async function (err, decoded) {
             if (err) {
-                if (err.name === 'TokenExpiredError') {
-                    localStorage.setItem("token", null);
-                    validated = false;
-                }
+                // if (err.name === 'TokenExpiredError') {
+                localStorage.setItem("token", null);
+                validated = false;
+                // }
+
             }
         });
 
@@ -60,13 +61,13 @@ class Api {
     }
 
     async login(data) {
-
+        
         if (data == null)
             data = this.defaultUser;//this has to be removed and it should get this info from the profile 
 
-        if (this.validateToken())
+        if (this.validateToken()) {
             return localStorage.getItem("token");
-
+        }
         return await axios.post(`${this.url}/login`, data);
     }
 

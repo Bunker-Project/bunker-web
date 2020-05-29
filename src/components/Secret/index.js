@@ -92,7 +92,7 @@ function Secret({location}) {
     }
 
     async function callInsert() {
-        
+
         let response = await api.insert({
             api: "secrets",
             data: {

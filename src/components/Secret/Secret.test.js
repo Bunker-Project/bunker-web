@@ -114,7 +114,7 @@ describe('tests in insert mode', () => {
         render(<Secret location={register_location_values} />);
 
         //Restore the implementations because .mockClear resets usage data but not implementation. mockRestore() resets everything, which includes usage data, implementation and mock name
-        // axiosMock.post.mockRestore();
+        axiosMock.post.mockRestore();
 
         //Configure the mock when the login is done and the second call that is the update call
         axiosMock.post
@@ -130,7 +130,9 @@ describe('tests in insert mode', () => {
 
         userEvent.click(secret_save_button);
 
+        
         await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(2));
+        await waitFor(() => expect(screen.getByText('Secret created successfully')).toBeInTheDocument());
     });
 
     test('checking validations', async () => {

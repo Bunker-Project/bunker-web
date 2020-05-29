@@ -6,6 +6,11 @@ import { axe } from 'jest-axe';
 import 'jest-axe/extend-expect';
 import axiosMock from 'axios';
 import userEvent from '@testing-library/user-event';
+import { toast } from 'react-toastify';
+
+// afterEach(() => {
+//     jest.clearAllMocks();
+// });
 
 test('should have correct values', async () => {
     const username = "bunker@unitteste.com";
@@ -46,17 +51,21 @@ test('test complete calling the form', async () => {
     await userEvent.type(email_input, email);
     await userEvent.type(password_input, pwd);
 
+    //Mocks the success message after login
+    toast.success = jest.fn();
     axiosMock.post.mockResolvedValueOnce({
         data: {
             username: email,
             password: pwd
-        }
+        },
+        status: 200
     });
 
     userEvent.click(login_submit);
 
     await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
-
+    await waitFor(() => expect(global.mockHistoryPush).toHaveBeenCalledWith('/home'));
+    await waitFor(() => expect(toast.success).toHaveBeenCalledWith('😀 Welcome!!'));
 });
 
 
@@ -101,4 +110,88 @@ test('test redirect to sign up page', () => {
     expect(global.mockHistoryPush).toHaveBeenLastCalledWith('/signUp');
 
 });
+
+test('test simulating server not found', async () => {
+    const email = "bunker@unitteste.com";
+    const pwd = "bunkerpassword123";
+    render(<Login />);
+
+    const email_input = screen.getByLabelText(/Username:/);
+    const password_input = screen.getByLabelText(/Password:/);
+    const login_submit = screen.getByRole('button', { name: /LOGIN/ });
+
+    await userEvent.type(email_input, email);
+    await userEvent.type(password_input, pwd);
+
+    //Configures the mock for the error message
+    toast.error = jest.fn();
+    //Configure the post to throw an error when requested
+    axiosMock.post.mockRejectedValue(new Error("network error"));
+
+    userEvent.click(login_submit);
+
+    await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('😔 Unable to connect with the server'));
+
+});
+
+
+test('test returning network error during an api call', async () => {
+    const email = "bunker@unitteste.com";
+    const pwd = "bunkerpassword123";
+    render(<Login />);
+
+    const email_input = screen.getByLabelText(/Username:/);
+    const password_input = screen.getByLabelText(/Password:/);
+    const login_submit = screen.getByRole('button', { name: /LOGIN/ });
+
+    await userEvent.type(email_input, email);
+    await userEvent.type(password_input, pwd);
+
+    axiosMock.post.mockRestore();
+    //Configures the mock for the error message
+    toast.error = jest.fn();
+    //Configure the post to throw an error when requested
+    axiosMock.post.mockResolvedValueOnce(
+        {
+            data: "network error",
+            hasError: true
+        });
+
+    userEvent.click(login_submit);
+
+    await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('😔 Unable to connect with the server'));
+
+});
+
+test('test returning a ranodm error during an api call', async () => {
+    const email = "bunker@unitteste.com";
+    const pwd = "bunkerpassword123";
+    render(<Login />);
+
+    const email_input = screen.getByLabelText(/Username:/);
+    const password_input = screen.getByLabelText(/Password:/);
+    const login_submit = screen.getByRole('button', { name: /LOGIN/ });
+
+    await userEvent.type(email_input, email);
+    await userEvent.type(password_input, pwd);
+
+    axiosMock.post.mockRestore();
+    //Configures the mock for the error message
+    toast.error = jest.fn();
+    //Configure the post to throw an error when requested
+    axiosMock.post.mockResolvedValueOnce(
+        {
+            data: "an error occurred",
+            hasError: true
+        });
+
+    userEvent.click(login_submit);
+
+    await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('😱 an error occurred'));
+
+});
+
 

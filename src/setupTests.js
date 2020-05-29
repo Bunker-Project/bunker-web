@@ -26,3 +26,7 @@ jest.mock('axios');
 //This was necessary because the tests, when ran all together were running out of time
 jest.setTimeout(30000);
 
+//Mock of the toast messages
+jest.mock('react-toastify');
+
+

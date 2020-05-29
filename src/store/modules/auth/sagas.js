@@ -6,11 +6,11 @@ import { toast } from 'react-toastify';
 export function* signIn({ payload }) {
     try {
         const api = new Api();
-
+        
         const history = payload.history;
 
         const response = yield call(api.login, payload.user);
-
+        
         if (!response.hasOwnProperty('hasError') && response.status === 200) {
             const token = response.data;
 

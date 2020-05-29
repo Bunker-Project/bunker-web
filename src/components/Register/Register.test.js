@@ -48,7 +48,7 @@ test('test calling the api', async () => {
 test('test calling the api and returning error', async () => {
     render(<Register />);
 
-    const error_message = 'An error occurred. Check your internet';
+    const error_message = "It wasn't possible to update. Check the internet connection";
     const create_item_save_button = screen.getByRole('button', { name: /SAVE/ });
     const register_title_input = screen.getByLabelText('Title:');
     const register_content_input = screen.getByLabelText('Content:');

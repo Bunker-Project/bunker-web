@@ -53,9 +53,10 @@
       "jsx-a11/rule-name": 2
     }
   },
-  "jest": {
-    "setupFiles": [
-      "jest-localstorage-mock"
+  "jest" : {
+    "coveragePathIgnorePatterns" : [
+      "<rootDir>/src/config/",
+      "<rootDir>/serviceWorker.js" 
     ]
   },
   "browserslist": {

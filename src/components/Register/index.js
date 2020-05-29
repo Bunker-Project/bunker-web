@@ -121,7 +121,7 @@ function Register(props) {
         if (response.status === 201)
             openSnackBar("Created successfully", "success");
         else
-            openSnackBar(response.statusText, "error");
+            openSnackBar("It wasn't possible to update. Check the internet connection", "error");
 
         setTitle('');
         setDescription('');

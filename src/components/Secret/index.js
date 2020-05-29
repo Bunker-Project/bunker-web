@@ -106,7 +106,7 @@ function Secret({location}) {
             clearAllData();
             openMessage('Secret created successfully', 'success');
         } else {
-            openMessage(response.statusText, 'error');
+            openMessage("It wasn't possible to update. Check the internet connection", 'error');
         }
 
         document.getElementById("txtId").focus();

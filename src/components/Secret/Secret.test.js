@@ -79,8 +79,6 @@ describe('test in edition mode', () => {
 
     test('check error message', async () => {
 
-        jest.clearAllMocks();
-
         render(<Secret location={edit_location_values} />);
 
         const error_message = 'error during update';
@@ -116,7 +114,7 @@ describe('tests in insert mode', () => {
         render(<Secret location={register_location_values} />);
 
         //Restore the implementations because .mockClear resets usage data but not implementation. mockRestore() resets everything, which includes usage data, implementation and mock name
-        axiosMock.post.mockRestore();
+        // axiosMock.post.mockRestore();
 
         //Configure the mock when the login is done and the second call that is the update call
         axiosMock.post
@@ -166,7 +164,7 @@ describe('tests in insert mode', () => {
 
         render(<Secret location={register_location_values} />);
 
-        const error_message = 'error during insertion';
+        const error_message = "It wasn't possible to update. Check the internet connection";
         
         const secret_id_input = screen.getByLabelText('Your ID:');
         const secret_password_input = screen.getByLabelText('Your password:');
@@ -180,7 +178,7 @@ describe('tests in insert mode', () => {
         //Configure the mock when the login is done
         axiosMock.post
             .mockResolvedValueOnce(true)
-            .mockResolvedValueOnce({ status: 500, statusText: error_message });
+            .mockResolvedValueOnce({ status: 500 });
 
         userEvent.click(secret_save_button);
 

@@ -3,14 +3,15 @@ const axios = require('axios');
 
 
 class Api {
+    url = '';
+    // errorMessage = '';
+    defaultUser = null;
+
     constructor() {
-        this.state = {
-            url: process.env.REACT_APP_API_URL,
-            errorMessage: '',
-            defaultUser: {
-                username: 'doug',
-                password: 'apiapi'
-            }
+        this.url = process.env.REACT_APP_API_URL;
+        this.defaultUser = {
+            username: 'doug',
+            password: 'apiapi'
         };
 
         axios.interceptors.response.use(function (response) {
@@ -29,14 +30,7 @@ class Api {
 
         this.login = this.login.bind(this);
         this.insert = this.insert.bind(this);
-        this.setDefaultUser = this.setDefaultUser.bind(this);
 
-    }
-
-    setDefaultUser(data){
-        this.setState({
-            defaultUser: data
-        });
     }
 
     validateToken() {
@@ -66,11 +60,14 @@ class Api {
     }
 
     async login(data) {
-        
-        if (data == null) 
-            data = this.state.defaultUser;
 
-        return await axios.post(`${this.state.url}/login`, data);
+        if (data == null)
+            data = this.defaultUser;//this has to be removed and it should get this info from the profile 
+
+        if (this.validateToken())
+            return localStorage.getItem("token");
+
+        return await axios.post(`${this.url}/login`, data);
     }
 
     async getHeaders() {
@@ -84,91 +81,60 @@ class Api {
 
     //Concats the url 
     concatUrl(api) {
-        return `${this.state.url}/${api}`;
+        return `${this.url}/${api}`;
     }
 
     //Returns all the data of an object
     async getAll({ api }) {
-        try {
-            if (!this.validateToken())
-                await this.handleToken();
+        return axios.get(this.concatUrl(api), await this.getHeaders());
 
-            return axios.get(this.concatUrl(api), await this.getHeaders());
-        } catch{
-            return null;
-        }
     }
 
     async getById({ api, id }) {
-        try {
-            return axios.get(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
-        } catch {
-            return null;
-        }
+        return axios.get(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
+
     }
 
     async insert({ api, data }) {
         return axios.post(this.concatUrl(api), data, await this.getHeaders());
     }
 
-    async searchByEntity({ api, searchString }) {
-        try {
-            return axios.get(`${this.concatUrl(api)}/search/${searchString}`, await this.getHeaders());
-        } catch {
-            return null;
-        }
-    }
+    // async searchByEntity({ api, searchString }) {
+    //     try {
+    //         return axios.get(`${this.concatUrl(api)}/search/${searchString}`, await this.getHeaders());
+    //     } catch {
+    //         return null;
+    //     }
+    // }
 
-    setMessageText(value) {
-        this.setState({
-            errorMessage: value
-        });
-    }
+    // setMessageText(value) {
+    //     this.errorMessage = value;
+    // }
 
-    getErrorMessage() {
-        return this.state.errorMessage;
-    }
+    // getErrorMessage() {
+    //     return this.errorMessage;
+    // }
 
     async update({ api, data }) {
-        try {
-            return axios.put(`${this.concatUrl(api)}/${data.id}`, data, await this.getHeaders());
-        } catch{
-            return null;
-        }
+        return axios.put(`${this.concatUrl(api)}/${data.id}`, data, await this.getHeaders());
     }
 
     async searchAllTogether(pageNumber) {
-        try {
-            return axios.get(`${this.state.url}/search?pageNumber=${pageNumber}`, await this.getHeaders());
-        } catch{
-            return null;
-        }
+        return axios.get(`${this.url}/search?pageNumber=${pageNumber}`, await this.getHeaders());
     }
 
     async searchAllByString(searchString) {
-        try {
-            return axios.get(`${this.state.url}/search/${searchString}`, await this.getHeaders());
-        } catch {
-            return null;
-        }
+        return axios.get(`${this.url}/search/${searchString}`, await this.getHeaders());
     }
 
     //Generic delete method for all entities
     async delete({ api, id }) {
-        try {
-            return axios.delete(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
-        } catch{
-            return null;
-        }
+        return axios.delete(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
     }
 
     //Check if a username is available
     async checkUsername(username) {
-        try {
-            return axios.get(`${this.concatUrl("users")}/username/${username}`);
-        } catch{
-            return null;
-        }
+        return axios.get(`${this.concatUrl("users")}/username/${username}`);
     }
 }
 

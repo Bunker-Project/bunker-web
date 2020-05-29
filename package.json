@@ -53,10 +53,14 @@
       "jsx-a11/rule-name": 2
     }
   },
-  "jest" : {
-    "coveragePathIgnorePatterns" : [
+  "jest": {
+    "coveragePathIgnorePatterns": [
       "<rootDir>/src/config/",
-      "<rootDir>/src/serviceWorker.js" 
+      "<rootDir>/src/serviceWorker.js"
+    ],
+    "coverageReporters": [
+      "text",
+      "cobertura"
     ]
   },
   "browserslist": {

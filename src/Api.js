@@ -3,9 +3,9 @@ const axios = require('axios');
 
 
 class Api {
-    url = '';
+    // url = '';
     // errorMessage = '';
-    defaultUser = null;
+    // defaultUser = null;
 
     constructor() {
         this.url = process.env.REACT_APP_API_URL;
@@ -61,13 +61,14 @@ class Api {
     }
 
     async login(data) {
-        
+        console.log("Caiu aqui");
         if (data == null)
             data = this.defaultUser;//this has to be removed and it should get this info from the profile 
 
         if (this.validateToken()) {
             return localStorage.getItem("token");
         }
+        console.log("URL", this.url);
         return await axios.post(`${this.url}/login`, data);
     }
 

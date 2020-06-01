@@ -2,6 +2,7 @@ import { all, call, takeLatest, put } from 'redux-saga/effects';
 import Api from '../../../Api';
 import { signInSuccess, setToken, signInFail } from './actions';
 import { toast } from 'react-toastify';
+import Actions from '../../enums';
 
 export function* signIn({ payload }) {
     try {
@@ -15,7 +16,7 @@ export function* signIn({ payload }) {
             const token = response.data;
 
             if (token !== null) {
-                yield put(signInSuccess(token));
+                yield put(signInSuccess(token, payload.user));
                 toast.success("😀 Welcome!!");
                 history.push('/home');
             }
@@ -41,6 +42,7 @@ export function* signIn({ payload }) {
 
 export function* rehydrate({ payload }) {
     if (payload !== undefined) {//This is necessary because jest enters here and throws an exception
+        console.log("Rehydrate was called");
         const token = payload.auth.token;
 
         if (token !== null)
@@ -56,6 +58,6 @@ export function* logout({ payload }) {
 }
 
 export default all([
-    takeLatest('@auth/LOGIN_REQUEST', signIn),
+    takeLatest(Actions.AUTH.LOGIN_REQUEST, signIn),
     takeLatest('persist/REHYDRATE', rehydrate),
-    takeLatest('@auth/LOGOUT', logout)]);
+    takeLatest(Actions.AUTH.LOGOUT, logout)]);

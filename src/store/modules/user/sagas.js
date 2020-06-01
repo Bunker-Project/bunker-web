@@ -3,16 +3,17 @@ import Api from '../../../Api';
 import { signUpSuccess, signUpFail } from './actions';
 import { signInRequest } from '../auth/actions';
 import { toast } from 'react-toastify';
+import Actions from '../../enums';
 
 
 export function* setUserInfo({ payload }) {
     const api = new Api();
-    
+
     try {
         let response = yield call(api.insert, { api: "users", data: payload.user });
 
         if (response.status === 201) {
-            
+
             //Put sets the variable to the store
             yield put(signUpSuccess(response.data));
 
@@ -20,8 +21,8 @@ export function* setUserInfo({ payload }) {
                 username: response.data.username,
                 password: response.data.passwordAsString
             }, payload.history));
-        }else{
-            
+        } else {
+
             if (response.data.toString().toLowerCase().includes("network error")) {
                 toast.error("😔 Unable to connect with the server");
             } else {
@@ -31,7 +32,7 @@ export function* setUserInfo({ payload }) {
         }
 
     } catch (err) {
-        
+
         if (err.toString().toLowerCase().includes("network error")) {
             toast.error("😔 Unable to connect with the server");
         }
@@ -40,4 +41,19 @@ export function* setUserInfo({ payload }) {
     }
 }
 
-export default all([takeLatest("@user/SIGN_UP", setUserInfo)])
+export function* rehydrate({ payload }) {
+    console.tron.log(payload);
+    // if (payload !== undefined) {//This is necessary because jest enters here and throws an exception
+    //     console.log("Rehydrate was called");
+    //     const token = payload.auth.token;
+
+    //     if (token !== null)
+    //         yield put(setToken(token));
+    //     else
+    //         yield put(signInFail());
+    // }
+}
+
+export default all([
+    takeLatest(Actions.USER.SIGN_UP, setUserInfo),
+    takeLatest('persist/REHYDRATE', rehydrate)])

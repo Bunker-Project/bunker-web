@@ -1,9 +1,12 @@
 // import jwt from 'jsonwebtoken';
 import { store } from './store';
+import { getTokenInfo, setTokenInfo } from './config/AccessTokenInfo';
+import { setRefreshToken } from './store/modules/auth/actions';
 const axios = require('axios');
 
 
 class Api {
+
     constructor() {
         this.url = process.env.REACT_APP_API_URL;
 
@@ -27,61 +30,65 @@ class Api {
     }
 
     validateToken() {
-        console.log("Validating token", store.getState().auth);
+        let tokenInfo = getTokenInfo();
 
-        if (store.getState().auth.token !== null) {
-            const { expiration } = store.getState().auth.token;
-
-            console.log("Expiration date", expiration);
-
-            if (Date.parse(expiration) > Date.now())
+        if (tokenInfo.accessToken !== null) {
+            if (Date.parse(tokenInfo.expiration) > Date.now())
                 return true;
         }
-        // let { accessToken, expiration } = store.getState().auth.token; //localStorage.getItem("token");
-        
-
-        // if (accessToken === null || accessToken === "null")
-        //     return false;
-
-        // jwt.verify(token, 'anVzdGF0ZXN0Zm9ydGhlYXBp', async function (err, decoded) {
-        //     if (err) {
-        //         // if (err.name === 'TokenExpiredError') {
-        //         // localStorage.setItem("token", null);
-        //         validated = false;
-        //         // }
-
-        //     }
-        // });
 
         return false;
     }
 
-    // async handleToken() {
-    //     let response = await this.login();
-
-    //     // if (response !== undefined)
-    //     //     localStorage.setItem("token", response.data.accessToken);
-    // }
-
     async login(data) {
+        let response = await axios.post(`${this.url}/login`, data);
+        return response;
+    }
 
-        if (data == null) {
-            console.log("Data is null");
+    async refreshToken() {
+        const { refreshToken, id } = store.getState().auth;
+
+        if (refreshToken) {
+            let data = {
+                grantType: 'refresh_token',
+                id: id,
+                refreshToken: refreshToken
+            };
+
+            let response = await this.login(data);
+
+            if (response.status === 200) {
+                setTokenInfo(response.data);
+                setRefreshToken(response.data);
+
+                return response.data;
+            }
+        }
+        else
+            return null;
+
+        return null;
+    }
+
+    //Validates and make a request to refresh the token in case of it is invalid
+    async getToken() {
+        let tokenInfo = getTokenInfo();
+
+        if (tokenInfo.accessToken !== null) {
+            if (tokenInfo.expiration > Date.now()) {
+                let { accessToken } = await this.refreshToken(tokenInfo.id);
+
+                if (accessToken !== null)
+                    return accessToken;
+            } else
+                return tokenInfo.accessToken;
         }
 
-        if (this.validateToken()) {
-            // return localStorage.getItem("token");
-            console.log("Token is valid", store.getState().auth.token);
-            return store.getState().auth.token.accessToken;
-        }
-
-        //After login the store should be updated
-        // return await axios.post(`${this.url}/login`, data);
-        return await axios.post(`${this.url}/login`, data);
+        return null;
     }
 
     async getHeaders() {
-        let token = await this.login();
+        let token = await this.getToken();
         return {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -97,16 +104,13 @@ class Api {
     //Returns all the data of an object
     async getAll({ api }) {
         return axios.get(this.concatUrl(api), await this.getHeaders());
-
     }
 
     async getById({ api, id }) {
         return axios.get(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
-
     }
 
     async insert({ api, data, isSignUp }) {
-        console.log("Chamando insert", this.concatUrl(api));
         if (isSignUp)
             return axios.post(this.concatUrl(api), data);
         else

@@ -2,7 +2,8 @@ import produce from 'immer';
 import Actions from '../../enums';
 
 const INITIAL_STATE = {
-    token: null,
+    refreshToken: null,
+    id: null,
     signed: false,
     loading: false
 };
@@ -16,18 +17,21 @@ export default function auth(state = INITIAL_STATE, action) {
                 break;
             case Actions.AUTH.LOGIN_SUCCESS:
                 draft.loading = false;
-                draft.token = action.payload.tokenData;
+                draft.refreshToken = action.payload.tokenData.refreshToken;
+                draft.id = action.payload.tokenData.id;
                 draft.signed = true;
                 break;
             case Actions.AUTH.LOGIN_FAIL:
                 draft.loading = false;
                 draft.signed = false;
-                draft.token = null;
+                draft.refreshToken = null;
+                draft.id = null;
                 break;
             case Actions.AUTH.LOGOUT:
                 draft.loading = false;
                 draft.signed = false;
-                draft.token = null;
+                draft.refreshToken = null;
+                draft.id = null;
                 break;
             default:
                 return { ...state };

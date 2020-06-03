@@ -17,7 +17,7 @@ function Login() {
     const formRef = useRef(null);
 
     async function submitLogin(user) {
-        
+
         try {
             formRef.current.setErrors({});
 
@@ -29,7 +29,7 @@ function Login() {
             await schema.validate(user, {
                 abortEarly: false,
             });
-            
+
             dispatch(signInRequest(user, history));
         } catch (err) {
             const validationErrors = {};

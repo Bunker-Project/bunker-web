@@ -44,9 +44,16 @@ function Edit({ location }) {
 
     //If you pass something to the array it will execute every time something change otherwise just once
     useEffect(() => {
+        function initialize() {
+            setTitle(item.title);
+            setDescription(item.description);
+            setErrorTitle(false);
+            setErrorTitleText('');
+        }
+        
         initialize();
         
-    }, []);
+    }, [item.description, item.title]);
 
 
     async function save(data) {
@@ -138,13 +145,7 @@ function Edit({ location }) {
         item.keyWords = item.keyWords.filter(chip => chip.id !== data.id);
     }
 
-    function initialize() {
-        setTitle(item.title);
-        setDescription(item.description);
-        setErrorTitle(false);
-        setErrorTitleText('');
-    }
-
+  
     function returnToSearch() {
         setOpen(false);
         history.goBack();

@@ -54,7 +54,8 @@ function Register(props) {
                     title: title,
                     description: description,
                     keyWords: keys
-                }
+                },
+                isSignUp: false
             });
 
             configureAfterSave(response);

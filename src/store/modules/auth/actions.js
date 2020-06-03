@@ -21,8 +21,7 @@ export function signInFail() {
 }
 
 //This is because after refreshing the page the value of the state is not set
-export function setToken(tokenData) {
-    
+export function setRefreshToken(tokenData) {
     return {
         type: Actions.AUTH.LOGIN_SUCCESS,
         payload: { tokenData }

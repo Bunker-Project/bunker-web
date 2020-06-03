@@ -11,18 +11,15 @@ export default function RouteWrapper({
   ...rest
 }) {
 
-  var authenticated = false;
-  
-  if (store.getState().auth.token !== null)
-    authenticated = store.getState().auth.token.accessToken
+  let signed = store.getState().auth.signed;
 
   // const { authenticated } = store.getState().auth.token;
 
-  if (!authenticated && isPrivate) {
+  if (!signed && isPrivate) {
     return <Redirect to="/" />;
   }
 
-  if (authenticated && !isPrivate) {
+  if (signed && !isPrivate) {
     return <Redirect to="/home" />;
   }
 

@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Navbar.css'
 import { useHistory } from 'react-router-dom';
 import logo from '../../icons/logo.png';
 import '../../global.css';
+import Api from '../../Api';
+import { useDispatch } from 'react-redux';
+import { setRefreshToken } from '../../store/modules/auth/actions';
 
 
 function NavBar(props) {
 
     const history = useHistory();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        async function refreshToken() {
+
+            var api = new Api();
+            let response = await api.refreshToken();
+
+            if (response)
+                dispatch(setRefreshToken(response));
+
+            if (!response)
+                history.push('/');
+        }
+
+        refreshToken();
+    }, [dispatch, history]);
+
+
 
     function handleClick() {
         history.push('/');

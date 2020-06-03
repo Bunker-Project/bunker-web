@@ -141,6 +141,8 @@ function Edit({ location }) {
     function initialize() {
         setTitle(item.title);
         setDescription(item.description);
+        setErrorTitle(false);
+        setErrorTitleText('');
     }
 
     function returnToSearch() {

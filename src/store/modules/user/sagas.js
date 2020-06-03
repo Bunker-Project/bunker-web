@@ -1,7 +1,7 @@
 import { all, call, takeLatest, put } from 'redux-saga/effects';
 import Api from '../../../Api';
 import { signUpSuccess, signUpFail } from './actions';
-import { signInRequest } from '../auth/actions';
+import { signInSuccess } from '../auth/actions';
 import { toast } from 'react-toastify';
 import Actions from '../../enums';
 
@@ -10,17 +10,18 @@ export function* setUserInfo({ payload }) {
     const api = new Api();
 
     try {
-        let response = yield call(api.insert, { api: "users", data: payload.user });
+        let response = yield call(api.insert, { api: "users", data: payload.user, isSignUp: true });
 
         if (response.status === 201) {
 
             //Put sets the variable to the store
             yield put(signUpSuccess(response.data));
 
-            yield put(signInRequest({
-                username: response.data.username,
-                password: response.data.passwordAsString
-            }, payload.history));
+            yield put(signInSuccess(response.data));
+
+            toast.success("😀 Welcome!!");
+            
+            payload.history.push('/home');
         } else {
 
             if (response.data.toString().toLowerCase().includes("network error")) {
@@ -42,7 +43,7 @@ export function* setUserInfo({ payload }) {
 }
 
 export function* rehydrate({ payload }) {
-    console.tron.log(payload);
+    // console.tron.log(payload);
     // if (payload !== undefined) {//This is necessary because jest enters here and throws an exception
     //     console.log("Rehydrate was called");
     //     const token = payload.auth.token;

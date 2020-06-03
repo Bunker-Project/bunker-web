@@ -13,23 +13,18 @@ export default function user(state = INITIAL_STATE, action) {
                 draft.loading = true;
                 break;
             case Actions.USER.SIGN_UP_SUCCESS:
-                console.tron.log("SIGN UP SUCESS");
-                draft.profile = action.payload.user;
+                // draft.profile = action.payload.user;
                 draft.loading = false;
                 break;
-            case Actions.AUTH.LOGIN_SUCCESS:
-                console.tron.log("LOGIN SUCCESS");
-                console.tron.log("User payload is: ", action.payload.user);
-                draft.profile = action.payload.user;
-                draft.loading = false;
-                break;
+            // case Actions.AUTH.LOGIN_SUCCESS:
+            //     draft.profile = action.payload.user;
+            //     draft.loading = false;
+            //     break;
             case Actions.USER.SIGN_UP_FAIL:
-                console.tron.log("LOGIN FAIL");
                 draft.profile = null;
                 draft.loading = false;
                 break;
             default:
-                console.tron.log("DEFAULT");
                 return { ...state };
         }
     })

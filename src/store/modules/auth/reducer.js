@@ -16,7 +16,7 @@ export default function auth(state = INITIAL_STATE, action) {
                 break;
             case Actions.AUTH.LOGIN_SUCCESS:
                 draft.loading = false;
-                draft.token = action.payload.token;
+                draft.token = action.payload.tokenData;
                 draft.signed = true;
                 break;
             case Actions.AUTH.LOGIN_FAIL:

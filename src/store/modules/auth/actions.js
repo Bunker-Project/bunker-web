@@ -7,10 +7,10 @@ export function signInRequest(user, history) {
     };
 }
 
-export function signInSuccess(token, user) {
+export function signInSuccess(tokenData) {
     return {
         type: Actions.AUTH.LOGIN_SUCCESS,
-        payload: { token, user }
+        payload: { tokenData }
     }
 }
 
@@ -21,10 +21,11 @@ export function signInFail() {
 }
 
 //This is because after refreshing the page the value of the state is not set
-export function setToken(token) {
+export function setToken(tokenData) {
+    
     return {
         type: Actions.AUTH.LOGIN_SUCCESS,
-        payload: { token }
+        payload: { tokenData }
     }
 }
 

@@ -1,18 +1,11 @@
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
+import { store } from './store';
 const axios = require('axios');
 
 
 class Api {
-    // url = '';
-    // errorMessage = '';
-    // defaultUser = null;
-
     constructor() {
         this.url = process.env.REACT_APP_API_URL;
-        this.defaultUser = {
-            username: 'doug',
-            password: 'apiapi'
-        };
 
         axios.interceptors.response.use(function (response) {
 
@@ -34,49 +27,64 @@ class Api {
     }
 
     validateToken() {
-        let token = localStorage.getItem("token");
-        let validated = true;
+        console.log("Validating token", store.getState().auth);
 
-        if (token === null || token === "null")
-            return false;
+        if (store.getState().auth.token !== null) {
+            const { expiration } = store.getState().auth.token;
 
-        jwt.verify(token, 'anVzdGF0ZXN0Zm9ydGhlYXBp', async function (err, decoded) {
-            if (err) {
-                // if (err.name === 'TokenExpiredError') {
-                localStorage.setItem("token", null);
-                validated = false;
-                // }
+            console.log("Expiration date", expiration);
 
-            }
-        });
+            if (Date.parse(expiration) > Date.now())
+                return true;
+        }
+        // let { accessToken, expiration } = store.getState().auth.token; //localStorage.getItem("token");
+        
 
-        return validated;
+        // if (accessToken === null || accessToken === "null")
+        //     return false;
+
+        // jwt.verify(token, 'anVzdGF0ZXN0Zm9ydGhlYXBp', async function (err, decoded) {
+        //     if (err) {
+        //         // if (err.name === 'TokenExpiredError') {
+        //         // localStorage.setItem("token", null);
+        //         validated = false;
+        //         // }
+
+        //     }
+        // });
+
+        return false;
     }
 
-    async handleToken() {
-        let response = await this.login();
+    // async handleToken() {
+    //     let response = await this.login();
 
-        if (response !== undefined)
-            localStorage.setItem("token", response.data);
-    }
+    //     // if (response !== undefined)
+    //     //     localStorage.setItem("token", response.data.accessToken);
+    // }
 
     async login(data) {
-        console.log("Caiu aqui");
-        if (data == null)
-            data = this.defaultUser;//this has to be removed and it should get this info from the profile 
+
+        if (data == null) {
+            console.log("Data is null");
+        }
 
         if (this.validateToken()) {
-            return localStorage.getItem("token");
+            // return localStorage.getItem("token");
+            console.log("Token is valid", store.getState().auth.token);
+            return store.getState().auth.token.accessToken;
         }
-        console.log("URL", this.url);
+
+        //After login the store should be updated
+        // return await axios.post(`${this.url}/login`, data);
         return await axios.post(`${this.url}/login`, data);
     }
 
     async getHeaders() {
-        await this.handleToken();
+        let token = await this.login();
         return {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
+                Authorization: `Bearer ${token}`
             }
         }
     }
@@ -97,8 +105,13 @@ class Api {
 
     }
 
-    async insert({ api, data }) {
-        return axios.post(this.concatUrl(api), data, await this.getHeaders());
+    async insert({ api, data, isSignUp }) {
+        console.log("Chamando insert", this.concatUrl(api));
+        if (isSignUp)
+            return axios.post(this.concatUrl(api), data);
+        else
+            return axios.post(this.concatUrl(api), data, await this.getHeaders());
+
     }
 
     // async searchByEntity({ api, searchString }) {

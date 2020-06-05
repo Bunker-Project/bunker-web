@@ -1,6 +1,6 @@
 import {
     signInRequest, signInSuccess, signInFail,
-    setToken, logout
+    setRefreshToken, logout
 } from '../../../store/modules/auth/actions';
 
 const default_user = {
@@ -22,7 +22,7 @@ test('test signInSuccess', () => {
     let response = signInSuccess(token);
 
     expect(response.type).toBe('@auth/LOGIN_SUCCESS');
-    expect(response.payload.token).toBe(token);
+    expect(response.payload.tokenData).toBe(token);
 });
 
 test('test signInFail', () => {
@@ -32,10 +32,10 @@ test('test signInFail', () => {
 });
 
 test('test setToken', () => {
-    let response = setToken(token)
+    let response = setRefreshToken(token)
 
     expect(response.type).toBe('@auth/LOGIN_SUCCESS');
-    expect(response.payload.token).toBe(token);
+    expect(response.payload.tokenData).toBe(token);
 });
 
 test('test logout', () => {

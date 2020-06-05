@@ -11,21 +11,21 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Flip } from 'react-toastify';
 
 function App() {
-  
+
   return (
-      <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <Routes />
-          <ToastContainer
-            autoClose={3000}
-            hideProgressBar
-            closeOnClick
-            transition={Flip}
-            rtl={false}
-            draggable
-            position="top-right" />
-        </PersistGate>
-      </Provider>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <Routes />
+        <ToastContainer
+          autoClose={3000}
+          hideProgressBar
+          closeOnClick
+          transition={Flip}
+          rtl={false}
+          draggable
+          position="top-right" />
+      </PersistGate>
+    </Provider>
   );
 }
 

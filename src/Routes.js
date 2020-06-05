@@ -12,6 +12,7 @@ import SignUp from './components/SignUp';
 import Profile from './components/Profile';
 
 export default function Routes() {
+
     return (
         <BrowserRouter>
             <NavBar />
@@ -19,11 +20,11 @@ export default function Routes() {
                 <Route path="/" exact component={Login} />
                 <Route path="/home" component={Main} isPrivate />
                 <Route path="/search" component={Search} isPrivate />
-                <Route path="/register" component={Register} isPrivate/>
+                <Route path="/register" component={Register} isPrivate />
                 <Route path="/secret" component={Secret} isPrivate />
                 <Route path="/edit" component={Edit} isPrivate />
-                <Route path="/signUp" component={SignUp}/>
-                <Route path="/editSecret" component={Secret} isPrivate/>
+                <Route path="/signUp" component={SignUp} />
+                <Route path="/editSecret" component={Secret} isPrivate />
                 <Route path="/profile" component={Profile} isPrivate />
             </Switch>
 

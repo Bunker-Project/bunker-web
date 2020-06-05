@@ -1,18 +1,14 @@
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
+import { store } from './store';
+import { getTokenInfo, setTokenInfo } from './config/AccessTokenInfo';
+import { setRefreshToken } from './store/modules/auth/actions';
 const axios = require('axios');
 
 
 class Api {
-    url = '';
-    // errorMessage = '';
-    defaultUser = null;
 
     constructor() {
         this.url = process.env.REACT_APP_API_URL;
-        this.defaultUser = {
-            username: 'doug',
-            password: 'apiapi'
-        };
 
         axios.interceptors.response.use(function (response) {
 
@@ -34,48 +30,66 @@ class Api {
     }
 
     validateToken() {
-        let token = localStorage.getItem("token");
-        let validated = true;
+        let tokenInfo = getTokenInfo();
 
-        if (token === null || token === "null")
-            return false;
+        if (tokenInfo.accessToken !== null) {
+            if (Date.parse(tokenInfo.expiration) > Date.now())
+                return true;
+        }
 
-        jwt.verify(token, 'anVzdGF0ZXN0Zm9ydGhlYXBp', async function (err, decoded) {
-            if (err) {
-                // if (err.name === 'TokenExpiredError') {
-                localStorage.setItem("token", null);
-                validated = false;
-                // }
-
-            }
-        });
-
-        return validated;
-    }
-
-    async handleToken() {
-        let response = await this.login();
-
-        if (response !== undefined)
-            localStorage.setItem("token", response.data);
+        return false;
     }
 
     async login(data) {
-        
-        if (data == null)
-            data = this.defaultUser;//this has to be removed and it should get this info from the profile 
+        let response = await axios.post(`${this.url}/login`, data);
+        return response;
+    }
 
-        if (this.validateToken()) {
-            return localStorage.getItem("token");
+    async refreshToken() {
+        const { refreshToken, id } = store.getState().auth;
+
+        if (refreshToken) {
+            let data = {
+                grantType: 'refresh_token',
+                id: id,
+                refreshToken: refreshToken
+            };
+
+            let response = await this.login(data);
+
+            if (response.status === 200) {
+                setTokenInfo(response.data);
+                setRefreshToken(response.data);
+
+                return response.data;
+            }
         }
-        return await axios.post(`${this.url}/login`, data);
+        else
+            return null;
+    }
+
+    //Validates and make a request to refresh the token in case of it is invalid
+    async getToken() {
+        let tokenInfo = getTokenInfo();
+
+        if (tokenInfo.accessToken !== null) {
+            if (Date.parse(tokenInfo.expiration) < Date.now()) {
+                let { accessToken } = await this.refreshToken(tokenInfo.id);
+
+                if (accessToken !== null)
+                    return accessToken;
+            } else
+                return tokenInfo.accessToken;
+        }
+
+        return null;
     }
 
     async getHeaders() {
-        await this.handleToken();
+        let token = await this.getToken();
         return {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
+                Authorization: `Bearer ${token}`
             }
         }
     }
@@ -88,33 +102,19 @@ class Api {
     //Returns all the data of an object
     async getAll({ api }) {
         return axios.get(this.concatUrl(api), await this.getHeaders());
-
     }
 
     async getById({ api, id }) {
         return axios.get(`${this.concatUrl(api)}/${id}`, await this.getHeaders());
-
     }
 
-    async insert({ api, data }) {
-        return axios.post(this.concatUrl(api), data, await this.getHeaders());
+    async insert({ api, data, isSignUp }) {
+        if (isSignUp)
+            return axios.post(this.concatUrl(api), data);
+        else
+            return axios.post(this.concatUrl(api), data, await this.getHeaders());
+
     }
-
-    // async searchByEntity({ api, searchString }) {
-    //     try {
-    //         return axios.get(`${this.concatUrl(api)}/search/${searchString}`, await this.getHeaders());
-    //     } catch {
-    //         return null;
-    //     }
-    // }
-
-    // setMessageText(value) {
-    //     this.errorMessage = value;
-    // }
-
-    // getErrorMessage() {
-    //     return this.errorMessage;
-    // }
 
     async update({ api, data }) {
         return axios.put(`${this.concatUrl(api)}/${data.id}`, data, await this.getHeaders());

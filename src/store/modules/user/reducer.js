@@ -1,4 +1,5 @@
 import produce from 'immer';
+import Actions from '../../enums';
 
 const INITIAL_STATE = {
     loading: false,
@@ -8,14 +9,18 @@ const INITIAL_STATE = {
 export default function user(state = INITIAL_STATE, action) {
     return produce(state, draft => {
         switch (action.type) {
-            case "@user/SIGN_UP":
+            case Actions.USER.SIGN_UP:
                 draft.loading = true;
                 break;
-            case "@user/SIGN_UP_SUCCESS":
-                draft.profile = action.payload.user;
+            case Actions.USER.SIGN_UP_SUCCESS:
+                // draft.profile = action.payload.user;
                 draft.loading = false;
                 break;
-            case "@user/SIGN_UP_FAIL":
+            // case Actions.AUTH.LOGIN_SUCCESS:
+            //     draft.profile = action.payload.user;
+            //     draft.loading = false;
+            //     break;
+            case Actions.USER.SIGN_UP_FAIL:
                 draft.profile = null;
                 draft.loading = false;
                 break;

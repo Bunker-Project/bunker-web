@@ -99,7 +99,8 @@ function Secret({location}) {
                 id: uuidv4(),
                 secretId: txtId,
                 passwordAsString: txtPassword
-            }
+            },
+            isSignUp: false
         });
 
         if (response.status === 201) {

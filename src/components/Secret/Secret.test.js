@@ -6,6 +6,7 @@ import { axe } from 'jest-axe';
 import 'jest-axe/extend-expect';
 import axiosMock from 'axios';
 import userEvent from '@testing-library/user-event';
+import { setTokenInfo } from '../../config/AccessTokenInfo';
 
 const edit_location_values = {
     "pathname": "/editSecret",
@@ -28,6 +29,7 @@ const register_location_values = {
 
 const new_secret_password = "inserting123";
 const new_secret_secretId = "inserting";
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJjNzAyZWIwYi05NTQxLTRmMDMtOTk5My0zZjZiZjlhMmU0OWIiLCJjNzAyZWIwYi05NTQxLTRmMDMtOTk5My0zZjZiZjlhMmU0OWIiXSwianRpIjoiN2U5NWVhYTIxYjI0NDYxMjk3OTczZjM5NzVmNzkyMjkiLCJuYmYiOjE1OTExMzg3NDksImV4cCI6MTU5MTE0MjM0OSwiaWF0IjoxNTkxMTM4NzQ5fQ.qMQRcp02hqICzlSVQcnlTLrgVZxH7xchML0y4XbbgDw';
 
 test('checking accessibility', async () => {
     const { container } = render(<Secret location={edit_location_values} />);
@@ -54,8 +56,21 @@ describe('test in edition mode', () => {
 
         render(<Secret location={edit_location_values} />);
 
+        var dt = new Date();
+        dt.setHours(dt.getHours() + 2);
+        let tokenMock = {
+            "id": "c702eb0b-9541-4f03-9993-3f6bf9a2e49b",
+            "authenticated": true,
+            "createdAt": "2020-06-02 19:59:09",
+            "expiration": dt.toString("yyyy-MM-dd HH:mm:ss"),
+            "accessToken": token,
+            "refreshToken": "99415b0490cd4591862caef8850f6e5a"
+        };
+
+        setTokenInfo(tokenMock);
+
         //Configure the mock when the login is done
-        axiosMock.post.mockResolvedValueOnce(true);
+        // axiosMock.post.mockResolvedValueOnce(true);
         //Configure the put result on update 
         axiosMock.put.mockResolvedValueOnce({ status: 201 });
 
@@ -63,7 +78,7 @@ describe('test in edition mode', () => {
 
         userEvent.click(secret_save_button);
 
-        await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
+        // await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
         await waitFor(() => expect(axiosMock.put).toHaveBeenCalledTimes(1));
     });
 
@@ -113,12 +128,22 @@ describe('tests in insert mode', () => {
     test('test inserting values', async () => {
         render(<Secret location={register_location_values} />);
 
+        var dt = new Date();
+        dt.setHours(dt.getHours() + 2);
+        let tokenMock = {
+            "id": "c702eb0b-9541-4f03-9993-3f6bf9a2e49b",
+            "authenticated": true,
+            "createdAt": "2020-06-02 19:59:09",
+            "expiration": dt.toString("yyyy-MM-dd HH:mm:ss"),
+            "accessToken": token,
+            "refreshToken": "99415b0490cd4591862caef8850f6e5a"
+        };
+
         //Restore the implementations because .mockClear resets usage data but not implementation. mockRestore() resets everything, which includes usage data, implementation and mock name
         axiosMock.post.mockRestore();
 
         //Configure the mock when the login is done and the second call that is the update call
         axiosMock.post
-            .mockResolvedValueOnce(true)
             .mockResolvedValueOnce({ status: 201 });
 
         const secret_id_input = screen.getByLabelText('Your ID:');
@@ -131,7 +156,7 @@ describe('tests in insert mode', () => {
         userEvent.click(secret_save_button);
 
         
-        await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(2));
+        await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
         await waitFor(() => expect(screen.getByText('Secret created successfully')).toBeInTheDocument());
     });
 

@@ -76,7 +76,7 @@ describe('general tests', () => {
     });
 
     test('get results for a string value typed', async () => {
-        const searchValue = 'test';
+        const searchValue = 'test{enter}';
 
         render(<Search />);
 
@@ -84,13 +84,14 @@ describe('general tests', () => {
 
         //Support to fire the key code is not ready yet https://github.com/testing-library/user-event/pull/235
         // await userEvent.type(search_text_input, searchValue);
-        fireEvent.change(search_text_input, { target: { value: searchValue } });
-
         axiosMock.get.mockResolvedValueOnce({
             data: secret_values
         });
 
-        fireEvent.keyDown(search_text_input, { key: 'Enter', code: 'Enter' });
+        // fireEvent.change(search_text_input, { target: { value: searchValue } });
+        await userEvent.type(search_text_input, searchValue);
+
+        // fireEvent.keyDown(search_text_input, { key: 'Enter', code: 'Enter' });
 
         //Check if the workflow was done correctly and the api was called
         // expect(axiosMock.get).toHaveBeenCalledTimes(1)

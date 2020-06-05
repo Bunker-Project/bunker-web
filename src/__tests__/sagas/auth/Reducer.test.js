@@ -4,28 +4,39 @@ import {
 } from '../../../store/modules/auth/actions';
 
 const INITIAL_STATE = {
-    token: null,
+    refreshToken: null,
+    id: null,
     signed: false,
     loading: false
 };
 
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFhYWQ2MWQ2LTUwMTEtNDEyNi04NmZhLWZlNWNjMDhjMTk5NyIsIm5iZiI6MTU4OTgzODAzNiwiZXhwIjoxNTg5OTI0NDM2LCJpYXQiOjE1ODk4MzgwMzZ9.dYawPPqG2GVkSNPQSzl1TmTkM4OHmgQjAWnNf0e8b1Q';
+const token = '99415b0490cd4591862caef8850f6e5a';
 
 test('test login request', () => {
     let response = auth(INITIAL_STATE, '@auth/LOGIN_REQUEST');
 
-    expect(response.token).toBeNull();
+    expect(response.refreshToken).toBeNull();
+    expect(response.id).toBeNull();
     expect(response.loading).toBeFalsy();
     expect(response.signed).toBeFalsy();
 });
 
-test('test login sucess', () => {
+test('test login success', () => {
+
+    let tokenData = {
+        refreshToken: token,
+        id: 'c702eb0b-9541-4f03-9993-3f6bf9a2e49b',
+        signed: true,
+        loading: false
+    }
+
     //Creates the action that contains the values used by the reducer
-    let action = signInSuccess(token);
+    let action = signInSuccess(tokenData);
 
     let response = auth(INITIAL_STATE, action);
 
-    expect(response.token).toBe(token);
+    expect(response.refreshToken).toBe(token);
+    expect(response.id).toBe('c702eb0b-9541-4f03-9993-3f6bf9a2e49b');
     expect(response.loading).toBeFalsy();
     expect(response.signed).toBeTruthy();
 });
@@ -36,7 +47,8 @@ test('test login fail', () => {
 
     let response = auth(INITIAL_STATE, action);
 
-    expect(response.token).toBeNull();
+    expect(response.refreshToken).toBeNull();
+    expect(response.id).toBeNull();
     expect(response.loading).toBeFalsy();
     expect(response.signed).toBeFalsy();
 });

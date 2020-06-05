@@ -66,8 +66,6 @@ class Api {
         }
         else
             return null;
-
-        return null;
     }
 
     //Validates and make a request to refresh the token in case of it is invalid
@@ -75,7 +73,7 @@ class Api {
         let tokenInfo = getTokenInfo();
 
         if (tokenInfo.accessToken !== null) {
-            if (tokenInfo.expiration > Date.now()) {
+            if (Date.parse(tokenInfo.expiration) < Date.now()) {
                 let { accessToken } = await this.refreshToken(tokenInfo.id);
 
                 if (accessToken !== null)
@@ -117,22 +115,6 @@ class Api {
             return axios.post(this.concatUrl(api), data, await this.getHeaders());
 
     }
-
-    // async searchByEntity({ api, searchString }) {
-    //     try {
-    //         return axios.get(`${this.concatUrl(api)}/search/${searchString}`, await this.getHeaders());
-    //     } catch {
-    //         return null;
-    //     }
-    // }
-
-    // setMessageText(value) {
-    //     this.errorMessage = value;
-    // }
-
-    // getErrorMessage() {
-    //     return this.errorMessage;
-    // }
 
     async update({ api, data }) {
         return axios.put(`${this.concatUrl(api)}/${data.id}`, data, await this.getHeaders());

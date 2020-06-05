@@ -6,10 +6,12 @@ import { axe } from 'jest-axe';
 import 'jest-axe/extend-expect';
 import axiosMock from 'axios';
 import userEvent from '@testing-library/user-event';
+import { setTokenInfo } from '../../config/AccessTokenInfo';
 
 const _description = 'test register';
 const _keyDescription = 'keyword 1';
 const _title = 'title';
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJjNzAyZWIwYi05NTQxLTRmMDMtOTk5My0zZjZiZjlhMmU0OWIiLCJjNzAyZWIwYi05NTQxLTRmMDMtOTk5My0zZjZiZjlhMmU0OWIiXSwianRpIjoiN2U5NWVhYTIxYjI0NDYxMjk3OTczZjM5NzVmNzkyMjkiLCJuYmYiOjE1OTExMzg3NDksImV4cCI6MTU5MTE0MjM0OSwiaWF0IjoxNTkxMTM4NzQ5fQ.qMQRcp02hqICzlSVQcnlTLrgVZxH7xchML0y4XbbgDw';
 
 test('check accessibility', async () => {
     const { container } = render(<Register />);
@@ -21,6 +23,19 @@ test('check accessibility', async () => {
 
 test('test calling the api', async () => {
     render(<Register />);
+
+    var dt = new Date();
+    dt.setHours(dt.getHours() + 2);
+    let tokenMock = {
+        "id": "c702eb0b-9541-4f03-9993-3f6bf9a2e49b",
+        "authenticated": true,
+        "createdAt": "2020-06-02 19:59:09",
+        "expiration": dt.toString("yyyy-MM-dd HH:mm:ss"),
+        "accessToken": token,
+        "refreshToken": "99415b0490cd4591862caef8850f6e5a"
+    };
+
+    setTokenInfo(tokenMock);
 
     const create_item_save_button = screen.getByRole('button', { name: /SAVE/ });
     const register_title_input = screen.getByLabelText('Title:');
@@ -36,13 +51,11 @@ test('test calling the api', async () => {
 
     //Set the mock. First call for login call and the second for the insert command call
     axiosMock.post
-        .mockResolvedValueOnce(true)
         .mockResolvedValueOnce({ status: 201 });
 
     userEvent.click(create_item_save_button);
 
-    //It's gonna be called twice because the first time is to do the login, the second is the insert call
-    await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
 });
 
 test('test calling the api and returning error', async () => {

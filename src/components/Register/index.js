@@ -29,6 +29,7 @@ function Register(props) {
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('info');
     const [keyword, setKeyword] = useState('');
+    const [isSaving, setSaving] = useState(false);
 
     const schema = Yup.object().shape({
         title: Yup.string().required('Title is required')
@@ -38,6 +39,7 @@ function Register(props) {
         let newId = uuidv4();//Creates a random GUID as PK
 
         if (await validate(item)) {
+            setSaving(true);
             var keys = [];
             for (var key of chips) {
                 keys.push({
@@ -118,7 +120,7 @@ function Register(props) {
 
 
     function configureAfterSave(response) {
-        
+
         if (response.status === 201)
             openSnackBar("Created successfully", "success");
         else
@@ -127,6 +129,7 @@ function Register(props) {
         setTitle('');
         setDescription('');
         setChips([]);
+        setSaving(false);
 
         document.getElementById("txtTitle").focus();
     };
@@ -211,8 +214,8 @@ function Register(props) {
                     <div className="buttons">
                         <button
                             className="saveButton"
-                            type="submit">SAVE
-                    </button>
+                            type="submit">{isSaving ? 'SAVING' : 'SAVE'}
+                        </button>
                         <button
                             className="backButton"
                             type="button"

@@ -12,7 +12,7 @@ import * as Yup from 'yup';
 import { Helmet } from 'react-helmet';
 
 // class Secret extends React.Component {
-function Secret({location}) {
+function Secret({ location }) {
 
     const api = new Api();
     const history = useHistory();
@@ -25,6 +25,7 @@ function Secret({location}) {
     const [open, setOpen] = useState(false);
     const [messageType, setMessageType] = useState('');
     const [message, setMessage] = useState('');
+    const [isSaving, setSaving] = useState(false);
 
     const schema = Yup.object().shape({
         secretId: Yup.string().required('The ID is required'),
@@ -56,7 +57,7 @@ function Secret({location}) {
 
     useEffect(() => {
         if (isEditing) {
-            
+
             let secret = location.state.secret;
             setTxtId(secret.secretId);
             setTxtPassword(secret.password);
@@ -66,10 +67,14 @@ function Secret({location}) {
     }, [isEditing, location.state.secret])
 
     async function save() {
+        setSaving(true);
+        
         if (isEditing)
             await callUpdate();
         else
             await callInsert();
+
+        setSaving(false);
     }
 
     async function callUpdate() {
@@ -169,7 +174,7 @@ function Secret({location}) {
                         <button
                             className="saveButton"
                             type="submit">
-                            SAVE
+                            {isSaving ? 'SAVING' : 'SAVE'}
                         </button>
                         <button
                             className="backButton"

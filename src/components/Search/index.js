@@ -16,6 +16,7 @@ import { useHistory } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { Helmet } from 'react-helmet';
+import Loading from '../Loading';
 
 // class Search extends React.Component {
 function Search(props) {
@@ -40,11 +41,12 @@ function Search(props) {
     const [deleteItem, setDeleteItem] = useState(false);
     const [deleteSecret, setDeleteSecret] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(-1);
+    const [isSearching, setSearching] = useState(false);
 
     async function handleKeyDown(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
-            
+
             if (validateText())
                 await search(txtSearch, 1);
         }
@@ -53,7 +55,7 @@ function Search(props) {
     //Validate if the textfield has a value for searching
     function validateText() {
         var hasValue = txtSearch !== ''
-        
+
         if (!hasValue) {
             setSearchWarning(true);
             return false;
@@ -64,11 +66,12 @@ function Search(props) {
 
     //Calls the api and returns the values
     async function search(value, page) {
+        setSearching(true);
         setSearchWarning(false);
         clearCurrentData();
         let response = await api.searchAllByString(value, page);
+        setSearching(false);
         setFinalResults(response);
-
     }
 
     //Clear all the list to not duplicate the results
@@ -84,7 +87,7 @@ function Search(props) {
         clearCurrentData();
 
         let response = await api.searchAllTogether(page);
-        
+
         setFinalResults(response);
     }
 
@@ -232,9 +235,9 @@ function Search(props) {
     }
 
     function handleChange(event, value) {
-        
+
         if (value !== currentPage) {
-            
+
             if (txtSearch.length === 0)
                 searchAll(value);
             else
@@ -262,7 +265,7 @@ function Search(props) {
                     value={txtSearch}></input>
 
                 <div key="search" className="results">
-
+                    <Loading visible={isSearching} />
                     {/* Build the items results */}
                     <div>
                         {results.map((data, index) => {

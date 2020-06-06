@@ -31,7 +31,7 @@ steps:
 - script: npm run build
   displayName: 'Build React project'
   
-# Publish the app
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: web'
-  condition: succeeded()
+# # Publish the app
+# - task: PublishBuildArtifacts@1
+#   displayName: 'Publish Artifact: web'
+#   condition: succeeded()

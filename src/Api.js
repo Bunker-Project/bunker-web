@@ -11,17 +11,25 @@ class Api {
         this.url = process.env.REACT_APP_API_URL;
 
         axios.interceptors.response.use(function (response) {
-
+            console.log("The response returned", response);
             return response;
         }, function (error) {
 
-            var response =
-            {
-                data: error,
-                hasError: true
+            //Check if has the property data which indicates that the API returned a custom error
+            if (error.hasOwnProperty('data')){
+                return {
+                    status: error.response.data.Status,
+                    message: error.response.data.Message
+                }
             }
-
-            return response;
+            else if(error.toString().toLowerCase().includes("network error")){
+                //Otherwise, the server wasn't reached and perhaps is out of service
+                return {
+                    status: 500,
+                    message: "😔 Unable to connect with the server"
+                };
+            }
+                
         });
 
         this.login = this.login.bind(this);

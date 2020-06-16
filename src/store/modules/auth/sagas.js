@@ -1,52 +1,38 @@
 import { all, call, takeLatest, put } from 'redux-saga/effects';
 import Api from '../../../Api';
 import { signInSuccess, setRefreshToken, signInFail } from './actions';
-import { toast } from 'react-toastify';
 import Actions from '../../enums';
 import { v4 as uuidv4 } from 'uuid';
 import { setTokenInfo } from '../../../config/AccessTokenInfo';
+import Toast from '../../../services/ToastService';
 
 export function* signIn({ payload }) {
-    try {
-        const api = new Api();
+    const api = new Api();
+    const toastService = new Toast();
 
-        const history = payload.history;
+    const history = payload.history;
 
-        var newUser = {
-            id: uuidv4(),
-            username: payload.user.username,
-            password: payload.user.password,
-            refreshToken: '',
-            grantType: "password"
-        };
+    var newUser = {
+        id: uuidv4(),
+        username: payload.user.username,
+        password: payload.user.password,
+        refreshToken: '',
+        grantType: "password"
+    };
 
-        const response = yield call(api.login, newUser);
+    const response = yield call(api.login, newUser);
+    
+    if (response.status === 200) {
+        const token = response.data;
 
-        if (!response.hasOwnProperty('hasError') && response.status === 200) {
-            const token = response.data;
-
-            if (token !== null) {
-                yield put(signInSuccess(token));
-                setTokenInfo(token);
-                toast.success("😀 Welcome!!");
-                history.push('/home');
-            }
-        } else {
-            if (response.data.toString().toLowerCase().includes("network error")) {
-                toast.error("😔 Unable to connect with the server");
-            } else {
-                toast.error("😱 " + response.data);
-            }
-            yield put(signInFail());
+        if (token !== null) {
+            yield put(signInSuccess(token));
+            setTokenInfo(token);
+            toastService.success("😀 Welcome!!")
+            history.push('/home');
         }
-
-    }
-    catch (err) {
-
-        if (err.toString().toLowerCase().includes("network error")) {
-            toast.error("😔 Unable to connect with the server");
-        }
-
+    } else {
+        toastService.error(response.message);
         yield put(signInFail());
     }
 }
@@ -67,7 +53,7 @@ export function* rehydrate({ payload }) {
 
 export function* logout({ payload }) {
     payload.history.push('/');
-    yield put(toast.info, "Bye! See you soon 😉!!!");
+    yield put(toastService.info, "Bye! See you soon 😉!!!");
 }
 
 export default all([

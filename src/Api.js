@@ -9,10 +9,13 @@ class Api {
 
     constructor() {
         this.url = process.env.REACT_APP_API_URL;
+        
 
         axios.interceptors.response.use(function (response) {
+            console.log("The response is: ", response);
             return response;
         }, function (error) {
+            console.log("The error is: ", error);
             //Check if has the property data which indicates that the API returned a custom error
             if (error.response.hasOwnProperty('data')) {
                 //If it has length property, indicates that is an array with more than one error
@@ -53,6 +56,7 @@ class Api {
     }
 
     async login(data) {
+        console.log("Chamando o caralho do login");
         let response = await axios.post(`${this.url}/login`, data);
         return response;
     }

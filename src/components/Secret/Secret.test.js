@@ -100,9 +100,13 @@ describe('test in edition mode', () => {
         const secret_save_button = screen.getByRole('button', { name: /SAVE/ });
 
         //Configure the mock when the login is done
-        axiosMock.post.mockResolvedValueOnce(true);
+        // axiosMock.post.mockResolvedValueOnce(true);
         //Configure the put result on update 
-        axiosMock.put.mockResolvedValueOnce({ status: 500, statusText: error_message });
+        axiosMock.put.mockResolvedValueOnce(
+            {
+                message: error_message,
+                status: 400
+            });
 
         userEvent.click(secret_save_button);
 
@@ -120,8 +124,8 @@ describe('tests in insert mode', () => {
         const secret_id_input = screen.getByLabelText('Your ID:');
         const secret_password_input = screen.getByLabelText('Your password:');
 
-        expect(secret_id_input).toBeEmpty();
-        expect(secret_password_input).toBeEmpty();
+        expect(secret_id_input).toBeEmptyDOMElement();
+        expect(secret_password_input).toBeEmptyDOMElement();
 
     });
 
@@ -155,7 +159,7 @@ describe('tests in insert mode', () => {
 
         userEvent.click(secret_save_button);
 
-        
+
         await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
         await waitFor(() => expect(screen.getByText('Secret created successfully')).toBeInTheDocument());
     });
@@ -192,7 +196,7 @@ describe('tests in insert mode', () => {
         render(<Secret location={register_location_values} />);
 
         const error_message = "It wasn't possible to update. Check the internet connection";
-        
+
         const secret_id_input = screen.getByLabelText('Your ID:');
         const secret_password_input = screen.getByLabelText('Your password:');
         const secret_save_button = screen.getByRole('button', { name: /SAVE/ });
@@ -203,9 +207,12 @@ describe('tests in insert mode', () => {
         //Restore the implementations because .mockClear resets usage data but not implementation. mockRestore() resets everything, which includes usage data, implementation and mock name
         axiosMock.post.mockRestore();
         //Configure the mock when the login is done
-        axiosMock.post
-            .mockResolvedValueOnce(true)
-            .mockResolvedValueOnce({ status: 500 });
+
+        axiosMock.post.mockResolvedValueOnce(
+            {
+                message: error_message,
+                status: 400
+            });
 
         userEvent.click(secret_save_button);
 

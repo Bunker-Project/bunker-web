@@ -11,25 +11,29 @@ class Api {
         this.url = process.env.REACT_APP_API_URL;
 
         axios.interceptors.response.use(function (response) {
-            console.log("The response returned", response);
             return response;
         }, function (error) {
-
             //Check if has the property data which indicates that the API returned a custom error
-            if (error.hasOwnProperty('data')){
-                return {
-                    status: error.response.data.Status,
-                    message: error.response.data.Message
+            if (error.response.hasOwnProperty('data')) {
+                //If it has length property, indicates that is an array with more than one error
+                if (error.response.data.hasOwnProperty('length')) {
+                    return error.response.data;
+                }
+                else {
+                    return {
+                        status: error.response.data.Status,
+                        message: error.response.data.Message
+                    }
                 }
             }
-            else if(error.toString().toLowerCase().includes("network error")){
+            else if (error.toString().toLowerCase().includes("network error")) {
                 //Otherwise, the server wasn't reached and perhaps is out of service
                 return {
                     status: 500,
                     message: "😔 Unable to connect with the server"
                 };
             }
-                
+
         });
 
         this.login = this.login.bind(this);
@@ -121,6 +125,8 @@ class Api {
             return axios.post(this.concatUrl(api), data);
         else
             return axios.post(this.concatUrl(api), data, await this.getHeaders());
+        // return axios.post(this.concatUrl(api), {timeout: 3000, data: data, headers: await this.getHeaders()});
+
 
     }
 

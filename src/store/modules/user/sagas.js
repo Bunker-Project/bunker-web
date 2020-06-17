@@ -2,42 +2,32 @@ import { all, call, takeLatest, put } from 'redux-saga/effects';
 import Api from '../../../Api';
 import { signUpSuccess, signUpFail } from './actions';
 import { signInSuccess } from '../auth/actions';
-import { toast } from 'react-toastify';
 import Actions from '../../enums';
+import Toast from '../../../services/ToastService';
 
 
 export function* setUserInfo({ payload }) {
-    const api = new Api();
+    let api = new Api();
+    let toastService = new Toast();
 
-    try {
-        let response = yield call(api.insert, { api: "users", data: payload.user, isSignUp: true });
+    let response = yield call(api.insert, { api: "users", data: payload.user, isSignUp: true });
 
-        if (response.status === 201) {
+    if (response.status === 201) {
 
-            //Put sets the variable to the store
-            yield put(signUpSuccess(response.data));
+        //Put sets the variable to the store
+        yield put(signUpSuccess(response.data));
 
-            yield put(signInSuccess(response.data));
+        yield put(signInSuccess(response.data));
 
-            toast.success("😀 Welcome!!");
-            
-            payload.history.push('/home');
-        } else {
+        toastService.success("😀 Welcome!!")
 
-            if (response.data.toString().toLowerCase().includes("network error")) {
-                toast.error("😔 Unable to connect with the server");
-            } else {
-                toast.error("😱 " + response.data);
-            }
-            yield put(signUpFail());
-        }
+        payload.history.push('/home');
+    } else {
 
-    } catch (err) {
-
-        if (err.toString().toLowerCase().includes("network error")) {
-            toast.error("😔 Unable to connect with the server");
-        }
-
+        response.map(error => {
+            return toastService.error(error.message);
+        });
+        
         yield put(signUpFail());
     }
 }

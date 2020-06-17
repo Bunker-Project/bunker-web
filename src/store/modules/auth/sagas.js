@@ -7,10 +7,10 @@ import { setTokenInfo } from '../../../config/AccessTokenInfo';
 import Toast from '../../../services/ToastService';
 
 export function* signIn({ payload }) {
-    const api = new Api();
-    const toastService = new Toast();
+    let api = new Api();
+    let toastService = new Toast();
 
-    const history = payload.history;
+    let history = payload.history;
 
     var newUser = {
         id: uuidv4(),
@@ -20,10 +20,10 @@ export function* signIn({ payload }) {
         grantType: "password"
     };
 
-    const response = yield call(api.login, newUser);
+    let response = yield call(api.login, newUser);
     
     if (response.status === 200) {
-        const token = response.data;
+        let token = response.data;
 
         if (token !== null) {
             yield put(signInSuccess(token));
@@ -39,7 +39,6 @@ export function* signIn({ payload }) {
 
 export function* rehydrate({ payload }) {
     if (payload !== undefined) {//This is necessary because jest enters here and throws an exception
-
         const { refreshToken, signed } = payload.auth;
 
         if (refreshToken) {
@@ -52,6 +51,7 @@ export function* rehydrate({ payload }) {
 }
 
 export function* logout({ payload }) {
+    let toastService = new Toast();
     payload.history.push('/');
     yield put(toastService.info, "Bye! See you soon 😉!!!");
 }

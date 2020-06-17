@@ -6,6 +6,7 @@ import '../../global.css';
 import Api from '../../Api';
 import { useDispatch } from 'react-redux';
 import { setRefreshToken } from '../../store/modules/auth/actions';
+import { store } from '../../store';
 
 
 function NavBar(props) {
@@ -17,13 +18,19 @@ function NavBar(props) {
         async function refreshToken() {
 
             var api = new Api();
-            let response = await api.refreshToken();
+            let signed = store.getState().auth.signed;
+            
+            if (signed) {
+                if (!api.validateToken()) {
+                    let response = await api.refreshToken();
 
-            if (response)
-                dispatch(setRefreshToken(response));
+                    if (response)
+                        dispatch(setRefreshToken(response));
 
-            if (!response)
-                history.push('/');
+                    if (!response)
+                        history.push('/');
+                }
+            }
         }
 
         refreshToken();

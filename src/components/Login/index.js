@@ -80,6 +80,7 @@ function Login() {
                     <button
                         type="submit"
                         disabled={loading}
+                        aria-label="LOGIN"
                         className="loginButton">
                         {loading ? "WAIT..." : "LOGIN"}
                     </button>

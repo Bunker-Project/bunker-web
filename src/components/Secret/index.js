@@ -90,7 +90,7 @@ function Secret({ location }) {
             clearAllData();
             openMessage('Secret updated successfully', 'success');
         } else {
-            openMessage(response.statusText, 'error');
+            openMessage(response.message, 'error');
         }
 
         history.push('/search');
@@ -112,7 +112,7 @@ function Secret({ location }) {
             clearAllData();
             openMessage('Secret created successfully', 'success');
         } else {
-            openMessage("It wasn't possible to update. Check the internet connection", 'error');
+            openMessage(response.message, 'error');
         }
 
         document.getElementById("txtId").focus();

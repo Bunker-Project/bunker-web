@@ -111,29 +111,34 @@ test('test redirect to sign up page', () => {
 
 });
 
-test('test simulating server not found', async () => {
-    const email = "bunker@unitteste.com";
-    const pwd = "bunkerpassword123";
-    render(<Login />);
+// test('test simulating server not found', async () => {
+//     const email = "bunker@unitteste.com";
+//     const pwd = "bunkerpassword123";
+//     render(<Login />);
 
-    const email_input = screen.getByLabelText(/Username:/);
-    const password_input = screen.getByLabelText(/Password:/);
-    const login_submit = screen.getByRole('button', { name: /LOGIN/ });
+//     const email_input = screen.getByLabelText(/Username:/);
+//     const password_input = screen.getByLabelText(/Password:/);
+//     const login_submit = screen.getByRole('button', { name: /LOGIN/ });
 
-    await userEvent.type(email_input, email);
-    await userEvent.type(password_input, pwd);
+//     await userEvent.type(email_input, email);
+//     await userEvent.type(password_input, pwd);
 
-    //Configures the mock for the error message
-    toast.error = jest.fn();
-    //Configure the post to throw an error when requested
-    axiosMock.post.mockRejectedValue(new Error("network error"));
+//     //Configures the mock for the error message
+//     toast.error = jest.fn();
+//     //Configure the post to throw an error when requested
+//     axiosMock.post.mockResolvedValueOnce(
+//         {
+//             message: "network error",
+//             status: 400
+//         });
 
-    userEvent.click(login_submit);
 
-    await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('😔 Unable to connect with the server'));
+//     userEvent.click(login_submit);
 
-});
+//     await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
+//     await waitFor(() => expect(toast.error).toHaveBeenCalledWith('network error'));
+
+// });
 
 
 test('test returning network error during an api call', async () => {
@@ -154,18 +159,18 @@ test('test returning network error during an api call', async () => {
     //Configure the post to throw an error when requested
     axiosMock.post.mockResolvedValueOnce(
         {
-            data: "network error",
-            hasError: true
+            message: "network error",
+            status: 400
         });
 
     userEvent.click(login_submit);
 
     await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('😔 Unable to connect with the server'));
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('network error'));
 
 });
 
-test('test returning a ranodm error during an api call', async () => {
+test('test returning a random error during an api call', async () => {
     const email = "bunker@unitteste.com";
     const pwd = "bunkerpassword123";
     render(<Login />);
@@ -183,14 +188,14 @@ test('test returning a ranodm error during an api call', async () => {
     //Configure the post to throw an error when requested
     axiosMock.post.mockResolvedValueOnce(
         {
-            data: "an error occurred",
-            hasError: true
+            message: "an error occurred",
+            status: 400
         });
 
     userEvent.click(login_submit);
 
     await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('😱 an error occurred'));
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('an error occurred'));
 
 });
 
